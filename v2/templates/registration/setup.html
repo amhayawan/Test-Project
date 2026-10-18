@@ -1,11 +1,15 @@
 {% extends "base.html" %}{% load i18n %}
 {% block auth %}
+<form method="post" action="{% url 'set_language' %}" class="auth-lang">{% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  <button name="language" value="ar" class="link">العربية</button> · <button name="language" value="en" class="link">English</button>
+</form>
 <div class="card auth-card wide-card">
   <h1>{% translate "Dr. Hassan Abbas Zaki Association" %}</h1>
   <p>{% translate "First start: choose how to begin." %}</p>
   <h2>{% translate "Try the system with demo data" %}</h2>
   <p class="muted">{% translate "Fills the system with FICTIONAL donors, cases, staff, accounts, purchases and projects, with one login per role, so you can test each module as a different user. Sample tax, insurance and leave figures are labelled SAMPLE and are not legal values. Use a separate data folder for real work." %}</p>
-  <form method="post">{% csrf_token %}<button class="btn" name="action" value="demo">{% translate "Load demo data" %}</button></form>
+  <form method="post">{% csrf_token %}<button class="btn primary" name="action" value="demo">تحميل البيانات التجريبية · Load demo data</button></form>
   <hr>
   <h2>{% translate "Start for real" %}</h2>
   <form method="post">{% csrf_token %}

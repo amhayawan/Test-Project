@@ -8,7 +8,9 @@ class UserLanguageMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        lang = request.session.get("lang") if hasattr(request, "session") else None
+        # Arabic unless the user chose English: the computer's own language does not decide.
+        from django.conf import settings
+        lang = (request.session.get("lang") if hasattr(request, "session") else None) or settings.LANGUAGE_CODE
         if lang:
             request.META["HTTP_ACCEPT_LANGUAGE"] = lang
             translation.activate(lang)

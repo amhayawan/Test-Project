@@ -88,10 +88,20 @@ def test_management_dashboard_reflects_every_module(demo):
     from accounts.models import User
     c = Client()
     c.force_login(User.objects.get(username="director"))
-    with translation.override("en"):
-        html = c.get("/?period=this_year", HTTP_ACCEPT_LANGUAGE="en").content.decode()
+    c.post("/language/", {"language": "en"})                 # the user picks English
+    html = c.get("/?period=this_year").content.decode()
     for heading in ("Fundraising", "Case management", "Human resources", "Finance", "Project"):
         assert heading in html, heading
     c.force_login(User.objects.get(username="researcher1"))
     html = c.get("/").content.decode()
     assert "Finance" not in html and "Payroll" not in html
+
+
+def test_first_start_is_arabic_with_the_demo_button_even_on_english_windows(db):
+    from accounts.middleware import FirstRunMiddleware
+    FirstRunMiddleware.checked = False
+    c = Client()
+    r = c.get("/", HTTP_ACCEPT_LANGUAGE="en-US,en;q=0.9", follow=True)
+    html = r.content.decode()
+    assert r.redirect_chain[-1][0].endswith("/setup/")
+    assert "تحميل البيانات التجريبية" in html and 'dir="rtl"' in html
