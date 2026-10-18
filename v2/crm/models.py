@@ -153,7 +153,7 @@ class Sponsorship(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return f"{self.donor} ← {self.beneficiary}"
+        return f"{self.donor} ← {self.beneficiary.case_no}"
 
     def clean(self):
         errors = {}

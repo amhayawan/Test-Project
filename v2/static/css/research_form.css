@@ -1,0 +1,17 @@
+/* Printable field research form, laid out like the association's paper form (A4). */
+body.research-form { background: #fff; font-size: 13px; }
+.research-form .sheet { max-width: 800px; margin: 12px auto; border: 2px solid #222; padding: 14px 16px; page-break-after: always; }
+.research-form header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.research-form header h1 { font-size: 1.15rem; margin: 0; text-decoration: underline; }
+.research-form .org { font-weight: 700; color: #2f6b2f; }
+.research-form h3 { margin: 12px 0 6px; font-size: 1rem; text-decoration: underline; }
+.research-form table.grid { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.research-form table.grid th, .research-form table.grid td { border: 1px solid #333; padding: 4px 6px; height: 22px; vertical-align: top; }
+.research-form table.grid th { background: #f2f2f2; font-weight: 700; color: #111; }
+.research-form table.small { font-size: 12px; }
+.research-form .items { gap: 10px; }
+.research-form .opinion { min-height: 70px; border-bottom: 1px dashed #444; margin-bottom: 14px; }
+.research-form footer { display: flex; justify-content: space-between; margin-top: 18px; font-weight: 700; }
+.research-form .fill { display: inline-block; min-width: 110px; border-bottom: 1px dotted #333; }
+@page { size: A4; margin: 10mm; }
+@media print { .research-form .sheet { border: 2px solid #000; margin: 0; max-width: none; } }

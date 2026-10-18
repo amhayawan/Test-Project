@@ -32,8 +32,9 @@ LEAVE_TYPES = [
 # (document type, from amount, [approver roles in order]). Edit later in the back office.
 POLICIES = [
     ("cases.case", Decimal(0), ["case_manager"]),
-    ("cases.aid", Decimal(0), ["case_manager"]),
-    ("cases.aid", Decimal(10000), ["case_manager", "executive"]),
+    # Research Department Manager accepts the case; the Projects Department plans the aid and its manager approves it.
+    ("cases.aid", Decimal(0), ["project_manager"]),
+    ("cases.aid", Decimal(10000), ["project_manager", "executive"]),
     ("hr.incentive", Decimal(0), ["hr_manager"]),
     ("hr.incentive", Decimal(5000), ["hr_manager", "executive"]),
     ("hr.payroll", Decimal(0), ["hr_manager", "executive"]),

@@ -1,0 +1,96 @@
+{% load static humanize_lite %}<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<title>استمارة بحث ميداني {% if c %}{{ c.case_no }}{% endif %}</title>
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+<link rel="stylesheet" href="{% static 'css/research_form.css' %}"></head>
+<body class="research-form">
+<div class="no-print actions"><button class="btn primary" id="print">طباعة</button></div>
+
+<section class="sheet">
+  <header><div class="org">جمعية د. حسن عباس زكي للتنمية</div><h1>استمارة بحث ميداني</h1>
+    <div>التاريخ: <span class="fill">{{ c.visit_date|date:"Y/m/d" }}</span></div></header>
+  <table class="grid">
+    <tr><th>اسم الحالة</th><td>{{ c.name }}</td><th>الرقم القومي</th><td dir="ltr">{{ c.national_id|default:"" }}</td><th>رقم الموبايل</th><td dir="ltr">{{ c.phone }}</td></tr>
+    <tr><th>رقم الاستمارة</th><td>{{ c.form_no }}{% if c %} <small>({{ c.case_no }})</small>{% endif %}</td><th>المنطقة</th><td>{{ c.area }}</td><th>العنوان</th><td>{{ c.address }}</td></tr>
+    <tr><th>الحالة الاجتماعية</th><td colspan="5">
+      {% if c %}{{ c.get_marital_status_display|default:"" }}{% else %}أرملة ☐ &nbsp; مطلقة ☐ &nbsp; متزوج ☐ &nbsp; متزوجة ☐ &nbsp; أعزب/ة ☐{% endif %}</td></tr>
+  </table>
+
+  <table class="grid small">
+    <tr><th rowspan="2">أسماء الأفراد<br><small>(مع مراعاة كتابة اسم الحالة)</small></th><th rowspan="2">صلة القرابة</th><th rowspan="2">السن</th>
+        <th rowspan="2">المؤهل الدراسي</th><th rowspan="2">العمل</th><th rowspan="2">متوسط الدخل</th><th colspan="2">ثبات العمل</th>
+        <th rowspan="2">سبب الامتناع عن العمل</th><th rowspan="2">القدرة على العمل من وجهة نظري</th></tr>
+    <tr><th>مستمر</th><th>متقطع</th></tr>
+    {% for m in family %}<tr><td>{{ m.name }}</td><td>{% if m.relation %}{{ m.get_relation_display }}{% endif %}</td><td>{{ m.age|default:"" }}</td>
+      <td>{{ m.education }}</td><td>{{ m.education_work }}</td><td>{% if m.monthly_income %}{{ m.monthly_income|money }}{% endif %}</td>
+      <td>{% if m.job_stability == "stable" %}✓{% endif %}</td><td>{% if m.job_stability == "irregular" %}✓{% endif %}</td>
+      <td>{{ m.not_working_reason }}</td><td>{% if m.able_to_work %}{{ m.get_able_to_work_display }}{% endif %}</td></tr>{% endfor %}
+  </table>
+
+  <p>هل يوجد فتاة مكتوب كتابها: {% if c %}{{ c.get_has_engaged_daughter_display|default:"—" }}{% else %}نعم ☐ &nbsp; لا ☐{% endif %}</p>
+  <table class="grid">
+    <tr><th>اسم الفتاة</th><td>{{ c.engaged_daughter_name }}</td><th>ميعاد الزواج</th><td>{{ c.wedding_date|date:"Y/m/d"|default:"" }}</td></tr>
+    <tr><th>الاحتياجات التي تم توفيرها (ما هي – من أين)</th><td>{{ c.marriage_needs_provided|linebreaksbr }}</td><th>الاحتياجات المتبقية</th><td>{{ c.marriage_needs_remaining|linebreaksbr }}</td></tr>
+  </table>
+
+  <h3>مصادر دخل الحالة</h3>
+  <table class="grid">
+    <tr><th>مصادر الدخل</th><th>المبلغ</th><th>بند الصرف</th><th>المبلغ</th></tr>
+    <tr><td>مجموع رواتب عمل الأسرة</td><td class="num">{% if c %}{{ c.income_salaries|money }}{% endif %}</td><td>تكلفة الطعام اليومي</td><td class="num">{% if c %}{{ c.exp_food_daily|money }}{% endif %}</td></tr>
+    <tr><td>معاش الشؤون الاجتماعية / تكافل وكرامة</td><td class="num">{% if c %}{{ c.income_takaful|money }}{% endif %}</td><td>الإيجار</td><td class="num">{% if c %}{{ c.exp_rent|money }}{% endif %}</td></tr>
+    <tr><td>معاش التأمينات الاجتماعية</td><td class="num">{% if c %}{{ c.income_insurance|money }}{% endif %}</td><td>المواصلات</td><td class="num">{% if c %}{{ c.exp_transport|money }}{% endif %}</td></tr>
+    <tr><td>الجمعية الشرعية / جمعيات خيرية</td><td class="num">{% if c %}{{ c.income_charities|money }}{% endif %}</td><td>مصاريف الدراسة والدروس</td><td class="num">{% if c %}{{ c.exp_education|money }}{% endif %}</td></tr>
+    <tr><td>أهل الخير / أقارب / جيران {% if c.benefactors_who %}({{ c.benefactors_who }}){% endif %}</td><td class="num">{% if c %}{{ c.income_benefactors|money }}{% endif %}</td><td>أقساط إن وجد</td><td class="num">{% if c %}{{ c.exp_installments|money }}{% endif %}</td></tr>
+    <tr class="total"><td>إجمالي مصادر الدخل</td><td class="num">{% if c %}{{ c.total_income|money }}{% endif %}</td>
+      <td>فواتير (الكهرباء / المياه / التليفون / الغاز)</td><td class="num">{% if c %}{{ c.exp_electricity|money }} / {{ c.exp_water|money }} / {{ c.exp_phone|money }} / {{ c.exp_gas|money }}{% endif %}</td></tr>
+    {% if c %}<tr class="total"><td colspan="2">إجمالي المصروفات الشهرية (الطعام × 30 + باقي البنود)</td><td colspan="2" class="num">{{ c.total_expenses|money }} — العجز الشهري: {{ c.monthly_gap|money }}</td></tr>{% endif %}
+  </table>
+
+  <h3>الحالات المرضية لأفراد الأسرة</h3>
+  <table class="grid">
+    <tr><th></th><th>اسم المريض</th><th>المرض</th><th>تكلفة العلاج</th><th>نفقة الدولة</th></tr>
+    {% for m in medical %}<tr><td>{{ forloop.counter }}</td><td>{{ m.patient }}</td><td>{{ m.illness }}</td><td class="num">{% if m %}{{ m.treatment_cost|money }}{% endif %}</td><td>{{ m.state_coverage }}</td></tr>{% endfor %}
+  </table>
+</section>
+
+<section class="sheet">
+  <header><div class="org">جمعية د. حسن عباس زكي للتنمية</div><h1>وصف دقيق لحالة المسكن</h1>{% if c %}<div dir="ltr">{{ c.case_no }}</div>{% endif %}</header>
+  <table class="grid">
+    <tr><th>عدد الغرف</th><td>{{ c.rooms|default:"" }}</td><th>مساحة البيت</th><td>{{ c.house_area }}</td>
+        <th>ملك / إيجار</th><td>{% if c %}{{ c.get_housing_type_display|default:"" }}{% if c.exp_rent %} ({{ c.exp_rent|money }}){% endif %}{% endif %}</td>
+        <th>الحمام</th><td>{% if c %}{{ c.get_bathroom_display|default:"" }}{% else %}خاص ☐ مشترك ☐{% endif %}</td></tr>
+    <tr><th>الأرضية</th><td colspan="3">{% if c %}{{ c.get_floor_type_display|default:"" }}{% else %}بلاط ☐ سيراميك ☐ غير ذلك ☐{% endif %}</td>
+        <th>مواد البناء والبياض</th><td colspan="3">{% if c %}{{ c.get_building_material_display|default:"" }}{% else %}ريفي ☐ طوب ☐ محارة ☐{% endif %}</td></tr>
+    <tr><th>وصلة مياه</th><td colspan="3">{% if c %}{{ c.get_water_connection_display|default:"" }}{% else %}نعم ☐ لا ☐{% endif %}</td>
+        <th>في حالة (لا) مسافة أقرب وصلة مياه</th><td colspan="3">{{ c.water_distance }}</td></tr>
+    <tr><th>احتياج لسقف</th><td colspan="3">{% if c %}{{ c.get_needs_roof_display|default:"" }}{% else %}نعم ☐ لا ☐{% endif %}</td>
+        <th>في حالة (نعم) مساحة الغرفة</th><td colspan="3">{{ c.roof_room_area }}</td></tr>
+  </table>
+  <div class="grid2 items">
+    <table class="grid small"><tr><th>هل يوجد</th><th>نعم</th><th>لا</th><th>جيدة</th><th>متوسطة</th><th>سيئة</th></tr>
+      {% for i in appliances %}<tr><td>{{ i.get_item_display }}</td><td>{% if i.present == "yes" %}✓{% endif %}</td><td>{% if i.present == "no" %}✓{% endif %}</td>
+        <td>{% if i.condition == "good" %}✓{% endif %}</td><td>{% if i.condition == "medium" %}✓{% endif %}</td><td>{% if i.condition == "poor" %}✓{% endif %}</td></tr>{% endfor %}</table>
+    <table class="grid small"><tr><th>الأثاث</th><th>عدد</th><th>جيدة</th><th>متوسطة</th><th>سيئة</th></tr>
+      {% for i in furniture %}<tr><td>{{ i.get_item_display }}</td><td>{{ i.count|default:"" }}</td>
+        <td>{% if i.condition == "good" %}✓{% endif %}</td><td>{% if i.condition == "medium" %}✓{% endif %}</td><td>{% if i.condition == "poor" %}✓{% endif %}</td></tr>{% endfor %}</table>
+  </div>
+  <p>هل يوجد أجهزة كهربائية أخرى؟ {{ c.other_appliances }}</p>
+  <table class="grid">
+    <tr><th>عدد أفراد البطاقة التموينية</th><td>{{ c.ration_card_members|default:"" }}</td><th>سبب عدم وجودها</th><td>{{ c.no_ration_card_reason }}</td></tr>
+    <tr><th>هل لدى الأسرة مواشي</th><td>{% if c %}{{ c.get_livestock_display|default:"" }}{% endif %}</td><th>العدد / ملك أو للغير</th><td>{{ c.livestock_count|default:"" }} {% if c.livestock_owner %}— {{ c.get_livestock_owner_display }}{% endif %}</td></tr>
+    <tr><th>هل هناك تكاليف إضافية</th><td colspan="3">{{ c.extra_burdens|linebreaksbr }}</td></tr>
+    <tr><th>هل هناك أحد مدخن</th><td colspan="3">{% if c %}{{ c.get_smoker_display|default:"" }}{% else %}نعم ☐ لا ☐{% endif %}</td></tr>
+  </table>
+  <h3>احتياجات الأسرة</h3>
+  <table class="grid"><tr>
+    <td>طبي {% if c.need_medical %}☑{% else %}☐{% endif %}</td><td>زواج {% if c.need_marriage %}☑{% else %}☐{% endif %}</td>
+    <td>مشروع {% if c.need_project %}☑{% else %}☐{% endif %}</td><td>أجهزة منزلية {% if c.need_appliances %}☑{% else %}☐{% endif %}</td>
+    <td>مساعدة شهرية {% if c.need_monthly %}☑{% else %}☐{% endif %}</td><td>أخرى: {{ c.need_other }}</td></tr></table>
+  <h3>رأي الباحث ووصف مدى احتياج الأسرة</h3>
+  <p>{% if c %}<b>{{ c.get_assessment_display|default:"" }}</b>{% else %}الأسرة فقيرة وفي حاجة ضرورية للمساعدة ☐ — الأسرة في حالة متوسطة ☐ — الأسرة ليست في حاجة للمساعدة بسبب ارتفاع مستوى معيشتها ☐{% endif %}</p>
+  <div class="opinion">{{ c.research_findings|linebreaksbr }}</div>
+  <footer><div>توقيع الباحث: {% if c.researcher %}{{ c.researcher.display_name }}{% endif %} ....................</div>
+    <div>رقم الموبايل: ....................</div></footer>
+</section>
+<script src="{% static 'js/print.js' %}" defer></script>
+</body></html>

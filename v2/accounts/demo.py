@@ -7,8 +7,8 @@ from .models import User
 LOGINS = [
     ("admin", "مدير النظام", "System administrator", ["admin"], True),
     ("director", "د. سامية فؤاد", "Dr. Samia Fouad", ["executive"], False),
-    ("casemanager", "منى عبد الحميد", "Mona Abdelhamid", ["case_manager"], False),
-    ("casemanager2", "شريف منير", "Sherif Mounir", ["case_manager"], False),
+    ("casemanager", "منى عبد الحميد", "Mona Abdelhamid", ["case_manager"], False),       # Research Dept manager
+    ("projects", "شريف منير", "Sherif Mounir", ["projects_officer"], False),             # Projects Dept officer
     ("researcher1", "أحمد سعيد", "Ahmed Saeed", ["researcher"], False),
     ("researcher2", "هبة محمود", "Heba Mahmoud", ["researcher"], False),
     ("fundraiser", "كريم يوسف", "Karim Youssef", ["fundraising"], False),
@@ -20,7 +20,7 @@ LOGINS = [
     ("accountant", "مروة شوقي", "Marwa Shawky", ["accountant"], False),
     ("procurement", "عمرو جلال", "Amr Galal", ["procurement_officer"], False),
     ("storekeeper", "محمد عبد الله", "Mohamed Abdallah", ["storekeeper"], False),
-    ("pm", "رانيا عادل", "Rania Adel", ["project_manager"], False),
+    ("pm", "رانيا عادل", "Rania Adel", ["project_manager"], False),            # Projects Dept manager
 ]
 
 

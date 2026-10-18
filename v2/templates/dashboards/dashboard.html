@@ -96,7 +96,7 @@
 <section class="card">
   <h2>{% translate "Sponsorships" %}</h2>
   {% include "dashboards/_kpis.html" with kpis=s.sponsorships.kpis %}
-  <table>{% for sp in s.sponsorships.late %}<tr><td>{{ sp.donor }}</td><td>{{ sp.beneficiary.name }}</td><td class="num">{{ sp.monthly_amount|money }}</td><td class="num">{% translate "Arrears" %}: {{ sp.arrears|money }}</td></tr>
+  <table>{% for sp in s.sponsorships.late %}<tr><td>{{ sp.donor }}</td><td>{{ sp.beneficiary.case_no }}</td><td class="num">{{ sp.monthly_amount|money }}</td><td class="num">{% translate "Arrears" %}: {{ sp.arrears|money }}</td></tr>
   {% empty %}<tr><td class="muted">{% translate "No sponsorship is in arrears." %}</td></tr>{% endfor %}</table>
 </section>
 {% endif %}

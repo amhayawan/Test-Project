@@ -140,6 +140,10 @@ msgstr "الحساب الفرعي يجب أن يكون من نفس نوع الح
 msgid "Absence (leave or permission)"
 msgstr "غياب (إجازة أو إذن)"
 
+#: accounts/sod.py
+msgid "Accepts cases and also requests their assistance"
+msgstr "يعتمد الحالات ويطلب مساعداتها أيضاً"
+
 #: templates/projects/detail.html
 msgid "Account"
 msgstr "الحساب"
@@ -256,6 +260,10 @@ msgstr "الملفات المسموحة: PDF أو JPG أو PNG."
 #: templates/approvals/inbox.html
 msgid "Amount"
 msgstr "المبلغ"
+
+#: templates/cases/available.html
+msgid "Amount needed"
+msgstr "المبلغ المطلوب"
 
 #: templates/dashboards/dashboard.html
 msgid "Amount still needed:"
@@ -424,6 +432,10 @@ msgstr "تحويل بنكي"
 msgid "Basic salary"
 msgstr "الراتب الأساسي"
 
+#: cases/models.py
+msgid "Bed"
+msgstr "سرير"
+
 #: dashboards/widgets.py
 msgid "Being researched"
 msgstr "قيد البحث"
@@ -431,6 +443,14 @@ msgstr "قيد البحث"
 #: templates/projects/detail.html
 msgid "Beneficiaries"
 msgstr "المستفيدون"
+
+#: cases/nav.py
+msgid "Blank research form (print)"
+msgstr "استمارة بحث فارغة (للطباعة)"
+
+#: cases/models.py
+msgid "Blanket"
+msgstr "بطانية"
 
 #: projects/models.py
 msgid "Blocked"
@@ -443,6 +463,10 @@ msgstr "مكافأة"
 #: hr/models.py
 msgid "Both leave types must be counted in the same unit."
 msgstr "يجب أن يُحسب النوعان بنفس الوحدة."
+
+#: cases/models.py
+msgid "Brick"
+msgstr "طوب"
 
 #: templates/projects/detail.html
 msgid "Budget"
@@ -513,6 +537,10 @@ msgid "Can see all cases (not only assigned ones)"
 msgstr "يرى كل الحالات (وليس المسندة إليه فقط)"
 
 #: cases/models.py
+msgid "Can see approved cases by code only (no personal details)"
+msgstr "يرى الحالات المعتمدة بالكود فقط (بدون بيانات شخصية)"
+
+#: cases/models.py
 msgid "Can see donors and amounts linked to cases"
 msgstr "يرى المتبرعين والمبالغ المرتبطة بالحالات"
 
@@ -540,6 +568,10 @@ msgstr "إلغاء"
 msgid "Cancelled"
 msgstr "ملغي"
 
+#: cases/models.py
+msgid "Carpet"
+msgstr "سجاد"
+
 #: templates/dashboards/dashboard.html
 msgid "Case"
 msgstr "الحالة"
@@ -547,6 +579,10 @@ msgstr "الحالة"
 #: approvals/models.py
 msgid "Case acceptance"
 msgstr "قبول حالة"
+
+#: templates/cases/available.html
+msgid "Case code"
+msgstr "كود الحالة"
 
 #: cases/apps.py
 msgid "Case management"
@@ -563,6 +599,18 @@ msgstr "الحالات"
 #: dashboards/widgets.py
 msgid "Cases approved"
 msgstr "حالات معتمدة"
+
+#: templates/cases/available.html
+msgid "Cases are shown by code only. Names, ID numbers, addresses and phone numbers stay with the research team. Give donors the case code; record their donation or sponsorship against that code."
+msgstr "تظهر الحالات بالكود فقط. الأسماء وأرقام البطاقات والعناوين والهواتف تبقى لدى فريق البحث. أعطِ المتبرع كود الحالة وسجّل تبرعه أو كفالته على هذا الكود."
+
+#: templates/cases/available.html
+msgid "Cases available for donors"
+msgstr "الحالات المتاحة للمتبرعين"
+
+#: cases/nav.py
+msgid "Cases available for donors (by code)"
+msgstr "الحالات المتاحة للمتبرعين (بالكود)"
 
 #: templates/core/dashboard.html
 msgid "Cases awaiting approval"
@@ -587,6 +635,14 @@ msgstr "النقدية والبنوك الآن"
 #: templates/supply/stock.html
 msgid "Category"
 msgstr "الفئة"
+
+#: cases/models.py
+msgid "Ceramic"
+msgstr "سيراميك"
+
+#: cases/models.py
+msgid "Chairs"
+msgstr "كراسي"
 
 #: finance/nav.py
 msgid "Chart of accounts"
@@ -669,6 +725,10 @@ msgstr "شركة / مؤسسة"
 msgid "Complete the research first: %(m)s"
 msgstr "أكمل البحث أولاً: %(m)s"
 
+#: cases/models.py
+msgid "Computer"
+msgstr "كمبيوتر"
+
 #: supply/admin.py
 msgid "Confirm goods received (adds to stock and books it)"
 msgstr "تأكيد الاستلام (يضيف للمخزون ويقيّده)"
@@ -716,6 +776,10 @@ msgstr "يتحكم في الصلاحيات ويعد الرواتب أيضاً"
 #: accounts/sod.py
 msgid "Controls user permissions and also records donations"
 msgstr "يتحكم في صلاحيات المستخدمين ويسجل التبرعات أيضاً"
+
+#: cases/models.py
+msgid "Cooker / gas stove"
+msgstr "بوتاجاز / بوتاجاز مسطح / شعلة"
 
 #: templates/finance/_filters.html
 msgid "Cost centre"
@@ -967,6 +1031,10 @@ msgstr "فارغ = قاعدة الترحيل 'supply.inventory'."
 msgid "Ended"
 msgstr "منتهية"
 
+#: cases/admin.py
+msgid "Engaged daughter"
+msgstr "فتاة مكتوب كتابها"
+
 #: haz/settings.py
 msgid "English"
 msgstr "English"
@@ -1039,6 +1107,18 @@ msgstr "أسر استفادت"
 msgid "Family in need"
 msgstr "أسرة محتاجة"
 
+#: cases/admin.py
+msgid "Family needs"
+msgstr "احتياجات الأسرة"
+
+#: templates/cases/available.html
+msgid "Family size"
+msgstr "عدد أفراد الأسرة"
+
+#: cases/models.py
+msgid "Fan"
+msgstr "مروحة"
+
 #: cases/models.py
 msgid "Father"
 msgstr "أب"
@@ -1104,6 +1184,10 @@ msgid "Flag"
 msgstr "المؤشر"
 
 #: cases/models.py
+msgid "Floor mat"
+msgstr "حصير"
+
+#: cases/models.py
 msgid "Food"
 msgstr "غذاء"
 
@@ -1122,6 +1206,10 @@ msgstr "بدون مقابل / إيواء"
 #: templates/dashboards/dashboard.html
 msgid "From"
 msgstr "من"
+
+#: cases/models.py
+msgid "Fully collected"
+msgstr "تم تجميع المبلغ بالكامل"
 
 #: supply/models.py
 msgid "Fully received"
@@ -1150,6 +1238,10 @@ msgstr "تنمية الموارد"
 #: accounts/roles.py
 msgid "Fundraising / donations officer"
 msgstr "مسؤول التبرعات وتنمية الموارد"
+
+#: cases/models.py
+msgid "Gas cylinder"
+msgstr "أنبوبة"
 
 #: crm/models.py
 msgid "General donation"
@@ -1234,6 +1326,10 @@ msgstr "لديه صلاحيات ممنوحة مباشرة وليس من خلال
 msgid "Head of family"
 msgstr "رب الأسرة"
 
+#: cases/admin.py
+msgid "Head of the family"
+msgstr "رب الأسرة"
+
 #: cases/models.py
 msgid "High"
 msgstr "مرتفع"
@@ -1253,6 +1349,10 @@ msgstr "الأذونات بالساعات يجب أن تكون مدفوعة؛ س
 #: hr/models.py
 msgid "Hours"
 msgstr "ساعات"
+
+#: cases/admin.py
+msgid "Housing"
+msgstr "وصف حالة المسكن"
 
 #: cases/models.py
 msgid "Housing / repairs"
@@ -1319,6 +1419,10 @@ msgstr "قائمة الإيرادات والمصروفات"
 msgid "Income in period"
 msgstr "الإيرادات في الفترة"
 
+#: cases/admin.py
+msgid "Income sources (monthly)"
+msgstr "مصادر دخل الحالة (شهرياً)"
+
 #: templates/hr/payslip.html
 msgid "Income tax"
 msgstr "ضريبة كسب العمل"
@@ -1342,6 +1446,10 @@ msgstr "النظام المتكامل للإدارة"
 #: supply/dashboard.py
 msgid "Invoices waiting for approval"
 msgstr "فواتير بانتظار الاعتماد"
+
+#: cases/models.py
+msgid "Irregular"
+msgstr "متقطع"
 
 #: supply/models.py
 msgid "Issued"
@@ -1492,12 +1600,32 @@ msgid "Married"
 msgstr "متزوج"
 
 #: cases/models.py
+msgid "Married (man)"
+msgstr "متزوج"
+
+#: cases/models.py
+msgid "Married (woman)"
+msgstr "متزوجة"
+
+#: cases/models.py
+msgid "Mattress"
+msgstr "مرتبة"
+
+#: cases/models.py
 msgid "Medical"
 msgstr "علاج"
 
 #: cases/models.py
 msgid "Medical / surgery"
 msgstr "علاج / عملية"
+
+#: cases/models.py
+msgid "Medium"
+msgstr "متوسطة"
+
+#: cases/models.py
+msgid "Medium condition"
+msgstr "الأسرة في حالة متوسطة"
 
 #: hr/models.py
 msgid "Meets expectations"
@@ -1577,6 +1705,10 @@ msgstr "طلباتي"
 msgid "My requests still pending"
 msgstr "طلباتي التي لم يُبت فيها"
 
+#: templates/cases/available.html
+msgid "Need"
+msgstr "الاحتياج"
+
 #: hr/models.py
 msgid "Needs improvement"
 msgstr "يحتاج تحسيناً"
@@ -1624,6 +1756,14 @@ msgstr "لا"
 #: approvals/services.py
 msgid "No approval policy is configured for this document. Ask the administrator."
 msgstr "لا توجد سياسة اعتماد لهذا النوع من المستندات. راجع مدير النظام."
+
+#: crm/admin.py
+msgid "No approved case has this code."
+msgstr "لا توجد حالة معتمدة بهذا الكود."
+
+#: templates/cases/available.html
+msgid "No approved cases with open needs."
+msgstr "لا توجد حالات معتمدة لها احتياجات مفتوحة."
 
 #: templates/hr/my_payslips.html
 msgid "No approved payslips yet."
@@ -1715,10 +1855,18 @@ msgstr "غير مخصص لصندوق"
 msgid "Not calculated"
 msgstr "لم يُحتسب"
 
+#: cases/models.py
+msgid "Not collected yet"
+msgstr "لم يُجمع بعد"
+
 #: hr/leave.py
 #, python-format
 msgid "Not enough %(type)s balance: %(a)s available, %(n)s requested."
 msgstr "رصيد %(type)s غير كافٍ: المتاح %(a)s والمطلوب %(n)s."
+
+#: cases/models.py
+msgid "Not in need (standard of living is high)"
+msgstr "الأسرة ليست في حاجة للمساعدة بسبب ارتفاع مستوى معيشتها"
 
 #: templates/approvals/request.html
 msgid "Note"
@@ -1856,6 +2004,14 @@ msgstr "كفالة أيتام"
 msgid "Other"
 msgstr "أخرى"
 
+#: cases/admin.py
+msgid "Other circumstances"
+msgstr "ظروف أخرى"
+
+#: cases/models.py
+msgid "Others"
+msgstr "للغير"
+
 #: hr/models.py
 msgid "Outstanding"
 msgstr "ممتاز"
@@ -1883,6 +2039,10 @@ msgstr "مدفوع"
 #: hr/models.py
 msgid "Part time"
 msgstr "دوام جزئي"
+
+#: cases/models.py
+msgid "Partly collected"
+msgstr "تم تجميع جزء من المبلغ"
 
 #: templates/registration/login.html
 msgid "Password"
@@ -1979,8 +2139,16 @@ msgid "Planned"
 msgstr "مخطط"
 
 #: cases/models.py
+msgid "Plastered"
+msgstr "محارة"
+
+#: cases/models.py
 msgid "Poor"
 msgstr "سيئة"
+
+#: cases/models.py
+msgid "Poor and in urgent need of assistance"
+msgstr "الأسرة فقيرة وفي حاجة ضرورية للمساعدة"
 
 #: templates/hr/payslip.html
 msgid "Position"
@@ -2018,6 +2186,14 @@ msgstr "سعر أقل من أمر الشراء"
 msgid "Print"
 msgstr "طباعة"
 
+#: cases/admin.py
+msgid "Print the research form"
+msgstr "طباعة استمارة البحث الميداني"
+
+#: cases/models.py
+msgid "Private"
+msgstr "خاص"
+
 #: accounts/roles.py
 msgid "Procurement officer"
 msgstr "مسؤول المشتريات"
@@ -2049,6 +2225,14 @@ msgstr "إدارة المشروعات"
 #: accounts/roles.py
 msgid "Project manager"
 msgstr "مدير مشروع"
+
+#: accounts/roles.py
+msgid "Projects Department manager"
+msgstr "مدير قسم المشروعات"
+
+#: accounts/roles.py
+msgid "Projects Department officer"
+msgstr "أخصائي قسم المشروعات"
 
 #: projects/dashboard.py
 msgid "Projects at risk"
@@ -2114,6 +2298,14 @@ msgstr "يسجل التبرعات ويمسك حسابات النقدية وال�
 msgid "Records journal entries and payments and also approves them"
 msgstr "يسجل القيود والمدفوعات ويعتمدها أيضاً"
 
+#: cases/nav.py
+msgid "Referred to the Projects Department"
+msgstr "الحالات المحالة لقسم المشروعات"
+
+#: cases/models.py
+msgid "Refrigerator"
+msgstr "ثلاجة"
+
 #: approvals/models.py
 msgid "Reject"
 msgstr "رفض"
@@ -2146,6 +2338,14 @@ msgstr "يتبع"
 msgid "Request cancelled."
 msgstr "تم إلغاء الطلب."
 
+#: accounts/sod.py
+msgid "Requests assistance and also approves it"
+msgstr "يطلب المساعدة ويعتمدها أيضاً"
+
+#: accounts/roles.py
+msgid "Research Department manager"
+msgstr "مدير قسم البحث الاجتماعي"
+
 #: templates/dashboards/dashboard.html
 msgid "Researcher"
 msgstr "الباحث"
@@ -2154,9 +2354,17 @@ msgstr "الباحث"
 msgid "Researcher workload"
 msgstr "عبء العمل على الباحثين"
 
+#: cases/admin.py
+msgid "Researcher's opinion"
+msgstr "رأي الباحث"
+
 #: accounts/sod.py
 msgid "Researches cases and also accepts them"
 msgstr "يبحث الحالات ويعتمدها أيضاً"
+
+#: accounts/sod.py
+msgid "Researches cases and also requests their assistance"
+msgstr "يبحث الحالات ويطلب مساعداتها أيضاً"
 
 #: templates/dashboards/dashboard.html
 msgid "Researching"
@@ -2219,6 +2427,10 @@ msgstr "الأدوار"
 msgid "Rules checked"
 msgstr "القواعد المطبقة"
 
+#: cases/models.py
+msgid "Rural (mud)"
+msgstr "ريفي"
+
 #: crm/models.py
 msgid "Sadaqa"
 msgstr "صدقة"
@@ -2227,6 +2439,10 @@ msgstr "صدقة"
 #, python-format
 msgid "Salaries paid %(month)s"
 msgstr "صرف رواتب %(month)s"
+
+#: cases/models.py
+msgid "Salon (sitting set)"
+msgstr "صالون"
 
 #: templates/dashboards/dashboard.html
 msgid "Segregation of duties"
@@ -2251,6 +2467,14 @@ msgstr "خدمة / تُستهلك فوراً (مصروف)"
 #: templates/projects/list.html
 msgid "Share of budget spent"
 msgstr "نسبة الصرف من الموازنة"
+
+#: cases/models.py
+msgid "Shared"
+msgstr "مشترك"
+
+#: cases/models.py
+msgid "Sharia association / charities"
+msgstr "الجمعية الشرعية / جمعيات خيرية"
 
 #: templates/dashboards/_chart.html
 msgid "Show as table"
@@ -2312,6 +2536,10 @@ msgstr "الكفالات"
 msgid "Sponsorships can only be created for approved cases."
 msgstr "لا يمكن إنشاء كفالة إلا لحالة معتمدة."
 
+#: cases/models.py
+msgid "Stable"
+msgstr "مستمر"
+
 #: templates/projects/detail.html
 msgid "Staff cost"
 msgstr "تكلفة العاملين"
@@ -2335,6 +2563,10 @@ msgstr "المرحلة"
 #: templates/dashboards/dashboard.html
 msgid "Still missing"
 msgstr "ما ينقص"
+
+#: templates/cases/available.html
+msgid "Still needed"
+msgstr "المتبقي"
 
 #: finance/models.py
 msgid "Stock"
@@ -2445,6 +2677,14 @@ msgstr "المهام"
 msgid "Team"
 msgstr "فريق العمل"
 
+#: cases/models.py
+msgid "Telephone"
+msgstr "تليفون"
+
+#: cases/models.py
+msgid "Television"
+msgstr "تليفزيون"
+
 #: supply/models.py
 msgid "The aid must be approved and marked as goods from the store."
 msgstr "يجب أن تكون المساعدة معتمدة ومحددة كسلع من المخزن."
@@ -2490,6 +2730,10 @@ msgstr "تاريخ نهاية الخدمة قبل تاريخ التعيين."
 #, python-format
 msgid "The entry does not balance: debit %(d)s, credit %(c)s."
 msgstr "القيد غير متوازن: مدين %(d)s ودائن %(c)s."
+
+#: cases/models.py
+msgid "The family"
+msgstr "ملك الأسرة"
 
 #: core/models.py
 msgid "The file content does not match its type."
@@ -2630,6 +2874,10 @@ msgstr "هذا النوع من الإجازات يحتاج مستنداً مؤي
 msgid "This month"
 msgstr "هذا الشهر"
 
+#: crm/admin.py
+msgid "This need belongs to another case."
+msgstr "هذا الاحتياج يخص حالة أخرى."
+
 #: hr/payroll.py
 msgid "This payroll is awaiting approval or already approved and cannot be recalculated."
 msgstr "مسير الرواتب بانتظار الاعتماد أو معتمد ولا يمكن إعادة احتسابه."
@@ -2657,6 +2905,10 @@ msgstr "هذا المورد غير نشط."
 #: dashboards/filters.py
 msgid "This year"
 msgstr "هذا العام"
+
+#: cases/models.py
+msgid "Tiles"
+msgstr "بلاط"
 
 #: templates/dashboards/dashboard.html
 msgid "To"
@@ -2701,6 +2953,10 @@ msgstr "إجمالي الإيرادات"
 #: templates/finance/balance_sheet.html
 msgid "Total liabilities"
 msgstr "إجمالي الالتزامات"
+
+#: cases/models.py
+msgid "Traditional sofa (kanaba)"
+msgstr "كنب بلدي"
 
 #: hr/models.py
 msgid "Trainee"
@@ -2802,9 +3058,21 @@ msgstr "بانتظار اعتمادي"
 msgid "Waiting for my decision"
 msgstr "بانتظار قراري"
 
+#: cases/models.py
+msgid "Wardrobe"
+msgstr "دولاب"
+
+#: cases/models.py
+msgid "Washing machine"
+msgstr "غسالة"
+
 #: projects/services.py
 msgid "Watch"
 msgstr "تحت المراقبة"
+
+#: cases/models.py
+msgid "Water heater"
+msgstr "سخان"
 
 #: templates/finance/index.html
 msgid "What each fund received, spent and still holds"
@@ -2817,6 +3085,10 @@ msgstr "من يستطيع ماذا"
 #: templates/projects/detail.html
 msgid "Whole project"
 msgstr "المشروع بالكامل"
+
+#: cases/models.py
+msgid "Widow"
+msgstr "أرملة"
 
 #: cases/models.py
 msgid "Widow / divorcee"
@@ -2911,6 +3183,10 @@ msgstr "زكاة مال"
 msgid "Zakat must go to a zakat fund."
 msgstr "يجب أن تذهب الزكاة إلى صندوق الزكاة."
 
+#: cases/models.py
+msgid "able to work (researcher's view)"
+msgstr "القدرة على العمل (من وجهة نظر الباحث)"
+
 #: finance/models.py
 msgid "account"
 msgstr "الحساب"
@@ -2928,8 +3204,16 @@ msgid "add"
 msgstr "إضافة"
 
 #: cases/models.py
+msgid "additional burdens"
+msgstr "تكاليف إضافية"
+
+#: cases/models.py
 msgid "address"
 msgstr "العنوان"
+
+#: cases/models.py
+msgid "age"
+msgstr "السن"
 
 #: supply/models.py
 msgid "agreed unit price"
@@ -2959,6 +3243,10 @@ msgstr "المبلغ المطلوب (ج.م)"
 msgid "and age at least (years)"
 msgstr "وسن لا يقل عن (سنوات)"
 
+#: cases/models.py
+msgid "animals belong to"
+msgstr "ملكية المواشي"
+
 #: hr/models.py
 msgid "annual income from"
 msgstr "الدخل السنوي من"
@@ -2966,6 +3254,10 @@ msgstr "الدخل السنوي من"
 #: hr/models.py
 msgid "annual income to (empty = no limit)"
 msgstr "الدخل السنوي إلى (فارغ = بلا حد)"
+
+#: cases/models.py
+msgid "appliances and furniture"
+msgstr "الأجهزة والأثاث"
 
 #: approvals/models.py
 msgid "approval policies"
@@ -3063,6 +3355,14 @@ msgstr "سجل العمليات"
 msgid "availability"
 msgstr "أوقات التفرغ"
 
+#: cases/models.py
+msgid "available"
+msgstr "موجود"
+
+#: cases/models.py
+msgid "average income"
+msgstr "متوسط الدخل"
+
 #: templates/dashboards/dashboard.html
 msgid "back after"
 msgstr "يعود بعد"
@@ -3082,6 +3382,14 @@ msgstr "رقم الحساب / IBAN"
 #: hr/models.py
 msgid "basic monthly salary (EGP)"
 msgstr "الراتب الأساسي الشهري (ج.م)"
+
+#: cases/models.py
+msgid "bathroom"
+msgstr "الحمام"
+
+#: cases/models.py
+msgid "benefactors (relatives / neighbours)"
+msgstr "أهل الخير / أقارب / جيران"
 
 #: hr/models.py
 msgid "birth date"
@@ -3143,6 +3451,10 @@ msgstr "الحالة"
 msgid "case / beneficiary"
 msgstr "حالة / مستفيد"
 
+#: crm/admin.py
+msgid "case code"
+msgstr "كود الحالة"
+
 #: cases/models.py
 msgid "case no."
 msgstr "رقم الحالة"
@@ -3175,6 +3487,10 @@ msgstr "رقم الشيك / التحويل"
 msgid "code"
 msgstr "الكود"
 
+#: cases/admin.py
+msgid "collected?"
+msgstr "تم التجميع؟"
+
 #: supply/models.py
 msgid "commercial register no."
 msgstr "رقم السجل التجاري"
@@ -3182,6 +3498,10 @@ msgstr "رقم السجل التجاري"
 #: hr/models.py
 msgid "component"
 msgstr "البند"
+
+#: cases/models.py
+msgid "condition"
+msgstr "الحالة"
 
 #: supply/models.py
 msgid "contact person"
@@ -3227,6 +3547,10 @@ msgstr "تُحسب بـ"
 msgid "counts for social insurance"
 msgstr "يدخل في الأجر التأميني"
 
+#: cases/models.py
+msgid "covered by the state"
+msgstr "نفقة الدولة"
+
 #: finance/models.py
 msgid "credit"
 msgstr "دائن"
@@ -3235,6 +3559,10 @@ msgstr "دائن"
 msgid "custodian"
 msgstr "العهدة لدى"
 
+#: cases/models.py
+msgid "daily food cost"
+msgstr "تكلفة الطعام اليومي"
+
 #: crm/models.py
 msgid "date"
 msgstr "التاريخ"
@@ -3242,6 +3570,10 @@ msgstr "التاريخ"
 #: supply/models.py
 msgid "date received"
 msgstr "تاريخ الاستلام"
+
+#: cases/models.py
+msgid "daughter's name"
+msgstr "اسم الفتاة"
 
 #: hr/models.py
 msgid "days (+ add / - remove)"
@@ -3319,6 +3651,10 @@ msgstr "تاريخ الاستبعاد"
 msgid "document type"
 msgstr "نوع المستند"
 
+#: cases/models.py
+msgid "does the family keep livestock?"
+msgstr "هل لدى الأسرة مواشي؟"
+
 #: crm/models.py
 msgid "donation"
 msgstr "تبرع"
@@ -3351,6 +3687,10 @@ msgstr "تاريخ الاستحقاق"
 msgid "dues paid until"
 msgstr "الاشتراك مسدد حتى"
 
+#: crm/admin.py
+msgid "e.g. C-2026-00012, as given to the donor"
+msgstr "مثال: C-2026-00012، كما أُعطي للمتبرع"
+
 #: hr/models.py
 msgid "e.g. a medical certificate for sick leave."
 msgstr "مثال: شهادة طبية للإجازة المرضية."
@@ -3372,8 +3712,16 @@ msgid "earmarked for need"
 msgstr "مخصص لاحتياج"
 
 #: cases/models.py
+msgid "education"
+msgstr "المؤهل الدراسي"
+
+#: cases/models.py
 msgid "education / work"
 msgstr "التعليم / العمل"
+
+#: cases/models.py
+msgid "electricity bill"
+msgstr "فاتورة الكهرباء"
 
 #: cases/models.py
 msgid "eligible for zakat"
@@ -3476,6 +3824,10 @@ msgid "family size"
 msgstr "عدد أفراد الأسرة"
 
 #: cases/models.py
+msgid "family work salaries (total)"
+msgstr "مجموع رواتب عمل الأسرة"
+
+#: cases/models.py
 msgid "field visit date"
 msgstr "تاريخ الزيارة الميدانية"
 
@@ -3502,6 +3854,10 @@ msgstr "أصل ثابت"
 #: finance/models.py
 msgid "fixed assets"
 msgstr "الأصول الثابتة"
+
+#: cases/models.py
+msgid "floor"
+msgstr "الأرضية"
 
 #: hr/models.py
 msgid "for"
@@ -3534,6 +3890,10 @@ msgstr "الصندوق"
 #: core/models.py
 msgid "funds"
 msgstr "الصناديق"
+
+#: cases/models.py
+msgid "gas bill"
+msgstr "فاتورة الغاز"
 
 #: cases/models.py
 msgid "gender"
@@ -3591,6 +3951,10 @@ msgstr "أعلى مؤهل"
 msgid "hire date"
 msgstr "تاريخ التعيين"
 
+#: cases/models.py
+msgid "home appliances"
+msgstr "أجهزة منزلية"
+
 #: hr/models.py
 msgid "home department"
 msgstr "الإدارة الأساسية"
@@ -3600,12 +3964,40 @@ msgid "hours (permissions only)"
 msgstr "الساعات (للأذونات فقط)"
 
 #: cases/models.py
+msgid "house area"
+msgstr "مساحة البيت"
+
+#: cases/models.py
+msgid "household item"
+msgstr "جهاز / أثاث"
+
+#: cases/models.py
 msgid "housing condition"
 msgstr "حالة السكن"
 
 #: cases/models.py
 msgid "housing type"
 msgstr "نوع السكن"
+
+#: cases/models.py
+msgid "if not, distance to nearest water point"
+msgstr "في حالة (لا) مسافة أقرب وصلة مياه"
+
+#: cases/models.py
+msgid "if so, room area"
+msgstr "في حالة (نعم) مساحة الغرفة"
+
+#: cases/models.py
+msgid "illness"
+msgstr "المرض"
+
+#: cases/models.py
+msgid "illness in the family"
+msgstr "حالة مرضية"
+
+#: cases/models.py
+msgid "illnesses in the family"
+msgstr "الحالات المرضية لأفراد الأسرة"
 
 #: finance/models.py
 msgid "in use from"
@@ -3632,12 +4024,24 @@ msgid "income tax brackets"
 msgstr "شرائح ضريبة كسب العمل"
 
 #: cases/models.py
+msgid "instalments, if any"
+msgstr "أقساط إن وجد"
+
+#: cases/models.py
 msgid "intake notes"
 msgstr "ملاحظات التسجيل"
 
 #: supply/models.py
 msgid "invoice date"
 msgstr "تاريخ الفاتورة"
+
+#: cases/models.py
+msgid "is anyone a smoker?"
+msgstr "هل هناك أحد مدخن؟"
+
+#: cases/models.py
+msgid "is there an engaged daughter?"
+msgstr "هل يوجد فتاة مكتوب كتابها؟"
 
 #: supply/models.py
 msgid "issue no."
@@ -3739,6 +4143,22 @@ msgstr "المدير"
 msgid "marital status"
 msgstr "الحالة الاجتماعية"
 
+#: cases/models.py
+msgid "marital status of the head"
+msgstr "الحالة الاجتماعية"
+
+#: cases/models.py
+msgid "marriage"
+msgstr "زواج"
+
+#: cases/models.py
+msgid "marriage needs already provided (what, and from whom)"
+msgstr "الاحتياجات التي تم توفيرها (ما هي – من أين)"
+
+#: cases/models.py
+msgid "marriage needs remaining"
+msgstr "الاحتياجات المتبقية"
+
 #: hr/models.py
 msgid "maximum basic salary"
 msgstr "الحد الأقصى للراتب الأساسي"
@@ -3762,6 +4182,14 @@ msgstr "الحد الأقصى سنوياً"
 #: hr/models.py
 msgid "maximum times during service"
 msgstr "أقصى عدد مرات خلال الخدمة"
+
+#: cases/models.py
+msgid "medical"
+msgstr "طبي"
+
+#: cases/models.py
+msgid "members on the ration card"
+msgstr "عدد أفراد البطاقة التموينية"
 
 #: crm/models.py
 msgid "membership no."
@@ -3807,9 +4235,21 @@ msgstr "الحد الأدنى للخدمة قبل الاستحقاق (بالأش
 msgid "month"
 msgstr "الشهر"
 
+#: templates/cases/available.html
+msgid "monthly"
+msgstr "شهري"
+
 #: crm/models.py
 msgid "monthly amount (EGP)"
 msgstr "المبلغ الشهري (ج.م)"
+
+#: cases/models.py
+msgid "monthly assistance"
+msgstr "مساعدة شهرية"
+
+#: cases/admin.py
+msgid "monthly gap (expenses − income)"
+msgstr "العجز الشهري (المصروفات − الدخل)"
 
 #: cases/models.py
 msgid "monthly income"
@@ -3852,12 +4292,28 @@ msgid "needs"
 msgstr "الاحتياجات"
 
 #: cases/models.py
+msgid "needs a roof?"
+msgstr "هل هناك احتياج لسقف؟"
+
+#: cases/models.py
 msgid "next re-assessment"
 msgstr "إعادة التقييم القادمة"
 
 #: crm/models.py
 msgid "notes"
 msgstr "ملاحظات"
+
+#: cases/models.py
+msgid "number"
+msgstr "العدد"
+
+#: cases/models.py
+msgid "number of animals"
+msgstr "العدد"
+
+#: cases/models.py
+msgid "number of rooms"
+msgstr "عدد الغرف"
 
 #: core/models.py
 msgid "number sequence"
@@ -3904,6 +4360,14 @@ msgstr "الترتيب"
 msgid "order no."
 msgstr "رقم أمر الشراء"
 
+#: cases/models.py
+msgid "other electrical appliances"
+msgstr "أجهزة كهربائية أخرى"
+
+#: cases/models.py
+msgid "other needs"
+msgstr "احتياجات أخرى"
+
 #: supply/models.py
 msgid "our reference"
 msgstr "مرجعنا"
@@ -3931,6 +4395,10 @@ msgstr "الحساب الرئيسي"
 #: core/models.py
 msgid "parent department"
 msgstr "الإدارة الأم"
+
+#: cases/models.py
+msgid "patient's name"
+msgstr "اسم المريض"
 
 #: hr/models.py
 msgid "pay component"
@@ -4132,6 +4600,14 @@ msgstr "السبب / ملاحظات"
 msgid "reason for leaving"
 msgstr "سبب ترك العمل"
 
+#: cases/models.py
+msgid "reason for not working"
+msgstr "سبب الامتناع عن العمل"
+
+#: cases/models.py
+msgid "reason if there is no ration card"
+msgstr "سبب عدم وجود بطاقة تموينية"
+
 #: crm/models.py
 msgid "receipt no."
 msgstr "رقم الإيصال"
@@ -4145,8 +4621,16 @@ msgid "recommendation"
 msgstr "التوصية"
 
 #: cases/models.py
+msgid "referred to the Projects Department"
+msgstr "تاريخ الإحالة لقسم المشروعات"
+
+#: cases/models.py
 msgid "relation"
 msgstr "الصلة"
+
+#: cases/models.py
+msgid "rent"
+msgstr "الإيجار"
 
 #: supply/models.py
 msgid "reorder level"
@@ -4168,9 +4652,25 @@ msgstr "مقدم الطلب"
 msgid "research findings"
 msgstr "نتائج البحث"
 
+#: cases/admin.py
+msgid "research form"
+msgstr "استمارة البحث"
+
+#: cases/models.py
+msgid "research form no."
+msgstr "رقم الاستمارة"
+
 #: cases/models.py
 msgid "researcher"
 msgstr "الباحث"
+
+#: cases/models.py
+msgid "researcher's assessment"
+msgstr "تقييم الباحث"
+
+#: cases/models.py
+msgid "researcher's opinion and description of the family's need"
+msgstr "رأي الباحث ووصف مدى احتياج الأسرة"
 
 #: finance/models.py
 msgid "resolved at"
@@ -4188,6 +4688,10 @@ msgstr "يعكس القيد"
 msgid "reviewer"
 msgstr "المقيِّم"
 
+#: cases/models.py
+msgid "school fees and private lessons"
+msgstr "مصاريف الدراسة والدروس"
+
 #: finance/models.py
 msgid "serial / plate no."
 msgstr "الرقم المسلسل / رقم اللوحة"
@@ -4204,9 +4708,17 @@ msgstr "معتمدة"
 msgid "skills"
 msgstr "المهارات"
 
+#: cases/models.py
+msgid "small project"
+msgstr "مشروع"
+
 #: hr/models.py
 msgid "social insurance no."
 msgstr "الرقم التأميني"
+
+#: cases/models.py
+msgid "social insurance pension"
+msgstr "معاش التأمينات الاجتماعية"
 
 #: hr/models.py
 msgid "social insurance rule"
@@ -4215,6 +4727,10 @@ msgstr "قاعدة التأمينات الاجتماعية"
 #: hr/models.py
 msgid "social insurance rules"
 msgstr "قواعد التأمينات الاجتماعية"
+
+#: cases/models.py
+msgid "social solidarity pension (Takaful and Karama)"
+msgstr "معاش الشؤون الاجتماعية / تكافل وكرامة"
 
 #: finance/models.py
 msgid "source"
@@ -4393,6 +4909,10 @@ msgstr "المهام"
 msgid "tax registration no."
 msgstr "رقم التسجيل الضريبي"
 
+#: cases/models.py
+msgid "telephone bill"
+msgstr "فاتورة التليفون"
+
 #: core/models.py
 msgid "title"
 msgstr "العنوان"
@@ -4413,9 +4933,25 @@ msgstr "إجمالي التكلفة على الجمعية"
 msgid "total gross"
 msgstr "إجمالي الاستحقاقات"
 
+#: cases/admin.py
+msgid "total income"
+msgstr "إجمالي مصادر الدخل"
+
+#: cases/admin.py
+msgid "total monthly expenses"
+msgstr "إجمالي المصروفات الشهرية"
+
 #: hr/models.py
 msgid "total net"
 msgstr "إجمالي الصافي"
+
+#: cases/models.py
+msgid "transport"
+msgstr "المواصلات"
+
+#: cases/models.py
+msgid "treatment cost (monthly)"
+msgstr "تكلفة العلاج (شهرياً)"
 
 #: cases/models.py
 msgid "type"
@@ -4493,6 +5029,22 @@ msgstr "رقم الإذن"
 msgid "vs previous period"
 msgstr "مقارنة بالفترة السابقة"
 
+#: cases/models.py
+msgid "walls and roof"
+msgstr "مواد البناء والبياض للحوائط والأسقف"
+
+#: cases/models.py
+msgid "water bill"
+msgstr "فاتورة المياه"
+
+#: cases/models.py
+msgid "water connection"
+msgstr "وصلة مياه"
+
+#: cases/models.py
+msgid "wedding date"
+msgstr "ميعاد الزواج"
+
 #: hr/models.py
 msgid "weekly hours"
 msgstr "ساعات العمل الأسبوعية"
@@ -4504,6 +5056,18 @@ msgstr "الوزن"
 #: templates/projects/detail.html
 msgid "weighted by task"
 msgstr "مرجح بوزن المهام"
+
+#: cases/models.py
+msgid "which benefactors"
+msgstr "من أهل الخير"
+
+#: cases/models.py
+msgid "work"
+msgstr "العمل"
+
+#: cases/models.py
+msgid "work stability"
+msgstr "ثبات العمل"
 
 #: hr/models.py
 msgid "year"

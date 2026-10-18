@@ -17,16 +17,17 @@ GROUPS = {"cases": "Case management", "crm": "Donor management", "hr": "Human re
 # user → menu groups they must see (any group not listed must be hidden)
 EXPECTED = {
     "researcher1": {"cases"},
-    "casemanager": {"cases", "crm", "supply"},
+    "casemanager": {"cases", "supply"},                  # Research Dept manager: no donors or donations
+    "projects": {"cases", "crm", "supply"},              # Projects Dept officer: referred cases, aid, sponsorships
     "fundraiser": {"cases", "crm"},
     "hrofficer": {"hr"},
     "hrmanager": {"hr", "supply"},
     "payroll": {"hr"},
-    "accountant": {"finance", "supply", "projects", "crm"},
+    "accountant": {"finance", "supply", "projects", "crm", "cases"},   # cases by code only
     "finmanager": {"finance", "supply", "projects", "crm", "cases"},   # payroll reaches finance as journals, no salaries
     "procurement": {"supply"},
     "storekeeper": {"supply", "cases", "crm"},
-    "pm": {"projects", "supply"},
+    "pm": {"projects", "supply", "cases"},
     "director": set(GROUPS),
     "admin": set(GROUPS),
 }
@@ -38,7 +39,8 @@ PAGES = [
     ("/hr/structure/", {"hrofficer", "hrmanager", "payroll", "director", "admin"}),
     ("/projects/", {"pm", "accountant", "finmanager", "director", "admin"}),
     ("/backoffice/hr/payrollrun/", {"payroll", "hrmanager", "director", "admin"}),   # HR manager approves payroll
-    ("/backoffice/crm/donor/", {"fundraiser", "casemanager", "finmanager", "director", "admin"}),  # accountant: donations only
+    ("/backoffice/crm/donor/", {"fundraiser", "finmanager", "director", "admin"}),  # accountant: donations only
+    ("/cases/available/", {"fundraiser", "projects", "pm", "accountant", "finmanager", "director", "admin"}),
 ]
 
 

@@ -21,6 +21,7 @@ def research_done(case):
     case.zakat_eligible = "yes"
     case.research_findings = "زيارة ميدانية"
     case.recommendation = "قبول"
+    case.assessment = "urgent"
     case.save()
     return case
 
@@ -35,6 +36,9 @@ def team(make_user):
         "executive": make_user("director", "executive"),
         "both": make_user("both", "case_manager", "executive"),
         "fund": make_user("fund", "fundraising"),
+        "projects": make_user("proj", "projects_officer"),
+        "pm": make_user("pm", "project_manager"),
+        "pm_exec": make_user("pmx", "project_manager", "executive"),
     }
 
 
@@ -73,17 +77,18 @@ def test_maker_checker_rules(team):
 def test_large_aid_needs_two_different_approvers(team):
     case = research_done(Beneficiary.objects.create(name="حالة", researcher=team["researcher"]))
     services.decide(services.submit(case, team["researcher"]), team["manager"], "approve")
-    small = Aid.objects.create(beneficiary=case, value=Decimal("500"), requested_by=team["researcher"])
-    req = services.submit(small, team["researcher"])
-    assert req.policy.steps.count() == 1
-    big = Aid.objects.create(beneficiary=case, value=Decimal("25000"), requested_by=team["researcher"])
-    req = services.submit(big, team["researcher"])
-    assert [s.role.name for s in req.policy.steps.all()] == ["case_manager", "executive"]
+    # the Projects Department requests the aid; its manager approves (and the executive above the limit)
+    small = Aid.objects.create(beneficiary=case, value=Decimal("500"), requested_by=team["projects"])
+    req = services.submit(small, team["projects"])
+    assert req.policy.steps.count() == 1 and not services.can_act(req, team["manager"])
+    big = Aid.objects.create(beneficiary=case, value=Decimal("25000"), requested_by=team["projects"])
+    req = services.submit(big, team["projects"])
+    assert [s.role.name for s in req.policy.steps.all()] == ["project_manager", "executive"]
     with pytest.raises(services.ApprovalError):
-        services.decide(req, team["executive"], "approve")      # step 1 is the case manager's
-    services.decide(req, team["both"], "approve")                # step 1 done by someone with both roles
+        services.decide(req, team["executive"], "approve")      # step 1 is the Projects Department manager's
+    services.decide(req, team["pm_exec"], "approve")             # step 1 done by someone with both roles
     with pytest.raises(services.ApprovalError):
-        services.decide(req, team["both"], "approve")           # ...who may not also do step 2
+        services.decide(req, team["pm_exec"], "approve")        # ...who may not also do step 2
     big.refresh_from_db()
     assert big.status == Aid.PENDING
     services.decide(req, team["executive"], "approve")
@@ -144,9 +149,12 @@ def test_researchers_see_only_their_cases(team):
     Beneficiary.objects.create(name="حالة زميل", researcher=team["researcher2"])
     assert list(Beneficiary.objects.visible_to(team["researcher"])) == [mine]
     assert Beneficiary.objects.visible_to(team["manager"]).count() == 2
-    assert Beneficiary.objects.visible_to(team["fund"]).count() == 2
-    assert not team["researcher"].has_perm("crm.view_donor")
-    assert not team["researcher"].has_perm("cases.view_case_funding")
+    assert Beneficiary.objects.visible_to(team["fund"]).count() == 0     # fundraising works by case code only
+    assert team["fund"].has_perm("cases.view_case_summary")
+    for user in (team["researcher"], team["manager"]):                  # research team: no donors or amounts
+        assert not user.has_perm("crm.view_donor") and not user.has_perm("crm.view_donation")
+        assert not user.has_perm("cases.view_case_funding")
+    assert team["projects"].has_perm("cases.view_case_funding")
 
 
 def test_attachments_follow_record_access(team):

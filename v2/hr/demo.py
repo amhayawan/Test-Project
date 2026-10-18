@@ -25,10 +25,10 @@ GRADES = [("G1", "الدرجة الأولى (قيادية)", 1, 25000, 45000), (
 # username or None, position code, department, grade, salary, manager username, gender, assignments
 STAFF = [
     ("director", "ED", "ADM", "G1", 38000, None, "f", []),
-    ("casemanager", "CMH", "PRG", "G2", 21000, "director", "f", [("MED", 40)]),
-    ("casemanager2", "CM", "PRG", "G3", 14000, "casemanager", "m", [("FOOD", 50)]),
-    ("researcher1", "SR", "PRG", "G3", 10500, "casemanager", "m", [("ORPH", 50), ("FOOD", 30)]),
-    ("researcher2", "SR", "PRG", "G3", 10000, "casemanager", "f", [("ORPH", 40), ("MED", 40)]),
+    ("casemanager", "CMH", "RES", "G2", 21000, "director", "f", [("MED", 40)]),
+    ("projects", "CM", "PRG", "G3", 14000, "pm", "m", [("FOOD", 50)]),
+    ("researcher1", "SR", "RES", "G3", 10500, "casemanager", "m", [("ORPH", 50), ("FOOD", 30)]),
+    ("researcher2", "SR", "RES", "G3", 10000, "casemanager", "f", [("ORPH", 40), ("MED", 40)]),
     ("pm", "PM", "PRG", "G2", 19000, "director", "f", [("ORPH", 50), ("FOOD", 50)]),
     ("fundraiser", "FRO", "FR", "G3", 12000, "director", "m", []),
     ("hrmanager", "HRM", "HR", "G2", 20000, "director", "f", []),
@@ -39,16 +39,16 @@ STAFF = [
     ("procurement", "PRO", "SUP", "G3", 11000, "director", "m", []),
     ("storekeeper", "STK", "SUP", "G4", 8000, "procurement", "m", []),
     (None, "DRV", "ADM", "G5", 5500, "director", "m", [("FOOD", 60)]),
-    (None, "SW", "PRG", "G4", 7500, "casemanager", "f", [("ORPH", 100)]),
-    (None, "SW", "PRG", "G4", 7200, "casemanager", "f", [("FOOD", 100)]),
+    (None, "SW", "RES", "G4", 7500, "casemanager", "f", [("ORPH", 100)]),
+    (None, "SW", "RES", "G4", 7200, "casemanager", "f", [("FOOD", 100)]),
 ]
-POSITIONS = {"ED": ("المدير التنفيذي", "ADM", "G1", 1), "CMH": ("رئيس قسم الحالات", "PRG", "G2", 1),
-             "CM": ("مدير حالات", "PRG", "G3", 2), "SR": ("باحث اجتماعي", "PRG", "G3", 4),
-             "PM": ("مدير مشروعات", "PRG", "G2", 1), "FRO": ("مسؤول تنمية موارد", "FR", "G3", 2),
+POSITIONS = {"ED": ("المدير التنفيذي", "ADM", "G1", 1), "CMH": ("مدير قسم البحث الاجتماعي", "RES", "G2", 1),
+             "CM": ("أخصائي قسم المشروعات", "PRG", "G3", 2), "SR": ("باحث اجتماعي", "RES", "G3", 4),
+             "PM": ("مدير قسم المشروعات", "PRG", "G2", 1), "FRO": ("مسؤول تنمية موارد", "FR", "G3", 2),
              "HRM": ("مدير الموارد البشرية", "HR", "G2", 1), "HRO": ("أخصائي موارد بشرية", "HR", "G4", 1),
              "PAY": ("مسؤول الرواتب", "FIN", "G3", 1), "FM": ("المدير المالي", "FIN", "G2", 1),
              "ACC": ("محاسب", "FIN", "G3", 2), "PRO": ("مسؤول مشتريات", "SUP", "G3", 1),
-             "STK": ("أمين مخزن", "SUP", "G4", 1), "DRV": ("سائق", "ADM", "G5", 2), "SW": ("أخصائي ميداني", "PRG", "G4", 3)}
+             "STK": ("أمين مخزن", "SUP", "G4", 1), "DRV": ("سائق", "ADM", "G5", 2), "SW": ("أخصائي ميداني", "RES", "G4", 3)}
 
 
 def month_back(today, n):

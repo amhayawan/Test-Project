@@ -3,7 +3,8 @@ from datetime import date
 
 from .models import Branch, Department, Fund, Project
 
-DEPARTMENTS = [("ADM", "الإدارة العامة", "General administration"), ("PRG", "البرامج والمساعدات", "Programmes and aid"),
+DEPARTMENTS = [("ADM", "الإدارة العامة", "General administration"), ("PRG", "قسم المشروعات", "Projects Department"),
+               ("RES", "قسم البحث الاجتماعي", "Social Research Department"),
                ("FR", "تنمية الموارد", "Fundraising"), ("FIN", "الشؤون المالية", "Finance"),
                ("HR", "الموارد البشرية", "Human resources"), ("SUP", "المشتريات والمخازن", "Procurement and stores")]
 
@@ -26,6 +27,6 @@ def run(ctx):
                                        department=ctx.dept["PRG"], fund=ctx.fund["GEN"], manager=ctx.u["pm"],
                                        start_date=date(y, 2, 1), end_date=date(y, 12, 31), status=Project.ACTIVE),
         "MED": Project.objects.create(code=f"MED{y % 100}", name_ar="القوافل والعلاج", name_en="Medical aid and convoys",
-                                      department=ctx.dept["PRG"], fund=med, manager=ctx.u["casemanager"],
+                                      department=ctx.dept["PRG"], fund=med, manager=ctx.u["pm"],
                                       start_date=date(y, 1, 1), end_date=date(y, 12, 31), status=Project.ACTIVE),
     }

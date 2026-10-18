@@ -41,8 +41,9 @@ def test_each_role_gets_its_own_dashboard(people):
     seen = {role: {k for k, v in build(user, f).items() if v} for role, user in people.items()}
     assert seen["researcher"] == {"approvals", "my_cases"}                       # no money at all
     assert "fundraising" in seen["fundraising"] and "administration" not in seen["fundraising"]
-    assert {"overview", "case_management", "sponsorships", "aid"} <= seen["case_manager"]
-    assert "administration" not in seen["case_manager"]
+    # Research Department manager: cases and the aid given, but no donors, donations or sponsorship money
+    assert {"case_management", "aid"} <= seen["case_manager"]
+    assert not {"administration", "fundraising", "overview", "sponsorships"} & seen["case_manager"]
     assert {"overview", "case_management", "fundraising", "administration"} <= seen["executive"]
     assert "administration" in seen["admin"]
     c = Client()
@@ -74,7 +75,8 @@ def test_researcher_dashboard_lists_returned_and_missing(people, make_user):
     from django.utils import timezone
     res = people["researcher"]
     case = Beneficiary.objects.create(name="أسرة", researcher=res, visit_date=timezone.localdate(),
-                                      zakat_eligible="yes", research_findings="x", recommendation="y")
+                                      zakat_eligible="yes", research_findings="x", recommendation="y",
+                                      assessment="urgent")
     Beneficiary.objects.create(name="ناقصة", researcher=res)
     req = services.submit(case, res)
     services.decide(req, people["case_manager"], "return", "صورة البطاقة")

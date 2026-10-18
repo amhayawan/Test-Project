@@ -26,6 +26,15 @@ All six modules now run in **one v2 platform** with separate access per role. Th
   - cloud deployment of v2.
 - **[Likely] Maker-checker staffing:** each approving role needs at least two people. Otherwise a request made by the only holder of that role cannot be approved.
 
+## Case process and confidentiality (confirmed by the association, 18 October 2026)
+
+| Rule from the association | How the system enforces it |
+|---|---|
+| Cases are reviewed by the Research Department Manager first, then referred to the Projects Department for processing and assistance | Researcher completes the standard research form and sends it; only the **Research Department manager** can accept, return or reject. On acceptance the case is stamped **referred to the Projects Department**. A **Projects Department officer** plans and requests the aid; the **Projects Department manager** approves it (the executive director too from EGP 10,000). The research team cannot request aid, and whoever requests aid cannot approve it |
+| One standardised social research form | The case record holds every field of the association's *استمارة بحث ميداني*, both pages: family members table, engaged daughter, income sources and expenses with totals and monthly gap, illnesses, housing description, appliances and furniture checklist, ration card, livestock, smoker, family needs and the researcher's assessment. It prints in the same layout, filled or blank for field visits. A case cannot be sent for review without the assessment |
+| Sponsorships and designated donations; donors choose a case by its unique code | Fundraising sees approved cases **by code only** (category, family size, needs, amount still needed). Donations and sponsorships are recorded against the code; names, ID numbers, addresses and phones never reach fundraising, donors or receipts |
+| Accounts manages all financial data; researchers only ask whether a case's amount is collected | Researchers and the Research Department manager see each need as *fully collected / partly collected / not collected yet*, never donors, donations or amounts. Donor records and financial reports belong to fundraising, finance and management |
+
 ## Decisions taken (18 October 2026)
 
 | # | Decision | Choice |

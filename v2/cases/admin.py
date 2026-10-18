@@ -6,17 +6,44 @@ from django.utils.translation import gettext_lazy as _
 from approvals import services
 from core.admin import AttachmentInline, stamp_attachments
 
-from .models import Aid, Beneficiary, CaseNeed, FamilyMember
+from django.urls import reverse
+from django.utils.html import format_html
+
+from .models import Aid, Beneficiary, CaseNeed, FamilyMember, HouseholdItem, MedicalCondition
 
 
 class FamilyInline(admin.TabularInline):
     model = FamilyMember
     extra = 0
+    fields = ("name", "relation", "age", "education", "education_work", "monthly_income", "job_stability",
+              "not_working_reason", "able_to_work", "national_id", "gender", "health")
+
+
+class MedicalInline(admin.TabularInline):
+    model = MedicalCondition
+    extra = 0
+
+
+class HouseholdInline(admin.TabularInline):
+    """The fixed appliances / furniture checklist of the research form."""
+    model = HouseholdItem
+    extra = 0
+    max_num = 0
+    can_delete = False
+    fields = ("item", "present", "count", "condition")
+    readonly_fields = ("item",)
 
 
 class NeedInline(admin.TabularInline):
     model = CaseNeed
     extra = 0
+    fields = ("need_type", "description", "amount_needed", "frequency", "priority", "is_open", "collected")
+    readonly_fields = ("collected",)
+
+    @admin.display(description=_("collected?"))
+    def collected(self, obj):
+        # researchers may ask whether the amount is collected, never who gave or how much
+        return obj.funding_label if obj.pk else ""
 
 
 def submit_for_approval(modeladmin, request, queryset):
@@ -38,12 +65,57 @@ submit_for_approval.short_description = _("Send for approval")
 
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ("case_no", "name", "national_id", "category", "area", "researcher", "status")
-    list_filter = ("status", "category", "researcher")
+    list_display = ("case_no", "name", "national_id", "category", "area", "researcher", "status", "assessment",
+                    "referred_at")
+    list_filter = ("status", "category", "assessment", "researcher", ("referred_at", admin.EmptyFieldListFilter))
     search_fields = ("case_no", "name", "national_id", "phone", "area")
-    readonly_fields = ("case_no", "status")
-    inlines = [FamilyInline, NeedInline, AttachmentInline]
+    readonly_fields = ("case_no", "status", "referred_at", "income_total", "expenses_total", "gap", "print_form")
+    inlines = [FamilyInline, MedicalInline, HouseholdInline, NeedInline, AttachmentInline]
     actions = [submit_for_approval]
+    fieldsets = [
+        (_("Case"), {"fields": ("case_no", "status", "referred_at", "print_form", "form_no", "visit_date",
+                                "researcher", "category", "department", "project")}),
+        (_("Head of the family"), {"fields": ("name", "national_id", "phone", "area", "address", "marital_status",
+                                              "family_size")}),
+        (_("Engaged daughter"), {"classes": ("collapse",), "fields": (
+            "has_engaged_daughter", "engaged_daughter_name", "wedding_date", "marriage_needs_provided",
+            "marriage_needs_remaining")}),
+        (_("Income sources (monthly)"), {"fields": (
+            "income_salaries", "income_takaful", "income_insurance", "income_charities", "income_benefactors",
+            "benefactors_who", "income_total")}),
+        (_("Expenses"), {"fields": (
+            "exp_food_daily", "exp_rent", "exp_transport", "exp_education", "exp_installments", "exp_electricity",
+            "exp_water", "exp_phone", "exp_gas", "expenses_total", "gap", "debts")}),
+        (_("Housing"), {"fields": (
+            "housing_type", "rooms", "house_area", "bathroom", "floor_type", "building_material", "water_connection",
+            "water_distance", "needs_roof", "roof_room_area", "housing_condition", "other_appliances")}),
+        (_("Other circumstances"), {"fields": (
+            "ration_card_members", "no_ration_card_reason", "livestock", "livestock_count", "livestock_owner",
+            "extra_burdens", "smoker", "health_summary")}),
+        (_("Family needs"), {"fields": (
+            "need_medical", "need_marriage", "need_project", "need_appliances", "need_monthly", "need_other")}),
+        (_("Researcher's opinion"), {"fields": (
+            "assessment", "research_findings", "recommendation", "zakat_eligible", "next_review_date", "notes")}),
+    ]
+
+    @admin.display(description=_("total income"))
+    def income_total(self, obj):
+        return f"{obj.total_income:,.2f}"
+
+    @admin.display(description=_("total monthly expenses"))
+    def expenses_total(self, obj):
+        return f"{obj.total_expenses:,.2f}"
+
+    @admin.display(description=_("monthly gap (expenses − income)"))
+    def gap(self, obj):
+        return f"{obj.monthly_gap:,.2f}"
+
+    @admin.display(description=_("research form"))
+    def print_form(self, obj):
+        if not obj.pk:
+            return ""
+        return format_html('<a href="{}" target="_blank">🖶 {}</a>', reverse("research_form", args=[obj.pk]),
+                           _("Print the research form"))
 
     def get_actions(self, request):
         actions = super().get_actions(request)

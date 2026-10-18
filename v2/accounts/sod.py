@@ -12,6 +12,9 @@ from .roles import role_label
 CONFLICTS = [
     ("researcher", "case_manager", _("Researches cases and also accepts them")),
     ("fundraising", "case_manager", _("Records donations and also decides who receives them")),
+    ("case_manager", "projects_officer", _("Accepts cases and also requests their assistance")),
+    ("projects_officer", "project_manager", _("Requests assistance and also approves it")),
+    ("researcher", "projects_officer", _("Researches cases and also requests their assistance")),
     ("admin", "case_manager", _("Controls user permissions and also approves cases and aid")),
     ("admin", "fundraising", _("Controls user permissions and also records donations")),
     ("admin", "executive", _("Controls user permissions and also gives final approvals")),

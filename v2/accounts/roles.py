@@ -17,23 +17,36 @@ ROLES = {
         "hr.view_employee", "hr.view_position", "hr.view_payrollrun", "hr.view_payslip", "hr.view_salary",
         "finance.view_*", "supply.view_*", "projects.view_*", "projects.view_all_projects",
     ]),
-    "case_manager": (_("Case manager"), [
-        "core.view_department", "core.view_project", "core.view_fund", "core.view_attachment", "core.add_attachment",
-        "cases.*", "cases.view_all_cases", "cases.assign_case", "cases.approve_case", "cases.view_case_funding",
-        "crm.view_donor", "crm.view_donation", "crm.view_campaign", "crm.*_sponsorship",
-        "approvals.view_approvalrequest", "supply.view_purchaserequest", "supply.add_purchaserequest",
-        "supply.change_purchaserequest", "supply.*_purchaserequestline", "supply.view_item",
+    # Research Department: researchers study cases; the Research Department Manager reviews and accepts them.
+    # No donors, donations or amounts: only whether a need's amount has been collected.
+    "case_manager": (_("Research Department manager"), [
+        "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",
+        "cases.view_beneficiary", "cases.add_beneficiary", "cases.change_beneficiary", "cases.view_all_cases",
+        "cases.assign_case", "cases.approve_case", "cases.*_familymember", "cases.*_medicalcondition",
+        "cases.view_householditem", "cases.change_householditem", "cases.view_caseneed", "cases.add_caseneed",
+        "cases.change_caseneed", "cases.view_aid", "approvals.view_approvalrequest",
+        "supply.view_purchaserequest", "supply.add_purchaserequest", "supply.change_purchaserequest",
+        "supply.*_purchaserequestline", "supply.view_item",
     ]),
     "researcher": (_("Field researcher"), [
         "core.view_attachment", "core.add_attachment",
         "cases.view_beneficiary", "cases.add_beneficiary", "cases.change_beneficiary",
-        "cases.*_familymember", "cases.view_caseneed", "cases.add_caseneed",
-        "cases.recommend_case",
+        "cases.*_familymember", "cases.*_medicalcondition", "cases.view_householditem", "cases.change_householditem",
+        "cases.view_caseneed", "cases.add_caseneed", "cases.recommend_case",
     ]),
+    # Projects Department: receives accepted cases and plans and requests their assistance.
+    "projects_officer": (_("Projects Department officer"), [
+        "core.view_department", "core.view_project", "core.view_fund", "core.view_attachment", "core.add_attachment",
+        "cases.view_beneficiary", "cases.view_all_cases", "cases.view_familymember", "cases.view_medicalcondition",
+        "cases.view_householditem", "cases.*_caseneed", "cases.view_aid", "cases.add_aid", "cases.change_aid",
+        "cases.view_case_funding", "cases.view_case_summary", "crm.view_sponsorship", "crm.view_campaign",
+        "supply.view_purchaserequest", "supply.add_purchaserequest", "supply.change_purchaserequest",
+        "supply.*_purchaserequestline", "supply.view_item", "supply.view_stockissue",
+    ]),
+    # Fundraising works by case code only (see the 'cases available for donors' page), never names.
     "fundraising": (_("Fundraising / donations officer"), [
         "core.view_department", "core.view_project", "core.view_fund", "core.view_attachment", "core.add_attachment",
-        "crm.*", "cases.view_beneficiary", "cases.view_all_cases", "cases.view_caseneed", "cases.view_case_funding",
-        "cases.add_beneficiary",
+        "crm.*", "cases.view_case_summary",
     ]),
     "hr_manager": (_("HR manager"), [
         "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",
@@ -55,6 +68,7 @@ ROLES = {
     ]),
     "finance_manager": (_("Finance manager"), [
         "core.view_*", "core.add_attachment", "finance.*", "crm.view_donation", "crm.view_donor", "crm.view_campaign",
+        "cases.view_case_summary",
         "cases.view_aid", "hr.view_payrollrun", "supply.view_*", "projects.view_*", "projects.view_all_projects",
         "approvals.view_approvalrequest",
     ]),
@@ -63,7 +77,7 @@ ROLES = {
         "finance.view_*", "finance.add_journalentry", "finance.change_journalentry", "finance.*_journalline",
         "finance.add_payment", "finance.change_payment", "finance.*_fixedasset", "finance.add_depreciationrun",
         "finance.change_depreciationrun", "supply.view_*", "supply.*_supplierinvoice", "supply.*_supplierinvoiceline",
-        "crm.view_donation", "projects.view_*", "projects.view_all_projects",
+        "crm.view_donation", "projects.view_*", "projects.view_all_projects", "cases.view_case_summary",
     ]),
     "procurement_officer": (_("Procurement officer"), [
         "core.view_department", "core.view_project", "core.view_fund", "core.view_attachment", "core.add_attachment",
@@ -76,8 +90,12 @@ ROLES = {
         "supply.view_purchaseorderline", "supply.view_stockmove", "supply.*_goodsreceipt", "supply.*_goodsreceiptline",
         "supply.*_stockissue", "supply.*_stockissueline", "cases.view_aid", "crm.view_donation",
     ]),
-    "project_manager": (_("Project manager"), [
+    # Projects Department manager: approves the assistance requested for referred cases; manages projects.
+    "project_manager": (_("Projects Department manager"), [
         "core.view_department", "core.view_project", "core.view_fund", "core.view_attachment", "core.add_attachment",
+        "cases.view_beneficiary", "cases.view_all_cases", "cases.view_familymember", "cases.view_medicalcondition",
+        "cases.view_householditem", "cases.view_caseneed", "cases.view_aid", "cases.view_case_funding",
+        "cases.view_case_summary",
         "projects.*", "-projects.view_all_projects", "supply.view_purchaserequest", "supply.add_purchaserequest",
         "supply.change_purchaserequest", "supply.*_purchaserequestline", "supply.view_item",
     ]),

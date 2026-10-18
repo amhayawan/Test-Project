@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load i18n humanize_lite %}
+{% block content %}
+<h1>{% translate "Cases available for donors" %}</h1>
+<p class="muted">{% translate "Cases are shown by code only. Names, ID numbers, addresses and phone numbers stay with the research team. Give donors the case code; record their donation or sponsorship against that code." %}</p>
+<form method="get" class="filters">
+  <label>{% translate "Case code" %}<input name="q" value="{{ q }}" dir="ltr"></label>
+  <label>{% translate "Category" %}<select name="category"><option value="">{% translate "All" %}</option>{% for k, v in categories %}<option value="{{ k }}" {% if category == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+  <button class="btn primary">{% translate "Apply" %}</button>
+</form>
+<div class="card table-wrap"><table>
+  <tr><th>{% translate "Case code" %}</th><th>{% translate "Category" %}</th><th>{% translate "Family size" %}</th>
+      <th>{% translate "Need" %}</th><th>{% translate "Amount needed" %}</th><th>{% translate "Still needed" %}</th><th>{% translate "Status" %}</th></tr>
+  {% for r in rows %}{% for n in r.needs %}<tr>
+    {% if forloop.first %}<td rowspan="{{ r.needs|length }}" dir="ltr"><b>{{ r.case.case_no }}</b></td><td rowspan="{{ r.needs|length }}">{{ r.case.get_category_display }}</td><td rowspan="{{ r.needs|length }}" class="num">{{ r.case.family_size }}</td>{% endif %}
+    <td>{{ n.need.get_need_type_display }}{% if n.need.frequency == "monthly" %} <small class="muted">({% translate "monthly" %})</small>{% endif %}</td>
+    <td class="num">{{ n.need.amount_needed|money }}</td><td class="num">{{ n.remaining|money }}</td>
+    <td><span class="pill {{ n.state }}">{{ n.label }}</span></td></tr>{% endfor %}
+  {% empty %}<tr><td colspan="7" class="muted">{% translate "No approved cases with open needs." %}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

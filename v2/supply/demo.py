@@ -95,12 +95,12 @@ def run(ctx):
     d0 = today - timedelta(days=100)
     purchase(d0, u["pm"], "PRG", ctx.project["FOOD"], ctx.fund["GEN"], "كراتين غذائية لمشروع الإطعام",
              [(item["box"], 400, 250)], sup[0])
-    purchase(d0 + timedelta(days=5), u["casemanager"], "PRG", ctx.project["MED"], ctx.fund["MED"],
+    purchase(d0 + timedelta(days=5), u["projects"], "PRG", ctx.project["MED"], ctx.fund["MED"],
              "حقائب إسعافات للقافلة الطبية", [(item["medkit"], 60, 400)], sup[1])
     purchase(d0 + timedelta(days=10), u["hrmanager"], "ADM", None, ctx.fund["GEN"], "أجهزة ومستلزمات للمكتب",
              [(item["laptop"], 2, 22000), (item["paper"], 40, 180), (item["clean"], 1, 3000)], sup[3])
     # documents waiting at each step
-    purchase(today - timedelta(days=12), u["casemanager"], "PRG", ctx.project["MED"], ctx.fund["MED"],
+    purchase(today - timedelta(days=12), u["projects"], "PRG", ctx.project["MED"], ctx.fund["MED"],
              "حقائب إسعافات إضافية", [(item["medkit"], 30, 400)], sup[1], invoice_waits=True)
     purchase(today - timedelta(days=6), u["pm"], "PRG", ctx.project["FOOD"], ctx.fund["GEN"], "كراتين إضافية",
              [(item["box"], 150, 250)], sup[0], receive=False)
