@@ -74,9 +74,14 @@ def prepare(args):
     from django.conf import settings
     print(f"Data folder: {data}")
     print(f"Database: {settings.DATABASES['default']['ENGINE'].rsplit('.', 1)[-1]}")
-    call_command("migrate", interactive=False, verbosity=0)
-    call_command("seed_defaults", verbosity=0)
-    call_command("collectstatic", interactive=False, verbosity=0)
+    # commands are passed as objects: a packaged .exe cannot always look them up by name
+    from django.contrib.staticfiles.management.commands import collectstatic
+    from django.core.management.commands import migrate
+
+    from core.management.commands import seed_defaults
+    call_command(migrate.Command(), interactive=False, verbosity=0)
+    call_command(seed_defaults.Command(), verbosity=0)
+    call_command(collectstatic.Command(), interactive=False, verbosity=0)
     return data
 
 
@@ -103,7 +108,9 @@ def main():
 
     if args.load_demo:
         from django.core.management import call_command
-        call_command("load_demo")
+
+        from core.management.commands import load_demo
+        call_command(load_demo.Command())
         return
 
     if args.server:

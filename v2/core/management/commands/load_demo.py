@@ -25,7 +25,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if get_user_model().objects.exists():
             raise CommandError("The database already has users. Demo data only goes into an empty database.")
-        call_command("seed_defaults", verbosity=0)
+        from . import seed_defaults
+        call_command(seed_defaults.Command(), verbosity=0)
         ctx = SimpleNamespace(today=timezone.localdate(), rng=random.Random(2026), password=PASSWORD,
                               users={}, out=self.stdout)
         with transaction.atomic():

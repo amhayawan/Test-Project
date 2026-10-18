@@ -56,6 +56,13 @@ jobs:
           python manage.py makemigrations --check --dry-run
       - name: Every phrase has an Arabic translation
         run: python tools/i18n.py check
+      - name: Demo data loads and the books balance
+        env:
+          HAZ_DATA_DIR: ${{ runner.temp }}/demo
+        run: |
+          python manage.py migrate -v0
+          python manage.py load_demo
+          python manage.py shell -c "from finance import reports; from django.utils import timezone; c = reports.balance_sheet(timezone.localdate())['check']; assert abs(c) < 0.01, c; print('balance sheet balances')"
       - name: Tests on SQLite
         run: python -m pytest -q
       - name: Tests on PostgreSQL
@@ -103,3 +110,51 @@ jobs:
           path: |
             dist/HAZ-CRM.exe
             dist/HAZ-CRM-Server.exe
+
+  build-v2:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt pyinstaller==6.22.3
+      - name: Build HAZ-v2.exe (desktop window) and HAZ-v2-Server.exe (office network)
+        shell: pwsh
+        run: |
+          $common = @("--noconfirm", "--onefile",
+            "--add-data", "templates;templates", "--add-data", "static;static", "--add-data", "locale;locale",
+            "--collect-all", "django", "--collect-all", "psycopg_binary", "--hidden-import", "psycopg_binary",
+            "--collect-submodules", "haz")
+          foreach ($app in "accounts","core","approvals","crm","cases","dashboards","hr","finance","supply","projects") {
+            $common += @("--collect-submodules", $app)
+          }
+          python -m PyInstaller --clean --windowed --name HAZ-v2 @common haz_v2.py
+          python -m PyInstaller --console --name HAZ-v2-Server @common haz_v2.py
+      - name: Smoke test (first start shows setup; demo loads; login page works)
+        shell: pwsh
+        run: |
+          $data = "$env:RUNNER_TEMP\hazv2"
+          & dist\HAZ-v2-Server.exe --data $data --load-demo
+          if ($LASTEXITCODE -ne 0) { throw "demo load failed" }
+          $p = Start-Process -FilePath dist\HAZ-v2-Server.exe -ArgumentList "--no-browser","--port","8098","--data",$data -PassThru
+          $ok = $false
+          for ($i = 0; $i -lt 45; $i++) {
+            Start-Sleep -Seconds 2
+            try { $r = Invoke-WebRequest -Uri http://127.0.0.1:8098/login/ -UseBasicParsing; if ($r.StatusCode -eq 200) { $ok = $true; break } } catch {}
+          }
+          $css = $false
+          try { $c = Invoke-WebRequest -Uri http://127.0.0.1:8098/static/css/app.css -UseBasicParsing; $css = ($c.StatusCode -eq 200) } catch {}
+          Stop-Process -Id $p.Id -Force
+          if (-not $ok) { throw "exe did not start" }
+          if (-not $css) { throw "static files missing" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HAZ-v2-windows
+          path: |
+            v2/dist/HAZ-v2.exe
+            v2/dist/HAZ-v2-Server.exe

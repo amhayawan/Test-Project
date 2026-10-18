@@ -116,7 +116,8 @@ def setup(request):
 
     form = AdminForm(request.POST if request.POST.get("action") == "admin" else None)
     if request.method == "POST" and request.POST.get("action") == "demo":
-        call_command("load_demo")
+        from core.management.commands import load_demo
+        call_command(load_demo.Command())
         from .middleware import FirstRunMiddleware
         FirstRunMiddleware.checked = True
         messages.success(request, _("Demo data loaded. Sign in with any demo login below (password: Demo@2026)."))

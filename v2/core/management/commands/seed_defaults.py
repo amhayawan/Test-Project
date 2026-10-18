@@ -45,7 +45,9 @@ class Command(BaseCommand):
     help = "Create roles, default funds and default approval policies (safe to run again)."
 
     def handle(self, *args, **options):
-        call_command("setup_roles", stdout=self.stdout)
+        from accounts.management.commands import setup_roles
+        import io
+        call_command(setup_roles.Command(), stdout=self.stdout if options.get("verbosity", 1) else io.StringIO())
         for code, ar, en, kind in FUNDS:
             Fund.objects.get_or_create(code=code, defaults={"name_ar": ar, "name_en": en, "kind": kind})
         for doc_type, min_amount, roles in POLICIES:
