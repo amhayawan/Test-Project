@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% load i18n humanize_lite l10n %}
+{% block content %}{% with p=d.project %}
+<div class="head"><h1>{{ p.code }} {{ p.name }}</h1><span class="pill rag-{{ d.rag }}">{{ d.rag_label }}</span></div>
+<p class="muted">{{ p.department.name }} · {% translate "Manager" %}: {{ p.manager.display_name|default:"—" }} · {{ p.get_status_display }}
+  {% if p.start_date %}· <span dir="ltr">{{ p.start_date|date:"Y-m-d" }} → {{ p.end_date|date:"Y-m-d"|default:"…" }}</span>{% endif %}
+  {% if p.fund %}· {% translate "Fund" %}: {{ p.fund.name }}{% endif %}</p>
+
+<form method="get" class="filters" id="filters">
+  <label>{% translate "Actuals for" %}<select name="period"><option value="">{% translate "Whole project" %}</option>
+    {% for key, label in presets %}<option value="{{ key }}" {% if f and f.preset == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <label class="custom">{% translate "From" %}<input type="date" name="from" value="{% if f %}{{ f.start|date:'Y-m-d' }}{% endif %}"></label>
+  <label class="custom">{% translate "To" %}<input type="date" name="to" value="{% if f %}{{ f.end|date:'Y-m-d' }}{% endif %}"></label>
+  <button class="btn primary">{% translate "Apply" %}</button>
+</form>
+
+<div class="stats">
+  <div class="stat"><span>{% translate "Approved budget" %}</span><b>{{ d.budget|money }}</b><em>{% translate "EGP" %}</em>
+    {% if d.profile and d.profile.budget_status != "approved" %}<em>{% translate "Draft lines" %}: {{ d.draft_total|money }} ({{ d.profile.get_budget_status_display }})</em>{% endif %}</div>
+  <div class="stat"><span>{% translate "Spent" %}</span><b>{{ d.actual|money }}</b><em>{{ d.spend_pct|unlocalize }}% {% translate "of budget" %}</em></div>
+  <div class="stat"><span>{% translate "Remaining" %}</span><b>{{ d.remaining|money }}</b><em>{% translate "EGP" %}</em></div>
+  <div class="stat"><span>{% translate "Work done" %}</span><b>{{ d.progress|unlocalize }}%</b><em>{% translate "weighted by task" %}</em></div>
+  <div class="stat"><span>{% translate "Funding raised" %}</span><b>{{ d.funding|money }}</b><em>{% translate "donations and grants booked to this project" %}</em></div>
+  <div class="stat"><span>{% translate "Staff cost" %}</span><b>{{ d.staff_cost|money }}</b><em>{% translate "from payroll assignments" %}</em></div>
+  <div class="stat"><span>{% translate "Aid to cases" %}</span><b>{{ d.aid_total|money }}</b><em>{{ d.aid_count|unlocalize }} {% translate "deliveries" %}</em></div>
+  <div class="stat"><span>{% translate "Beneficiaries" %}</span><b>{{ d.beneficiaries|unlocalize }}</b>{% if d.profile.target_beneficiaries %}<em>{% translate "target" %} {{ d.profile.target_beneficiaries|unlocalize }}</em>{% endif %}</div>
+</div>
+
+<section class="card table-wrap"><h2>{% translate "Budget against actual" %}</h2><table>
+  <tr><th>{% translate "Account" %}</th><th>{% translate "Budget" %}</th><th>{% translate "Actual" %}</th><th>{% translate "Variance" %}</th></tr>
+  {% for r in d.by_account %}<tr><td>{{ r.account }}</td><td class="num">{{ r.budget|money }}</td><td class="num">{{ r.actual|money }}</td>
+    <td class="num{% if r.over %} over{% endif %}">{{ r.variance|money }}</td></tr>
+  {% empty %}<tr><td colspan="4" class="muted">{% translate "No budget lines or spending yet." %}</td></tr>{% endfor %}
+</table></section>
+
+<div class="grid2">
+  <section class="card"><h2>{% translate "Milestones and tasks" %}</h2>
+    {% for m in d.milestones %}<p><b>{{ m.m.title }}</b> {% if m.m.due %}<small class="muted" dir="ltr">{{ m.m.due|date:"Y-m-d" }}</small>{% endif %}
+      <span class="progress inline"><span style="width: {{ m.progress|unlocalize }}%"></span></span> {{ m.progress|unlocalize }}%</p>{% endfor %}
+    <table>{% for t in d.tasks %}<tr><td>{{ t.title }}</td><td>{{ t.assignee.display_name|default:"" }}</td>
+      <td class="num">{{ t.due|date:"Y-m-d" }}</td><td><span class="pill {{ t.status }}">{{ t.get_status_display }}</span></td><td class="num">{{ t.percent|unlocalize }}%</td></tr>
+    {% empty %}<tr><td class="muted">{% translate "No tasks yet." %}</td></tr>{% endfor %}</table></section>
+  <section class="card"><h2>{% translate "Team" %}</h2>
+    <table>{% for a in d.team %}<tr><td>{{ a.employee.name }}</td><td>{{ a.department.name }}</td><td class="num">{{ a.percent|unlocalize }}%</td></tr>
+    {% empty %}<tr><td class="muted">{% translate "No staff assigned to this project." %}</td></tr>{% endfor %}</table>
+    {% if d.profile.objectives %}<h3>{% translate "Objectives" %}</h3><p>{{ d.profile.objectives|linebreaksbr }}</p>{% endif %}</section>
+</div>
+{% endwith %}{% endblock %}
+{% block scripts %}{% load static %}<script src="{% static 'js/dashboard.js' %}" defer></script>{% endblock %}

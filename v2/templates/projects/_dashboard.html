@@ -1,0 +1,12 @@
+{% load i18n humanize_lite l10n %}<section class="card">
+  <h2>{% translate "Project management" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=d.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "Spend by project in period" %}</h3>{% include "dashboards/_hbars.html" with rows=d.by_project %}</div>
+    <div><h3>{% translate "Projects needing attention" %}</h3>
+      <table>{% for r in d.at_risk %}<tr><td><a href="{% url 'project_detail' r.project.pk %}">{{ r.project.code }} {{ r.project.name }}</a></td>
+        <td><span class="pill rag-{{ r.rag }}">{{ r.rag_label }}</span></td><td class="num">{{ r.spend_pct|unlocalize }}% / {{ r.progress|unlocalize }}%</td></tr>
+      {% empty %}<tr><td class="muted">{% translate "All projects are on track." %}</td></tr>{% endfor %}</table>
+      <a href="{% url 'projects_list' %}">{% translate "Projects overview" %} ←</a></div>
+  </div>
+</section>
