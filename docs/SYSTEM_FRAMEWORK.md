@@ -7,6 +7,25 @@ Confidence tags used below: **[Certain]** known fact or tested · **[Likely]** s
 
 ---
 
+## Build status (18 October 2026)
+
+All six modules now run in **one v2 platform** with separate access per role. The modules feed each other through the accounts: donations, aid, payroll, purchases and stock post journal entries automatically. Management and the administrator see every module.
+
+- **[Certain] Built and tested (57 automated tests, SQLite and PostgreSQL):** CRM, case management, HR with payroll and leave, finance, supply chain, project management, maker-checker approvals, per-role dashboards, Arabic and English.
+- **[Certain] A Windows test app exists:** HAZ-v2.exe. It ships fictional demo data, with one login per role.
+- **[Certain] Configuration only, not yet decided:**
+  - the chart of accounts is a starter template;
+  - approval limits are placeholders;
+  - tax, insurance and leave figures must be entered by the labour-law specialist.
+- **[Certain] Still to build:**
+  - designed everyday screens; most data entry is still in the back office;
+  - attendance;
+  - year-end closing entry;
+  - stock transfers and stock counts;
+  - field tablet app;
+  - cloud deployment of v2.
+- **[Likely] Maker-checker staffing:** each approving role needs at least two people. Otherwise a request made by the only holder of that role cannot be approved.
+
 ## Decisions taken (18 October 2026)
 
 | # | Decision | Choice |
