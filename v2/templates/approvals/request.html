@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% load i18n %}
+{% block content %}
+<h1>{{ req.title }}</h1>
+<div class="card">
+  <dl class="details">
+    <dt>{% translate "Type" %}</dt><dd>{{ req.get_doc_type_display }}</dd>
+    {% if req.amount %}<dt>{% translate "Amount" %}</dt><dd class="num">{{ req.amount }}</dd>{% endif %}
+    <dt>{% translate "Submitted by" %}</dt><dd>{{ req.maker.display_name }} — {{ req.created_at|date:"Y-m-d H:i" }}</dd>
+    {% if req.maker_note %}<dt>{% translate "Note" %}</dt><dd>{{ req.maker_note }}</dd>{% endif %}
+    <dt>{% translate "Status" %}</dt><dd><span class="pill {{ req.status }}">{{ req.get_status_display }}</span>{% if req.status == 'pending' %} — {% blocktranslate with n=req.current_step %}step {{ n }}{% endblocktranslate %} ({{ req.step.role_label }}){% endif %}</dd>
+  </dl>
+</div>
+<div class="card">
+  <h2>{% translate "Decisions" %}</h2>
+  <table>
+    {% for a in actions %}<tr><td>{{ a.step_order }}</td><td>{{ a.actor.display_name }}</td><td>{{ a.get_decision_display }}</td><td>{{ a.comment }}</td><td class="num">{{ a.at|date:"Y-m-d H:i" }}</td></tr>
+    {% empty %}<tr><td class="muted">—</td></tr>{% endfor %}
+  </table>
+</div>
+{% if can_act %}
+<form method="post" class="card form">{% csrf_token %}
+  <label class="wide">{% translate "Comment (required to reject or return)" %}<textarea name="comment" rows="2"></textarea></label>
+  <div class="wide actions">
+    <button class="btn primary" name="decision" value="approve">{% translate "Approve" %}</button>
+    <button class="btn" name="decision" value="return">{% translate "Return for changes" %}</button>
+    <button class="btn danger" name="decision" value="reject">{% translate "Reject" %}</button>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

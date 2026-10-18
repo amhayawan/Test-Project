@@ -9,3 +9,4 @@ secret.key
 .venv/
 .env
 backups/
+v2/data/

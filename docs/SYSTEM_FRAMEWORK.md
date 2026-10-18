@@ -7,6 +7,17 @@ Confidence tags used below: **[Certain]** known fact or tested · **[Likely]** s
 
 ---
 
+## Decisions taken (18 October 2026)
+
+| # | Decision | Choice |
+|---|---|---|
+| 0.1 | Build or adopt finance / HR / payroll | **Build (hybrid)**. The association owns the whole system. Payroll is built last and validated by an Egyptian payroll specialist before go-live |
+| 0.2 | Where the central server lives | **Cloud server hosted in Egypt** |
+| 0.3 | Foundation | **Rebuild now in Django 5.2 LTS + PostgreSQL** (in `v2/`). v1 stays in use until v2 reaches parity, and v1 data is imported |
+| 0.4 | Field research capture | **Offline tablet/phone form**, with photos of documents |
+
+Still open: approval limits, chart of accounts, payroll rules and the real research form. These come from the association in phase 0 (section 11).
+
 ## 0. Decisions to take before writing code
 
 These choices change everything downstream. Each has a recommendation.

@@ -1,0 +1,38 @@
+{% load i18n static %}{% get_current_language as LANG %}{% get_current_language_bidi as RTL %}<!doctype html>
+<html lang="{{ LANG }}" dir="{{ RTL|yesno:'rtl,ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% translate "HAZ integrated management system" %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+{% if user.is_authenticated %}
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">{% translate "Dr. Hassan Abbas Zaki Association" %}<small>{% translate "Integrated management system" %}</small></div>
+    <nav>
+      <a href="{% url 'dashboard' %}">{% translate "Dashboard" %}</a>
+      <a href="{% url 'approvals_inbox' %}">{% translate "Approvals" %}{% if approvals_waiting %} <span class="count">{{ approvals_waiting }}</span>{% endif %}</a>
+      {% for label, url in nav_modules %}<a href="{{ url }}">{{ label }}</a>{% endfor %}
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Back office" %}</a>{% endif %}
+    </nav>
+    <div class="me">
+      <div>{{ user.display_name }}</div>
+      <form method="post" action="{% url 'set_language' %}" class="lang">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% if LANG == 'ar' %}<button name="language" value="en" class="link">English</button>{% else %}<button name="language" value="ar" class="link">العربية</button>{% endif %}
+      </form>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">{% translate "Sign out" %}</button></form>
+    </div>
+  </aside>
+  <main class="content">
+    {% for m in messages %}<div class="flash {{ m.tags }}">{{ m }}</div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+<main class="auth">{% block auth %}{% endblock %}</main>
+{% endif %}
+</body>
+</html>

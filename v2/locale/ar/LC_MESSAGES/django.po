@@ -1,0 +1,1171 @@
+# Arabic translation of the HAZ integrated management system.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-18 16:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ar\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: cases/admin.py
+#, python-format
+msgid "%(n)s sent for approval."
+msgstr "تم إرسال %(n)s للاعتماد."
+
+#: cases/admin.py
+#, python-format
+msgid "%(n)s skipped: not approved."
+msgstr "تم تخطي %(n)s: غير معتمدة."
+
+#: crm/models.py
+msgid "Active"
+msgstr "نشط"
+
+#: core/context.py
+msgid "Aid"
+msgstr "المساعدات"
+
+#: cases/models.py
+msgid "Aid can only be given to approved cases."
+msgstr "لا تُصرف المساعدات إلا لحالة معتمدة."
+
+#: approvals/models.py
+msgid "Aid disbursement"
+msgstr "صرف مساعدة"
+
+#: core/models.py
+msgid "Allowed files: PDF, JPG or PNG."
+msgstr "الملفات المسموحة: PDF أو JPG أو PNG."
+
+#: templates/approvals/inbox.html
+msgid "Amount"
+msgstr "المبلغ"
+
+#: templates/base.html
+msgid "Approvals"
+msgstr "الاعتمادات"
+
+#: approvals/apps.py
+msgid "Approvals (maker-checker)"
+msgstr "الاعتمادات (المُدخِل والمراجِع)"
+
+#: approvals/models.py
+msgid "Approve"
+msgstr "اعتماد"
+
+#: cases/models.py
+msgid "Approved"
+msgstr "معتمد"
+
+#: templates/core/dashboard.html
+msgid "Approved cases"
+msgstr "حالات معتمدة"
+
+#: haz/settings.py
+msgid "Arabic"
+msgstr "العربية"
+
+#: accounts/admin.py
+msgid "Association"
+msgstr "الجمعية"
+
+#: cases/models.py
+msgid "Awaiting approval"
+msgstr "بانتظار الاعتماد"
+
+#: haz/urls.py
+msgid "Back office"
+msgstr "الإدارة الخلفية"
+
+#: crm/models.py
+msgid "Bank transfer"
+msgstr "تحويل بنكي"
+
+#: core/context.py
+msgid "Campaigns"
+msgstr "الحملات"
+
+#: cases/models.py
+msgid "Can approve, reject or return cases"
+msgstr "يمكنه اعتماد الحالات أو رفضها أو إعادتها"
+
+#: cases/models.py
+msgid "Can assign cases to researchers"
+msgstr "يمكنه إسناد الحالات للباحثين"
+
+#: cases/models.py
+msgid "Can see all cases (not only assigned ones)"
+msgstr "يرى كل الحالات (وليس المسندة إليه فقط)"
+
+#: cases/models.py
+msgid "Can see donors and amounts linked to cases"
+msgstr "يرى المتبرعين والمبالغ المرتبطة بالحالات"
+
+#: cases/models.py
+msgid "Can submit a case for approval"
+msgstr "يمكنه إرسال الحالة للاعتماد"
+
+#: approvals/models.py
+msgid "Cancelled"
+msgstr "ملغي"
+
+#: approvals/models.py
+msgid "Case acceptance"
+msgstr "قبول حالة"
+
+#: cases/apps.py
+msgid "Case management"
+msgstr "إدارة الحالات"
+
+#: accounts/roles.py
+msgid "Case manager"
+msgstr "مدير إدارة الحالات"
+
+#: core/context.py
+msgid "Cases"
+msgstr "الحالات"
+
+#: templates/core/dashboard.html
+msgid "Cases awaiting approval"
+msgstr "حالات بانتظار الاعتماد"
+
+#: templates/core/dashboard.html
+msgid "Cases under study"
+msgstr "حالات تحت الدراسة"
+
+#: cases/models.py
+msgid "Cash"
+msgstr "نقدي"
+
+#: crm/models.py
+msgid "Cheque"
+msgstr "شيك"
+
+#: core/models.py
+msgid "Closed"
+msgstr "مغلق"
+
+#: cases/models.py
+msgid "Clothes"
+msgstr "ملابس"
+
+#: templates/approvals/request.html
+msgid "Comment (required to reject or return)"
+msgstr "ملاحظة (إلزامية عند الرفض أو الإعادة)"
+
+#: crm/models.py
+msgid "Company / organisation"
+msgstr "شركة / مؤسسة"
+
+#: cases/models.py
+#, python-format
+msgid "Complete the research first: %(m)s"
+msgstr "أكمل البحث أولاً: %(m)s"
+
+#: templates/base.html
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: templates/approvals/inbox.html
+msgid "Date"
+msgstr "التاريخ"
+
+#: cases/models.py
+msgid "Daughter"
+msgstr "ابنة"
+
+#: cases/models.py
+msgid "Debt repayment"
+msgstr "سداد ديون"
+
+#: templates/approvals/request.html
+msgid "Decisions"
+msgstr "القرارات"
+
+#: cases/models.py
+msgid "Delivered"
+msgstr "تم التسليم"
+
+#: core/context.py
+msgid "Departments and projects"
+msgstr "الإدارات والمشروعات"
+
+#: templates/approvals/inbox.html
+msgid "Document"
+msgstr "المستند"
+
+#: core/context.py
+msgid "Donations"
+msgstr "التبرعات"
+
+#: crm/models.py
+msgid "Donations can only be earmarked for approved cases."
+msgstr "لا يمكن تخصيص التبرعات إلا لحالة معتمدة."
+
+#: core/context.py
+msgid "Donors"
+msgstr "المتبرعون"
+
+#: crm/apps.py
+msgid "Donors and donations"
+msgstr "المتبرعون والتبرعات"
+
+#: templates/base.html
+msgid "Dr. Hassan Abbas Zaki Association"
+msgstr "جمعية د. حسن عباس زكي"
+
+#: cases/models.py
+msgid "Draft"
+msgstr "مسودة"
+
+#: cases/models.py
+msgid "Education"
+msgstr "تعليم"
+
+#: cases/models.py
+msgid "Elderly"
+msgstr "مسن"
+
+#: crm/models.py
+msgid "Ended"
+msgstr "منتهية"
+
+#: haz/settings.py
+msgid "English"
+msgstr "English"
+
+#: accounts/roles.py
+msgid "Executive director"
+msgstr "المدير التنفيذي"
+
+#: cases/models.py
+msgid "Fair"
+msgstr "متوسطة"
+
+#: cases/models.py
+msgid "Family in need"
+msgstr "أسرة محتاجة"
+
+#: cases/models.py
+msgid "Father"
+msgstr "أب"
+
+#: cases/models.py
+msgid "Female"
+msgstr "أنثى"
+
+#: accounts/roles.py
+msgid "Field researcher"
+msgstr "باحث اجتماعي"
+
+#: cases/models.py
+msgid "Food"
+msgstr "غذاء"
+
+#: crm/models.py
+msgid "Food / Ramadan boxes"
+msgstr "إطعام / شنط رمضان"
+
+#: cases/models.py
+msgid "Free / shelter"
+msgstr "بدون مقابل / إيواء"
+
+#: accounts/roles.py
+msgid "Fundraising / donations officer"
+msgstr "مسؤول التبرعات وتنمية الموارد"
+
+#: crm/models.py
+msgid "General donation"
+msgstr "تبرع عام"
+
+#: cases/models.py
+msgid "Good"
+msgstr "جيدة"
+
+#: haz/urls.py
+msgid "HAZ integrated management system"
+msgstr "النظام المتكامل لإدارة الجمعية"
+
+#: haz/urls.py
+msgid "HAZ system"
+msgstr "نظام الجمعية"
+
+#: cases/models.py
+msgid "Head of family"
+msgstr "رب الأسرة"
+
+#: cases/models.py
+msgid "High"
+msgstr "مرتفع"
+
+#: crm/models.py
+msgid "Honorary"
+msgstr "شرفي"
+
+#: cases/models.py
+msgid "Housing / repairs"
+msgstr "سكن / ترميم"
+
+#: cases/models.py
+msgid "Husband"
+msgstr "زوج"
+
+#: crm/models.py
+msgid "In kind"
+msgstr "عيني"
+
+#: crm/models.py
+msgid "Inactive"
+msgstr "غير نشط"
+
+#: crm/models.py
+msgid "Individual"
+msgstr "فرد"
+
+#: crm/models.py
+msgid "InstaPay"
+msgstr "إنستاباي"
+
+#: templates/base.html
+msgid "Integrated management system"
+msgstr "النظام المتكامل للإدارة"
+
+#: cases/models.py
+msgid "Male"
+msgstr "ذكر"
+
+#: cases/admin.py
+msgid "Mark as delivered (approved aid only)"
+msgstr "تسجيل التسليم (للمساعدات المعتمدة فقط)"
+
+#: cases/models.py
+msgid "Marriage preparation"
+msgstr "تجهيز زواج"
+
+#: cases/models.py
+msgid "Medical"
+msgstr "علاج"
+
+#: cases/models.py
+msgid "Medical / surgery"
+msgstr "علاج / عملية"
+
+#: crm/models.py
+msgid "Mobile wallet"
+msgstr "محفظة إلكترونية"
+
+#: cases/models.py
+msgid "Monthly"
+msgstr "شهري"
+
+#: cases/models.py
+msgid "Monthly support"
+msgstr "إعانة شهرية"
+
+#: cases/models.py
+msgid "Mother"
+msgstr "أم"
+
+#: cases/models.py
+msgid "New rent"
+msgstr "إيجار جديد"
+
+#: cases/models.py
+msgid "No"
+msgstr "لا"
+
+#: approvals/services.py
+msgid "No approval policy is configured for this document. Ask the administrator."
+msgstr "لا توجد سياسة اعتماد لهذا النوع من المستندات. راجع مدير النظام."
+
+#: cases/models.py
+msgid "Normal"
+msgstr "عادي"
+
+#: templates/approvals/request.html
+msgid "Note"
+msgstr "ملاحظة"
+
+#: templates/approvals/inbox.html
+msgid "Nothing is waiting for you."
+msgstr "لا يوجد ما ينتظر قرارك."
+
+#: cases/models.py
+msgid "Old rent"
+msgstr "إيجار قديم"
+
+#: cases/models.py
+msgid "One-off"
+msgstr "مرة واحدة"
+
+#: core/apps.py
+msgid "Organisation"
+msgstr "الهيكل التنظيمي"
+
+#: cases/models.py
+msgid "Orphan"
+msgstr "يتيم"
+
+#: crm/models.py
+msgid "Orphan sponsorship"
+msgstr "كفالة أيتام"
+
+#: cases/models.py
+msgid "Other"
+msgstr "أخرى"
+
+#: cases/models.py
+msgid "Owned"
+msgstr "تمليك"
+
+#: templates/registration/login.html
+msgid "Password"
+msgstr "كلمة المرور"
+
+#: cases/models.py
+msgid "Patient"
+msgstr "مريض"
+
+#: crm/models.py
+msgid "Paused"
+msgstr "متوقفة مؤقتاً"
+
+#: approvals/models.py
+msgid "Pending"
+msgstr "قيد الاعتماد"
+
+#: cases/models.py
+msgid "Person with disability"
+msgstr "ذوي همم"
+
+#: core/models.py
+msgid "Planned"
+msgstr "مخطط"
+
+#: cases/models.py
+msgid "Poor"
+msgstr "سيئة"
+
+#: approvals/models.py
+msgid "Reject"
+msgstr "رفض"
+
+#: cases/models.py
+msgid "Rejected"
+msgstr "مرفوض"
+
+#: core/models.py
+msgid "Restricted"
+msgstr "مقيد"
+
+#: approvals/models.py
+msgid "Return for changes"
+msgstr "إعادة للتعديل"
+
+#: cases/models.py
+msgid "Returned for changes"
+msgstr "أُعيد للتعديل"
+
+#: crm/models.py
+msgid "Sadaqa"
+msgstr "صدقة"
+
+#: cases/admin.py
+msgid "Send for approval"
+msgstr "إرسال للاعتماد"
+
+#: templates/registration/login.html
+msgid "Sign in"
+msgstr "تسجيل الدخول"
+
+#: templates/base.html
+msgid "Sign out"
+msgstr "تسجيل الخروج"
+
+#: cases/models.py
+msgid "Small business"
+msgstr "مشروع صغير"
+
+#: cases/models.py
+msgid "Son"
+msgstr "ابن"
+
+#: core/context.py
+msgid "Sponsorships"
+msgstr "الكفالات"
+
+#: crm/models.py
+msgid "Sponsorships can only be created for approved cases."
+msgstr "لا يمكن إنشاء كفالة إلا لحالة معتمدة."
+
+#: templates/approvals/request.html
+msgid "Status"
+msgstr "الحالة"
+
+#: templates/approvals/inbox.html
+msgid "Step"
+msgstr "المرحلة"
+
+#: cases/models.py
+msgid "Student"
+msgstr "طالب"
+
+#: templates/approvals/inbox.html
+msgid "Submitted by"
+msgstr "مقدم من"
+
+#: templates/approvals/inbox.html
+msgid "Submitted by me"
+msgstr "مقدمة مني"
+
+#: cases/models.py
+msgid "Suspended"
+msgstr "موقوف"
+
+#: accounts/roles.py
+msgid "System administrator"
+msgstr "مدير النظام"
+
+#: crm/models.py
+msgid "The amount must be greater than zero."
+msgstr "المبلغ يجب أن يكون أكبر من صفر."
+
+#: crm/models.py
+msgid "The end date is before the start date."
+msgstr "تاريخ النهاية قبل تاريخ البداية."
+
+#: core/models.py
+msgid "The file content does not match its type."
+msgstr "محتوى الملف لا يطابق نوعه."
+
+#: core/models.py
+#, python-format
+msgid "The file is larger than %(mb)s MB."
+msgstr "حجم الملف أكبر من %(mb)s ميجابايت."
+
+#: cases/models.py
+msgid "The national ID must be exactly 14 digits."
+msgstr "الرقم القومي يجب أن يكون 14 رقماً بالضبط."
+
+#: crm/models.py
+msgid "The need does not belong to the selected case."
+msgstr "الاحتياج لا يخص الحالة المختارة."
+
+#: cases/models.py
+msgid "The need does not belong to this case."
+msgstr "الاحتياج لا يخص هذه الحالة."
+
+#: crm/models.py
+msgid "The sponsorship is not for the selected case."
+msgstr "الكفالة لا تخص الحالة المختارة."
+
+#: cases/models.py
+msgid "The value must be greater than zero."
+msgstr "القيمة يجب أن تكون أكبر من صفر."
+
+#: accounts/forms.py
+#, python-format
+msgid "This account is temporarily locked after repeated wrong passwords. Try again in %(minutes)s minutes."
+msgstr "الحساب مقفل مؤقتاً بسبب تكرار كلمة مرور خاطئة. حاول بعد %(minutes)s دقيقة."
+
+#: crm/models.py
+msgid "This case is not eligible for zakat according to the social research."
+msgstr "هذه الحالة غير مستحقة للزكاة حسب البحث الاجتماعي."
+
+#: cases/models.py
+msgid "This case is not eligible for zakat."
+msgstr "هذه الحالة غير مستحقة للزكاة."
+
+#: approvals/services.py
+msgid "This document is already waiting for approval."
+msgstr "هذا المستند بانتظار الاعتماد بالفعل."
+
+#: crm/models.py
+msgid "This sponsorship belongs to another donor."
+msgstr "هذه الكفالة باسم متبرع آخر."
+
+#: templates/approvals/inbox.html
+msgid "Type"
+msgstr "النوع"
+
+#: crm/models.py
+msgid "Udhiya"
+msgstr "أضاحي"
+
+#: cases/models.py
+msgid "Under study"
+msgstr "تحت الدراسة"
+
+#: core/models.py
+msgid "Unrestricted"
+msgstr "غير مقيد"
+
+#: cases/models.py
+msgid "Unsafe"
+msgstr "غير آمنة"
+
+#: cases/models.py
+msgid "Urgent"
+msgstr "عاجل"
+
+#: templates/registration/login.html
+msgid "Username"
+msgstr "اسم المستخدم"
+
+#: accounts/apps.py
+msgid "Users and roles"
+msgstr "المستخدمون والصلاحيات"
+
+#: templates/core/dashboard.html
+msgid "Version 2 is being built step by step. Day-to-day screens for cases and donations come next; until then, use the back office."
+msgstr "الإصدار الثاني قيد البناء على مراحل. شاشات العمل اليومي للحالات والتبرعات هي الخطوة التالية؛ وحتى ذلك الحين استخدم الإدارة الخلفية."
+
+#: templates/core/dashboard.html
+msgid "Waiting for my approval"
+msgstr "بانتظار اعتمادي"
+
+#: templates/approvals/inbox.html
+msgid "Waiting for my decision"
+msgstr "بانتظار قراري"
+
+#: cases/models.py
+msgid "Widow / divorcee"
+msgstr "أرملة / مطلقة"
+
+#: cases/models.py
+msgid "Wife"
+msgstr "زوجة"
+
+#: cases/models.py
+msgid "With relatives"
+msgstr "مع الأقارب"
+
+#: approvals/services.py
+msgid "Write the reason for this decision."
+msgstr "اكتب سبب هذا القرار."
+
+#: accounts/forms.py
+msgid "Wrong username or password."
+msgstr "اسم المستخدم أو كلمة المرور غير صحيحة."
+
+#: cases/models.py
+msgid "Yes"
+msgstr "نعم"
+
+#: approvals/services.py
+msgid "You are not allowed to act on this request at this step."
+msgstr "ليس لديك صلاحية التصرف في هذا الطلب في هذه المرحلة."
+
+#: approvals/services.py
+msgid "You cannot approve a request you submitted yourself."
+msgstr "لا يمكنك اعتماد طلب قدمته بنفسك."
+
+#: core/models.py
+msgid "Zakat"
+msgstr "زكاة"
+
+#: crm/models.py
+msgid "Zakat al-fitr"
+msgstr "زكاة فطر"
+
+#: crm/models.py
+msgid "Zakat al-mal"
+msgstr "زكاة مال"
+
+#: crm/models.py
+msgid "Zakat must go to a zakat fund."
+msgstr "يجب أن تذهب الزكاة إلى صندوق الزكاة."
+
+#: crm/models.py
+msgid "active"
+msgstr "نشط"
+
+#: cases/models.py
+msgid "address"
+msgstr "العنوان"
+
+#: cases/models.py
+msgid "aid"
+msgstr "مساعدة"
+
+#: cases/models.py
+msgid "aid no."
+msgstr "رقم المساعدة"
+
+#: crm/models.py
+msgid "amount (EGP)"
+msgstr "المبلغ (ج.م)"
+
+#: cases/models.py
+msgid "amount needed (EGP)"
+msgstr "المبلغ المطلوب (ج.م)"
+
+#: approvals/models.py
+msgid "approval policies"
+msgstr "سياسات الاعتماد"
+
+#: approvals/models.py
+msgid "approval policy"
+msgstr "سياسة اعتماد"
+
+#: approvals/models.py
+msgid "approval request"
+msgstr "طلب اعتماد"
+
+#: approvals/models.py
+msgid "approval requests"
+msgstr "طلبات الاعتماد"
+
+#: approvals/models.py
+msgid "approval step"
+msgstr "مرحلة اعتماد"
+
+#: approvals/models.py
+msgid "approval steps"
+msgstr "مراحل الاعتماد"
+
+#: approvals/models.py
+msgid "approver role"
+msgstr "صلاحية المعتمِد"
+
+#: cases/models.py
+msgid "area"
+msgstr "المنطقة"
+
+#: core/models.py
+msgid "attachment"
+msgstr "مرفق"
+
+#: core/models.py
+msgid "attachments"
+msgstr "المرفقات"
+
+#: core/models.py
+msgid "audit entry"
+msgstr "عملية مسجلة"
+
+#: core/models.py
+msgid "audit trail"
+msgstr "سجل العمليات"
+
+#: crm/models.py
+msgid "availability"
+msgstr "أوقات التفرغ"
+
+#: cases/models.py
+msgid "birth year"
+msgstr "سنة الميلاد"
+
+#: core/models.py
+msgid "branch"
+msgstr "فرع"
+
+#: core/models.py
+msgid "branches"
+msgstr "الفروع"
+
+#: crm/models.py
+msgid "campaign"
+msgstr "حملة"
+
+#: crm/models.py
+msgid "campaigns"
+msgstr "الحملات"
+
+#: cases/models.py
+msgid "case"
+msgstr "الحالة"
+
+#: cases/models.py
+msgid "case / beneficiary"
+msgstr "حالة / مستفيد"
+
+#: cases/models.py
+msgid "case no."
+msgstr "رقم الحالة"
+
+#: cases/models.py
+msgid "cases / beneficiaries"
+msgstr "الحالات / المستفيدون"
+
+#: cases/models.py
+msgid "category"
+msgstr "الفئة"
+
+#: crm/models.py
+msgid "code"
+msgstr "الكود"
+
+#: core/models.py
+msgid "cost centre code"
+msgstr "كود مركز التكلفة"
+
+#: crm/models.py
+msgid "date"
+msgstr "التاريخ"
+
+#: cases/models.py
+msgid "debts (EGP)"
+msgstr "الديون (ج.م)"
+
+#: cases/models.py
+msgid "delivered on"
+msgstr "تاريخ التسليم"
+
+#: cases/models.py
+msgid "department"
+msgstr "الإدارة"
+
+#: core/models.py
+msgid "department / cost centre"
+msgstr "إدارة / مركز تكلفة"
+
+#: accounts/models.py
+msgid "department scope"
+msgstr "نطاق الإدارات"
+
+#: core/models.py
+msgid "departments / cost centres"
+msgstr "الإدارات / مراكز التكلفة"
+
+#: cases/models.py
+msgid "description"
+msgstr "الوصف"
+
+#: approvals/models.py
+msgid "document type"
+msgstr "نوع المستند"
+
+#: crm/models.py
+msgid "donation"
+msgstr "تبرع"
+
+#: crm/models.py
+msgid "donations"
+msgstr "التبرعات"
+
+#: crm/models.py
+msgid "donor"
+msgstr "المتبرع"
+
+#: crm/models.py
+msgid "donors"
+msgstr "المتبرعون"
+
+#: crm/models.py
+msgid "dues paid until"
+msgstr "الاشتراك مسدد حتى"
+
+#: crm/models.py
+msgid "earmarked for case"
+msgstr "مخصص لحالة"
+
+#: crm/models.py
+msgid "earmarked for need"
+msgstr "مخصص لاحتياج"
+
+#: cases/models.py
+msgid "education / work"
+msgstr "التعليم / العمل"
+
+#: cases/models.py
+msgid "eligible for zakat"
+msgstr "مستحق للزكاة"
+
+#: crm/models.py
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+#: crm/models.py
+msgid "end date"
+msgstr "تاريخ النهاية"
+
+#: core/models.py
+msgid "expires on"
+msgstr "ينتهي في"
+
+#: cases/models.py
+msgid "family health"
+msgstr "الحالة الصحية للأسرة"
+
+#: cases/models.py
+msgid "family member"
+msgstr "فرد أسرة"
+
+#: cases/models.py
+msgid "family members"
+msgstr "أفراد الأسرة"
+
+#: cases/models.py
+msgid "family size"
+msgstr "عدد أفراد الأسرة"
+
+#: cases/models.py
+msgid "field visit date"
+msgstr "تاريخ الزيارة الميدانية"
+
+#: core/models.py
+msgid "file"
+msgstr "الملف"
+
+#: cases/models.py
+msgid "frequency"
+msgstr "التكرار"
+
+#: approvals/models.py
+msgid "from amount"
+msgstr "من مبلغ"
+
+#: crm/models.py
+msgid "fund"
+msgstr "الصندوق"
+
+#: core/models.py
+msgid "funds"
+msgstr "الصناديق"
+
+#: cases/models.py
+msgid "gender"
+msgstr "النوع"
+
+#: crm/models.py
+msgid "general-assembly member"
+msgstr "عضو جمعية عمومية"
+
+#: crm/models.py
+msgid "general-assembly members"
+msgstr "أعضاء الجمعية العمومية"
+
+#: cases/models.py
+msgid "health"
+msgstr "الحالة الصحية"
+
+#: cases/models.py
+msgid "housing condition"
+msgstr "حالة السكن"
+
+#: cases/models.py
+msgid "housing type"
+msgstr "نوع السكن"
+
+#: cases/models.py
+msgid "intake notes"
+msgstr "ملاحظات التسجيل"
+
+#: crm/models.py
+msgid "join date"
+msgstr "تاريخ الانضمام"
+
+#: accounts/models.py
+msgid "language"
+msgstr "اللغة"
+
+#: core/models.py
+msgid "manager"
+msgstr "المدير"
+
+#: crm/models.py
+msgid "membership no."
+msgstr "رقم العضوية"
+
+#: crm/models.py
+msgid "membership type"
+msgstr "نوع العضوية"
+
+#: crm/models.py
+msgid "monthly amount (EGP)"
+msgstr "المبلغ الشهري (ج.م)"
+
+#: cases/models.py
+msgid "monthly income"
+msgstr "الدخل الشهري"
+
+#: cases/models.py
+msgid "monthly income (EGP)"
+msgstr "الدخل الشهري (ج.م)"
+
+#: cases/models.py
+msgid "name"
+msgstr "الاسم"
+
+#: accounts/models.py
+msgid "name (Arabic)"
+msgstr "الاسم (عربي)"
+
+#: accounts/models.py
+msgid "name (English)"
+msgstr "الاسم (إنجليزي)"
+
+#: cases/models.py
+msgid "national ID"
+msgstr "الرقم القومي"
+
+#: cases/models.py
+msgid "need"
+msgstr "الاحتياج"
+
+#: cases/models.py
+msgid "needs"
+msgstr "الاحتياجات"
+
+#: cases/models.py
+msgid "next re-assessment"
+msgstr "إعادة التقييم القادمة"
+
+#: crm/models.py
+msgid "notes"
+msgstr "ملاحظات"
+
+#: core/models.py
+msgid "number sequence"
+msgstr "تسلسل ترقيم"
+
+#: core/models.py
+msgid "number sequences"
+msgstr "تسلسلات الترقيم"
+
+#: cases/models.py
+msgid "open"
+msgstr "مفتوح"
+
+#: approvals/models.py
+msgid "order"
+msgstr "الترتيب"
+
+#: cases/models.py
+msgid "paid from fund"
+msgstr "يُصرف من صندوق"
+
+#: core/models.py
+msgid "parent department"
+msgstr "الإدارة الأم"
+
+#: crm/models.py
+msgid "payment method"
+msgstr "طريقة الدفع"
+
+#: core/models.py
+msgid "permitted uses"
+msgstr "أوجه الصرف المسموحة"
+
+#: cases/models.py
+msgid "phone"
+msgstr "الهاتف"
+
+#: cases/models.py
+msgid "priority"
+msgstr "الأولوية"
+
+#: cases/models.py
+msgid "project"
+msgstr "المشروع"
+
+#: accounts/models.py
+msgid "project scope"
+msgstr "نطاق المشروعات"
+
+#: core/models.py
+msgid "projects"
+msgstr "المشروعات"
+
+#: crm/models.py
+msgid "purpose"
+msgstr "الغرض"
+
+#: crm/models.py
+msgid "receipt no."
+msgstr "رقم الإيصال"
+
+#: cases/models.py
+msgid "recommendation"
+msgstr "التوصية"
+
+#: cases/models.py
+msgid "relation"
+msgstr "الصلة"
+
+#: cases/models.py
+msgid "research findings"
+msgstr "نتائج البحث"
+
+#: cases/models.py
+msgid "researcher"
+msgstr "الباحث"
+
+#: crm/models.py
+msgid "skills"
+msgstr "المهارات"
+
+#: crm/models.py
+msgid "sponsor"
+msgstr "الكافل"
+
+#: crm/models.py
+msgid "sponsorship"
+msgstr "كفالة"
+
+#: crm/models.py
+msgid "sponsorship payment"
+msgstr "دفعة كفالة"
+
+#: crm/models.py
+msgid "sponsorships"
+msgstr "الكفالات"
+
+#: crm/models.py
+msgid "start date"
+msgstr "تاريخ البداية"
+
+#: cases/models.py
+msgid "status"
+msgstr "الحالة"
+
+#: templates/approvals/request.html
+#, python-format
+msgid "step %(n)s"
+msgstr "المرحلة %(n)s"
+
+#: crm/models.py
+msgid "target (EGP)"
+msgstr "المستهدف (ج.م)"
+
+#: core/models.py
+msgid "title"
+msgstr "العنوان"
+
+#: cases/models.py
+msgid "type"
+msgstr "النوع"
+
+#: accounts/models.py
+msgid "user"
+msgstr "مستخدم"
+
+#: accounts/models.py
+msgid "users"
+msgstr "المستخدمون"
+
+#: cases/models.py
+msgid "value (EGP)"
+msgstr "القيمة (ج.م)"
+
+#: crm/models.py
+msgid "volunteer"
+msgstr "متطوع"
+
+#: crm/models.py
+msgid "volunteers"
+msgstr "المتطوعون"
+
+#: cases/models.py
+msgid "zakat eligibility"
+msgstr "استحقاق الزكاة"
+

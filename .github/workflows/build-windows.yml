@@ -29,6 +29,40 @@ jobs:
           HAZ_TEST_PG_URL: postgresql://postgres:test@localhost:5432/hazcrm_test
         run: python -m pytest -q
 
+  test-v2:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: haz_v2
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
+    defaults:
+      run:
+        working-directory: v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install v2 (and v1, used by the import test)
+        run: python -m pip install -r requirements-dev.txt -r ../requirements.txt
+      - name: Django checks and migrations are up to date
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+      - name: Every phrase has an Arabic translation
+        run: python tools/i18n.py check
+      - name: Tests on SQLite
+        run: python -m pytest -q
+      - name: Tests on PostgreSQL
+        env:
+          HAZ_DATABASE_URL: postgresql://postgres:test@localhost:5432/haz_v2
+        run: python -m pytest -q
+
   build:
     runs-on: windows-latest
     steps:
