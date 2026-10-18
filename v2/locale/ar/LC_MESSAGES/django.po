@@ -15,6 +15,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+#: projects/models.py
+#, python-format
+msgid "% complete"
+msgstr "نسبة الإنجاز %"
+
+#: templates/projects/list.html
+#, python-format
+msgid "% spent"
+msgstr "نسبة الصرف %"
+
+#: supply/admin.py
+#, python-format
+msgid "%(i)s: a payment voucher already covers it."
+msgstr "%(i)s: يغطيها إذن صرف بالفعل."
+
+#: supply/admin.py
+#, python-format
+msgid "%(i)s: only approved invoices can be paid."
+msgstr "%(i)s: لا تُسدد إلا الفواتير المعتمدة."
+
+#: supply/admin.py
+#, python-format
+msgid "%(i)s: payment voucher %(p)s created; send it for approval."
+msgstr "%(i)s: تم إنشاء إذن الصرف %(p)s؛ أرسله للاعتماد."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s is not kept in the store."
+msgstr "%(item)s ليس صنفاً مخزنياً."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s is not on the purchase order."
+msgstr "%(item)s ليس ضمن أمر الشراء."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s was not in the purchase request."
+msgstr "%(item)s لم يكن ضمن طلب الشراء."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s: %(q)s requested but only %(h)s in %(w)s."
+msgstr "%(item)s: المطلوب %(q)s والمتاح %(h)s فقط في %(w)s."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s: invoiced %(q)s but only %(r)s received and not yet invoiced."
+msgstr "%(item)s: الكمية بالفاتورة %(q)s والمستلم غير المفوتر %(r)s فقط."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s: invoiced at %(p)s, higher than the agreed price %(o)s."
+msgstr "%(item)s: سعر الفاتورة %(p)s أعلى من السعر المتفق عليه %(o)s."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s: ordering %(q)s but only %(left)s left on the request."
+msgstr "%(item)s: الكمية المطلوبة %(q)s والمتبقي في الطلب %(left)s فقط."
+
+#: supply/models.py
+#, python-format
+msgid "%(item)s: receiving %(q)s but only %(left)s still to come."
+msgstr "%(item)s: الكمية المستلمة %(q)s والمتبقي توريده %(left)s فقط."
+
 #: templates/dashboards/dashboard.html
 #, python-format
 msgid "%(n)s open needs not fully funded (%(u)s urgent)."
@@ -29,6 +94,11 @@ msgstr "تم إرسال %(n)s للاعتماد."
 #, python-format
 msgid "%(n)s skipped: not approved."
 msgstr "تم تخطي %(n)s: غير معتمدة."
+
+#: finance/admin.py
+#, python-format
+msgid "%(no)s: reversal %(rev)s sent for approval."
+msgstr "%(no)s: أُرسل القيد العكسي %(rev)s للاعتماد."
 
 #: hr/admin.py
 #, python-format
@@ -51,21 +121,53 @@ msgstr "العقد محدد المدة يحتاج تاريخ نهاية."
 msgid "A leave type cannot take from its own balance."
 msgstr "لا يمكن أن يُخصم نوع الإجازة من رصيده نفسه."
 
+#: finance/models.py
+msgid "A line is either a debit or a credit, not both."
+msgstr "السطر إما مدين أو دائن، وليس الاثنين."
+
 #: hr/leave.py
 msgid "A permission is for one day: use the same start and end date."
 msgstr "الإذن ليوم واحد: استخدم نفس تاريخ البداية والنهاية."
+
+#: finance/models.py
+msgid "A posted entry cannot be changed. Reverse it instead."
+msgstr "لا يمكن تعديل قيد مُرحَّل. اعكسه بدلاً من ذلك."
+
+#: finance/models.py
+msgid "A posted entry cannot be deleted. Reverse it instead."
+msgstr "لا يمكن حذف قيد مُرحَّل. اعكسه بدلاً من ذلك."
+
+#: finance/models.py
+msgid "A sub-account must have the same type as its parent."
+msgstr "الحساب الفرعي يجب أن يكون من نفس نوع الحساب الرئيسي."
 
 #: hr/models.py
 msgid "Absence (leave or permission)"
 msgstr "غياب (إجازة أو إذن)"
 
+#: templates/projects/detail.html
+msgid "Account"
+msgstr "الحساب"
+
+#: accounts/roles.py
+msgid "Accountant"
+msgstr "محاسب"
+
 #: dashboards/widgets.py
 msgid "Accounts locked now"
 msgstr "حسابات مقفلة حالياً"
 
+#: templates/finance/balance_sheet.html
+msgid "Accumulated surplus / (deficit)"
+msgstr "الفائض / (العجز) المتراكم"
+
 #: crm/models.py
 msgid "Active"
 msgstr "نشط"
+
+#: projects/dashboard.py
+msgid "Active projects"
+msgstr "المشروعات النشطة"
 
 #: dashboards/widgets.py
 msgid "Active sponsorships"
@@ -79,6 +181,22 @@ msgstr "مستخدمون نشطون"
 msgid "Active users by role"
 msgstr "المستخدمون النشطون حسب الدور"
 
+#: templates/projects/detail.html
+msgid "Actual"
+msgstr "الفعلي"
+
+#: templates/projects/detail.html
+msgid "Actuals for"
+msgstr "الفعلي عن"
+
+#: supply/models.py
+msgid "Add at least one line."
+msgstr "أضف سطراً واحداً على الأقل."
+
+#: projects/models.py
+msgid "Add budget lines before sending the budget for approval."
+msgstr "أضف بنود الموازنة قبل إرسالها للاعتماد."
+
 #: templates/hr/my_leave.html
 msgid "Adjustments"
 msgstr "التسويات"
@@ -90,6 +208,11 @@ msgstr "الإدارة والنظام"
 #: core/context.py
 msgid "Aid"
 msgstr "المساعدات"
+
+#: finance/builders.py
+#, python-format
+msgid "Aid %(no)s — case %(case)s"
+msgstr "مساعدة %(no)s — حالة %(case)s"
 
 #: dashboards/widgets.py
 msgid "Aid awaiting approval"
@@ -107,9 +230,29 @@ msgstr "مساعدات مسلَّمة"
 msgid "Aid disbursement"
 msgstr "صرف مساعدة"
 
+#: finance/models.py
+msgid "Aid to a case"
+msgstr "مساعدة لحالة"
+
+#: supply/models.py
+msgid "Aid to a case (approved aid)"
+msgstr "مساعدة لحالة (مساعدة معتمدة)"
+
+#: templates/projects/detail.html
+msgid "Aid to cases"
+msgstr "المساعدات للحالات"
+
 #: templates/dashboards/dashboard.html
 msgid "All"
 msgstr "الكل"
+
+#: templates/finance/index.html
+msgid "All entries of one account with running balance"
+msgstr "كل قيود حساب واحد مع الرصيد المتحرك"
+
+#: templates/projects/_dashboard.html
+msgid "All projects are on track."
+msgstr "كل المشروعات على المسار."
 
 #: core/models.py
 msgid "Allowed files: PDF, JPG or PNG."
@@ -147,6 +290,14 @@ msgstr "اعتماد"
 msgid "Approved"
 msgstr "معتمد"
 
+#: templates/projects/list.html
+msgid "Approved budget"
+msgstr "الموازنة المعتمدة"
+
+#: projects/dashboard.py
+msgid "Approved budgets"
+msgstr "الموازنات المعتمدة"
+
 #: templates/core/dashboard.html
 msgid "Approved cases"
 msgstr "حالات معتمدة"
@@ -155,6 +306,14 @@ msgstr "حالات معتمدة"
 msgid "Approved in period"
 msgstr "اعتُمدت في الفترة"
 
+#: supply/models.py
+msgid "Approved – sent to supplier"
+msgstr "معتمد – أُرسل للمورد"
+
+#: supply/models.py
+msgid "Approved – to be paid"
+msgstr "معتمدة – بانتظار السداد"
+
 #: haz/settings.py
 msgid "Arabic"
 msgstr "العربية"
@@ -162,6 +321,26 @@ msgstr "العربية"
 #: templates/dashboards/dashboard.html
 msgid "Arrears"
 msgstr "المتأخرات"
+
+#: templates/finance/balance_sheet.html
+msgid "As of"
+msgstr "في"
+
+#: finance/models.py
+msgid "Asset"
+msgstr "أصل"
+
+#: templates/finance/balance_sheet.html
+msgid "Assets"
+msgstr "الأصول"
+
+#: templates/finance/balance_sheet.html
+msgid "Assets do not equal liabilities plus funds. Check the posting problems."
+msgstr "الأصول لا تساوي الالتزامات مضافاً إليها الأرصدة الصندوقية. راجع مشكلات الترحيل."
+
+#: templates/finance/index.html
+msgid "Assets, liabilities and fund balances"
+msgstr "الأصول والالتزامات وأرصدة الصناديق"
 
 #: hr/models.py
 msgid "Assignments for the same dates would exceed 100%."
@@ -176,6 +355,14 @@ msgstr "الجمعية"
 msgid "At most %(n)s per request."
 msgstr "الحد الأقصى %(n)s في الطلب الواحد."
 
+#: projects/services.py
+msgid "At risk"
+msgstr "متعثر"
+
+#: templates/projects/list.html
+msgid "At risk: more of the budget spent than the work done (by over 15 points), or past the end date and not finished."
+msgstr "متعثر: نسبة الصرف تزيد على نسبة الإنجاز بأكثر من 15 نقطة، أو تجاوز تاريخ الانتهاء دون أن يكتمل."
+
 #: hr/leave.py
 msgid "Attach the supporting document (e.g. medical certificate) before sending."
 msgstr "أرفق المستند المؤيد (مثل الشهادة الطبية) قبل الإرسال."
@@ -188,6 +375,10 @@ msgstr "المتاح"
 #, python-format
 msgid "Available only after %(n)s months of service."
 msgstr "متاحة فقط بعد %(n)s شهراً من الخدمة."
+
+#: templates/supply/stock.html
+msgid "Average cost"
+msgstr "متوسط التكلفة"
 
 #: dashboards/widgets.py
 msgid "Average days to decision"
@@ -208,6 +399,18 @@ msgstr "غائبون اليوم"
 #: haz/urls.py
 msgid "Back office"
 msgstr "الإدارة الخلفية"
+
+#: templates/finance/ledger.html
+msgid "Balance"
+msgstr "الرصيد"
+
+#: templates/finance/funds.html
+msgid "Balance at end"
+msgstr "الرصيد آخر الفترة"
+
+#: templates/finance/funds.html
+msgid "Balance at start"
+msgstr "الرصيد أول الفترة"
 
 #: templates/hr/my_leave.html
 #, python-format
@@ -230,6 +433,14 @@ msgstr "الراتب الأساسي"
 msgid "Being researched"
 msgstr "قيد البحث"
 
+#: templates/projects/detail.html
+msgid "Beneficiaries"
+msgstr "المستفيدون"
+
+#: projects/models.py
+msgid "Blocked"
+msgstr "متوقفة"
+
 #: hr/models.py
 msgid "Bonus"
 msgstr "مكافأة"
@@ -237,6 +448,26 @@ msgstr "مكافأة"
 #: hr/models.py
 msgid "Both leave types must be counted in the same unit."
 msgstr "يجب أن يُحسب النوعان بنفس الوحدة."
+
+#: templates/projects/detail.html
+msgid "Budget"
+msgstr "الموازنة"
+
+#: templates/projects/detail.html
+msgid "Budget against actual"
+msgstr "الموازنة مقابل الفعلي"
+
+#: projects/models.py
+msgid "Budget lines use expense accounts."
+msgstr "بنود الموازنة تستخدم حسابات المصروفات."
+
+#: projects/dashboard.py
+msgid "Budget spent to date (%)"
+msgstr "نسبة صرف الموازنة حتى الآن (%)"
+
+#: templates/finance/index.html
+msgid "By fund: unrestricted, restricted, zakat"
+msgstr "حسب الصندوق: غير مقيد، مقيد، زكاة"
 
 #: templates/dashboards/dashboard.html
 msgid "By payment method"
@@ -249,6 +480,10 @@ msgstr "حسب الغرض"
 #: templates/accounts/access.html
 msgid "C"
 msgstr "ت"
+
+#: finance/admin.py
+msgid "Calculate and create the journal (then send it for approval)"
+msgstr "احتساب وإنشاء القيد (ثم إرساله للاعتماد)"
 
 #: hr/admin.py
 msgid "Calculate payroll"
@@ -285,6 +520,10 @@ msgstr "يرى كل الحالات (وليس المسندة إليه فقط)"
 #: cases/models.py
 msgid "Can see donors and amounts linked to cases"
 msgstr "يرى المتبرعين والمبالغ المرتبطة بالحالات"
+
+#: projects/models.py
+msgid "Can see every project (not only own)"
+msgstr "يرى كل المشروعات (وليس مشروعاته فقط)"
 
 #: hr/models.py
 msgid "Can see salaries, pay items and payslips"
@@ -346,6 +585,18 @@ msgstr "حالات تحت الدراسة"
 msgid "Cash"
 msgstr "نقدي"
 
+#: finance/dashboard.py
+msgid "Cash and bank now"
+msgstr "النقدية والبنوك الآن"
+
+#: templates/supply/stock.html
+msgid "Category"
+msgstr "الفئة"
+
+#: finance/nav.py
+msgid "Chart of accounts"
+msgstr "دليل الحسابات"
+
 #: crm/models.py
 msgid "Cheque"
 msgstr "شيك"
@@ -354,6 +605,34 @@ msgstr "شيك"
 msgid "Choose a valid custom date range (from and to)."
 msgstr "اختر فترة مخصصة صحيحة (من وإلى)."
 
+#: finance/models.py
+msgid "Choose an account that accepts entries, not a heading."
+msgstr "اختر حساباً يقبل القيود، وليس حساب تجميع."
+
+#: templates/finance/ledger.html
+msgid "Choose an account."
+msgstr "اختر حساباً."
+
+#: supply/models.py
+msgid "Choose either a purchase order or an in-kind donation."
+msgstr "اختر أمر شراء أو تبرعاً عينياً."
+
+#: supply/models.py
+msgid "Choose the approved aid these goods are given for."
+msgstr "اختر المساعدة المعتمدة التي تُصرف لها هذه السلع."
+
+#: supply/models.py
+msgid "Choose the asset category for a fixed-asset item."
+msgstr "اختر فئة الأصل لصنف الأصل الثابت."
+
+#: supply/models.py
+msgid "Choose the department."
+msgstr "اختر الإدارة."
+
+#: supply/models.py
+msgid "Choose the project."
+msgstr "اختر المشروع."
+
 #: templates/dashboards/dashboard.html
 msgid "Choosing a custom From/To date switches the period to Custom range. Totals compare with the previous period of the same length."
 msgstr ""
@@ -361,6 +640,14 @@ msgstr ""
 #: core/models.py
 msgid "Closed"
 msgstr "مغلق"
+
+#: templates/finance/trial_balance.html
+msgid "Closing"
+msgstr "الختامي"
+
+#: templates/finance/ledger.html
+msgid "Closing balance"
+msgstr "الرصيد الختامي"
 
 #: cases/models.py
 msgid "Clothes"
@@ -386,6 +673,18 @@ msgstr "شركة / مؤسسة"
 #, python-format
 msgid "Complete the research first: %(m)s"
 msgstr "أكمل البحث أولاً: %(m)s"
+
+#: supply/admin.py
+msgid "Confirm goods received (adds to stock and books it)"
+msgstr "تأكيد الاستلام (يضيف للمخزون ويقيّده)"
+
+#: supply/admin.py
+msgid "Confirm issue (takes goods out of stock and books the cost)"
+msgstr "تأكيد الصرف (يخرج السلع من المخزون ويقيّد تكلفتها)"
+
+#: supply/models.py
+msgid "Confirmed – in stock"
+msgstr "مؤكد – بالمخزن"
 
 #: templates/dashboards/dashboard.html
 msgid "Conflicts found:"
@@ -423,6 +722,22 @@ msgstr "يتحكم في الصلاحيات ويعد الرواتب أيضاً"
 msgid "Controls user permissions and also records donations"
 msgstr "يتحكم في صلاحيات المستخدمين ويسجل التبرعات أيضاً"
 
+#: templates/finance/_filters.html
+msgid "Cost centre"
+msgstr "مركز التكلفة"
+
+#: supply/admin.py
+msgid "Create payment voucher for what is still owed"
+msgstr "إنشاء إذن صرف بالمتبقي المستحق"
+
+#: templates/registration/setup.html
+msgid "Create the administrator"
+msgstr "إنشاء مدير النظام"
+
+#: templates/finance/ledger.html
+msgid "Credit"
+msgstr "دائن"
+
 #: dashboards/filters.py
 msgid "Custom range"
 msgstr "فترة مخصصة"
@@ -459,6 +774,10 @@ msgstr "الأيام / الساعات"
 msgid "Days paid"
 msgstr "الأيام المدفوعة"
 
+#: templates/finance/ledger.html
+msgid "Debit"
+msgstr "مدين"
+
 #: cases/models.py
 msgid "Debt repayment"
 msgstr "سداد ديون"
@@ -487,13 +806,34 @@ msgstr "تم التسليم"
 msgid "Delivered by type"
 msgstr "المسلَّم حسب النوع"
 
+#: accounts/views.py
+msgid "Demo data loaded. Sign in with any demo login below (password: Demo@2026)."
+msgstr "تم تحميل البيانات التجريبية. ادخل بأي حساب تجريبي أدناه (كلمة المرور: Demo@2026)."
+
 #: templates/dashboards/dashboard.html
 msgid "Department"
 msgstr "الإدارة"
 
+#: supply/models.py
+msgid "Department use"
+msgstr "استخدام إدارة"
+
 #: core/context.py
 msgid "Departments and projects"
 msgstr "الإدارات والمشروعات"
+
+#: finance/nav.py
+msgid "Depreciation"
+msgstr "الإهلاك"
+
+#: finance/assets.py
+#, python-format
+msgid "Depreciation %(m)s"
+msgstr "إهلاك %(m)s"
+
+#: templates/finance/ledger.html
+msgid "Description"
+msgstr "البيان"
 
 #: hr/models.py
 msgid "Discussed with employee"
@@ -511,6 +851,15 @@ msgstr "المستند"
 msgid "Documents expiring within 60 days"
 msgstr "مستندات تنتهي خلال 60 يوماً"
 
+#: finance/models.py
+msgid "Donation"
+msgstr "تبرع"
+
+#: finance/builders.py
+#, python-format
+msgid "Donation %(no)s — %(donor)s"
+msgstr "تبرع %(no)s — %(donor)s"
+
 #: core/context.py
 msgid "Donations"
 msgstr "التبرعات"
@@ -526,6 +875,14 @@ msgstr "التبرعات عبر الزمن"
 #: templates/dashboards/dashboard.html
 msgid "Donations received vs aid delivered"
 msgstr "التبرعات المستلمة مقابل المساعدات المسلَّمة"
+
+#: projects/models.py
+msgid "Done"
+msgstr "منتهية"
+
+#: crm/nav.py
+msgid "Donor management"
+msgstr "إدارة المتبرعين"
 
 #: core/context.py
 msgid "Donors"
@@ -550,6 +907,10 @@ msgstr "جمعية د. حسن عباس زكي"
 #: cases/models.py
 msgid "Draft"
 msgstr "مسودة"
+
+#: templates/projects/detail.html
+msgid "Draft lines"
+msgstr "بنود مسودة"
 
 #: templates/dashboards/dashboard.html
 msgid "EGP"
@@ -595,6 +956,18 @@ msgstr "لا يمكن للموظف تقييم نفسه."
 msgid "Employees now"
 msgstr "الموظفون حالياً"
 
+#: finance/models.py
+msgid "Empty = the category's default."
+msgstr "فارغ = القيمة الافتراضية للفئة."
+
+#: supply/models.py
+msgid "Empty = the posting rule 'supply.expense'."
+msgstr "فارغ = قاعدة الترحيل 'supply.expense'."
+
+#: supply/models.py
+msgid "Empty = the posting rule 'supply.inventory'."
+msgstr "فارغ = قاعدة الترحيل 'supply.inventory'."
+
 #: crm/models.py
 msgid "Ended"
 msgstr "منتهية"
@@ -602,6 +975,10 @@ msgstr "منتهية"
 #: haz/settings.py
 msgid "English"
 msgstr "English"
+
+#: finance/models.py
+msgid "Enter a debit or a credit amount."
+msgstr "أدخل مبلغاً مديناً أو دائناً."
 
 #: hr/models.py
 msgid "Enter either a fixed amount or a percentage of basic, not both."
@@ -615,6 +992,14 @@ msgstr "أدخل تاريخ نهاية الخدمة لمن ترك العمل."
 msgid "Enter the number of hours."
 msgstr "أدخل عدد الساعات."
 
+#: templates/finance/ledger.html
+msgid "Entry"
+msgstr "القيد"
+
+#: templates/finance/index.html
+msgid "Every account: opening, movements, closing"
+msgstr "كل حساب: رصيد أول المدة والحركة والرصيد الختامي"
+
 #: hr/models.py
 msgid "Everyone"
 msgstr "الجميع"
@@ -626,6 +1011,22 @@ msgstr "يفوق التوقعات"
 #: accounts/roles.py
 msgid "Executive director"
 msgstr "المدير التنفيذي"
+
+#: finance/models.py
+msgid "Expense"
+msgstr "مصروف"
+
+#: templates/finance/income_statement.html
+msgid "Expenses"
+msgstr "المصروفات"
+
+#: templates/finance/_dashboard.html
+msgid "Expenses by category"
+msgstr "المصروفات حسب البند"
+
+#: finance/dashboard.py
+msgid "Expenses in period"
+msgstr "المصروفات في الفترة"
 
 #: dashboards/widgets.py
 msgid "Failed sign-ins"
@@ -659,13 +1060,53 @@ msgstr "باحث اجتماعي"
 msgid "Filled"
 msgstr "مشغول"
 
+#: templates/registration/setup.html
+msgid "Fills the system with FICTIONAL donors, cases, staff, accounts, purchases and projects, with one login per role, so you can test each module as a different user. Sample tax, insurance and leave figures are labelled SAMPLE and are not legal values. Use a separate data folder for real work."
+msgstr "يملأ النظام ببيانات وهمية: متبرعون وحالات وموظفون وحسابات ومشتريات ومشروعات، مع حساب دخول لكل دور، لتجربة كل وحدة كمستخدم مختلف. أرقام الضرائب والتأمينات والإجازات مُعلَّمة بكلمة SAMPLE وليست قيماً قانونية. استخدم مجلد بيانات منفصلاً للعمل الفعلي."
+
 #: hr/models.py
 msgid "Final"
 msgstr "نهائي"
 
+#: finance/nav.py
+msgid "Finance"
+msgstr "الشؤون المالية"
+
+#: finance/apps.py
+msgid "Finance and accounting"
+msgstr "الشؤون المالية والمحاسبة"
+
+#: accounts/roles.py
+msgid "Finance manager"
+msgstr "المدير المالي"
+
+#: finance/nav.py
+msgid "Financial reports"
+msgstr "التقارير المالية"
+
+#: finance/nav.py
+msgid "Financial years and month-end lock"
+msgstr "السنوات المالية وإقفال الشهر"
+
+#: templates/registration/setup.html
+msgid "First start: choose how to begin."
+msgstr "التشغيل الأول: اختر طريقة البدء."
+
+#: supply/models.py
+msgid "Fixed asset"
+msgstr "أصل ثابت"
+
+#: finance/nav.py
+msgid "Fixed assets"
+msgstr "الأصول الثابتة"
+
 #: hr/models.py
 msgid "Fixed term"
 msgstr "محدد المدة"
+
+#: templates/projects/list.html
+msgid "Flag"
+msgstr "المؤشر"
 
 #: cases/models.py
 msgid "Food"
@@ -687,9 +1128,25 @@ msgstr "بدون مقابل / إيواء"
 msgid "From"
 msgstr "من"
 
+#: supply/models.py
+msgid "Fully received"
+msgstr "تم الاستلام بالكامل"
+
 #: templates/dashboards/dashboard.html
 msgid "Fund"
 msgstr "الصندوق"
+
+#: templates/finance/funds.html
+msgid "Fund balances"
+msgstr "أرصدة الصناديق"
+
+#: templates/finance/_dashboard.html
+msgid "Fund balances at end of period"
+msgstr "أرصدة الصناديق آخر الفترة"
+
+#: templates/projects/detail.html
+msgid "Funding raised"
+msgstr "التمويل المحصل"
 
 #: templates/dashboards/dashboard.html
 msgid "Fundraising"
@@ -703,9 +1160,52 @@ msgstr "مسؤول التبرعات وتنمية الموارد"
 msgid "General donation"
 msgstr "تبرع عام"
 
+#: templates/finance/index.html
+msgid "General ledger"
+msgstr "دفتر الأستاذ العام"
+
 #: cases/models.py
 msgid "Good"
 msgstr "جيدة"
+
+#: supply/models.py
+msgid "Goods can only be received against an approved order."
+msgstr "لا تُستلم السلع إلا مقابل أمر شراء معتمد."
+
+#: supply/models.py
+msgid "Goods for this donation were already received."
+msgstr "تم استلام سلع هذا التبرع بالفعل."
+
+#: cases/models.py
+msgid "Goods from the store"
+msgstr "سلع من المخزن"
+
+#: cases/models.py
+msgid "Goods from the store are issued by the storekeeper against this aid."
+msgstr "السلع من المخزن يصرفها أمين المخزن مقابل هذه المساعدة."
+
+#: supply/postings.py
+#, python-format
+msgid "Goods issued %(no)s — %(to)s"
+msgstr "صرف سلع %(no)s — %(to)s"
+
+#: supply/postings.py
+#, python-format
+msgid "Goods issued %(no)s — aid %(aid)s"
+msgstr "صرف سلع %(no)s — مساعدة %(aid)s"
+
+#: supply/nav.py
+msgid "Goods receipts"
+msgstr "أذونات الاستلام"
+
+#: supply/postings.py
+#, python-format
+msgid "Goods received %(no)s — order %(po)s"
+msgstr "استلام سلع %(no)s — أمر شراء %(po)s"
+
+#: supply/dashboard.py
+msgid "Goods received, not yet invoiced"
+msgstr "سلع مستلمة لم ترد فاتورتها"
 
 #: templates/hr/structure.html
 msgid "Grade"
@@ -743,6 +1243,10 @@ msgstr "رب الأسرة"
 msgid "High"
 msgstr "مرتفع"
 
+#: accounts/sod.py
+msgid "Holds the stock and also keeps the stock accounts"
+msgstr "يحتفظ بالمخزون ويمسك حساباته أيضاً"
+
 #: crm/models.py
 msgid "Honorary"
 msgstr "شرفي"
@@ -759,6 +1263,10 @@ msgstr "ساعات"
 msgid "Housing / repairs"
 msgstr "سكن / ترميم"
 
+#: projects/models.py
+msgid "How much this task counts in the project's progress."
+msgstr "مقدار ما تمثله هذه المهمة من تقدم المشروع."
+
 #: hr/apps.py
 msgid "Human resources"
 msgstr "الموارد البشرية"
@@ -771,9 +1279,22 @@ msgstr "زوج"
 msgid "In kind"
 msgstr "عيني"
 
+#: projects/models.py
+msgid "In progress"
+msgstr "قيد التنفيذ"
+
 #: templates/dashboards/dashboard.html
 msgid "In the selected period"
 msgstr "في الفترة المختارة"
+
+#: supply/postings.py
+#, python-format
+msgid "In-kind donation received %(no)s — receipt %(rec)s"
+msgstr "استلام تبرع عيني %(no)s — إيصال %(rec)s"
+
+#: supply/models.py
+msgid "In-kind donations received into the store must be stock items."
+msgstr "التبرعات العينية المستلمة بالمخزن يجب أن تكون أصنافاً مخزنية."
 
 #: crm/models.py
 msgid "Inactive"
@@ -790,6 +1311,18 @@ msgstr "حافز / مكافأة / جزاء"
 #: core/context.py
 msgid "Incentives and penalties"
 msgstr "الحوافز والجزاءات"
+
+#: finance/models.py
+msgid "Income"
+msgstr "الإيرادات"
+
+#: templates/finance/index.html
+msgid "Income and expenditure"
+msgstr "قائمة الإيرادات والمصروفات"
+
+#: finance/dashboard.py
+msgid "Income in period"
+msgstr "الإيرادات في الفترة"
 
 #: templates/hr/payslip.html
 msgid "Income tax"
@@ -811,9 +1344,49 @@ msgstr "إنستاباي"
 msgid "Integrated management system"
 msgstr "النظام المتكامل للإدارة"
 
+#: supply/dashboard.py
+msgid "Invoices waiting for approval"
+msgstr "فواتير بانتظار الاعتماد"
+
+#: supply/models.py
+msgid "Issued"
+msgstr "تم الصرف"
+
+#: templates/supply/stock.html
+msgid "Item"
+msgstr "الصنف"
+
+#: supply/nav.py
+msgid "Items"
+msgstr "الأصناف"
+
+#: supply/dashboard.py
+msgid "Items at or below reorder level"
+msgstr "أصناف عند حد إعادة الطلب أو أقل"
+
 #: dashboards/widgets.py
 msgid "Joined in period"
 msgstr "التحقوا في الفترة"
+
+#: finance/nav.py
+msgid "Journal entries"
+msgstr "قيود اليومية"
+
+#: templates/finance/index.html
+msgid "Journal entries waiting for approval:"
+msgstr "قيود بانتظار الاعتماد:"
+
+#: finance/apps.py
+msgid "Journal entry"
+msgstr "قيد يومية"
+
+#: finance/dashboard.py
+msgid "Journals waiting for approval"
+msgstr "قيود بانتظار الاعتماد"
+
+#: supply/models.py
+msgid "Kept in the store"
+msgstr "يُحفظ بالمخزن"
 
 #: accounts/roles.py
 msgid "Labour-law / payroll specialist (signs off rules)"
@@ -875,9 +1448,21 @@ msgstr "ترك العمل"
 msgid "Left in period"
 msgstr "تركوا في الفترة"
 
+#: templates/finance/balance_sheet.html
+msgid "Liabilities"
+msgstr "الالتزامات"
+
+#: finance/models.py
+msgid "Liability"
+msgstr "التزام"
+
 #: accounts/roles.py
 msgid "Line manager (of the employee)"
 msgstr "المدير المباشر (للموظف)"
+
+#: templates/registration/setup.html
+msgid "Load demo data"
+msgstr "تحميل البيانات التجريبية"
 
 #: cases/models.py
 msgid "Male"
@@ -887,6 +1472,10 @@ msgstr "ذكر"
 msgid "Manager"
 msgstr "المدير"
 
+#: finance/models.py
+msgid "Manual journal"
+msgstr "قيد يدوي"
+
 #: cases/admin.py
 msgid "Mark as delivered (approved aid only)"
 msgstr "تسجيل التسليم (للمساعدات المعتمدة فقط)"
@@ -894,6 +1483,10 @@ msgstr "تسجيل التسليم (للمساعدات المعتمدة فقط)"
 #: hr/admin.py
 msgid "Mark as paid"
 msgstr "تسجيل كمدفوع"
+
+#: finance/admin.py
+msgid "Mark as paid (money has left: posts the entry)"
+msgstr "تسجيل كمدفوع (خرجت الأموال: يُرحَّل القيد)"
 
 #: cases/models.py
 msgid "Marriage preparation"
@@ -919,6 +1512,14 @@ msgstr "يلبي التوقعات"
 msgid "Men only"
 msgstr "الرجال فقط"
 
+#: projects/nav.py
+msgid "Milestones"
+msgstr "المراحل"
+
+#: templates/projects/detail.html
+msgid "Milestones and tasks"
+msgstr "المراحل والمهام"
+
 #: crm/models.py
 msgid "Mobile wallet"
 msgstr "محفظة إلكترونية"
@@ -940,9 +1541,22 @@ msgstr "مسير الرواتب الشهري"
 msgid "Monthly support"
 msgstr "إعانة شهرية"
 
+#: finance/models.py
+#, python-format
+msgid "More than what is still owed (%(a)s)."
+msgstr "أكبر من المتبقي المستحق (%(a)s)."
+
 #: cases/models.py
 msgid "Mother"
 msgstr "أم"
+
+#: templates/finance/trial_balance.html
+msgid "Movements in period"
+msgstr "حركة الفترة"
+
+#: finance/models.py
+msgid "Must be lower than the cost."
+msgstr "يجب أن تكون أقل من التكلفة."
 
 #: templates/dashboards/dashboard.html
 msgid "My cases"
@@ -971,6 +1585,14 @@ msgstr "طلباتي التي لم يُبت فيها"
 #: hr/models.py
 msgid "Needs improvement"
 msgstr "يحتاج تحسيناً"
+
+#: templates/finance/balance_sheet.html
+msgid "Net assets (funds)"
+msgstr "صافي الأصول (الأرصدة الصندوقية)"
+
+#: finance/models.py
+msgid "Net assets / funds"
+msgstr "صافي الأصول / الأرصدة الصندوقية"
 
 #: templates/hr/payslip.html
 msgid "Net pay"
@@ -1012,6 +1634,10 @@ msgstr "لا توجد سياسة اعتماد لهذا النوع من المس�
 msgid "No approved payslips yet."
 msgstr "لا توجد قسائم راتب معتمدة بعد."
 
+#: templates/projects/detail.html
+msgid "No budget lines or spending yet."
+msgstr "لا توجد بنود موازنة أو مصروفات بعد."
+
 #: templates/dashboards/dashboard.html
 msgid "No campaigns in this period."
 msgstr "لا توجد حملات في هذه الفترة."
@@ -1032,6 +1658,24 @@ msgstr "لا يوجد نوع إجازة متاح بعد: قواعد الإجاز
 msgid "No open cases."
 msgstr "لا توجد حالات مفتوحة."
 
+#: templates/finance/trial_balance.html
+msgid "No posted entries in this period."
+msgstr "لا توجد قيود مرحلة في هذه الفترة."
+
+#: finance/models.py
+#, python-format
+msgid "No posting rule for '%(key)s'. Add it under Finance â Posting rules."
+msgstr ""
+
+#: finance/models.py
+#, python-format
+msgid "No posting rule for '%(key)s'. Add it under Finance → Posting rules."
+msgstr "لا توجد قاعدة ترحيل لـ '%(key)s'. أضفها من الشؤون المالية ← قواعد الترحيل."
+
+#: templates/projects/list.html
+msgid "No projects to show."
+msgstr "لا توجد مشروعات للعرض."
+
 #: templates/hr/my_leave.html
 msgid "No requests yet."
 msgstr "لا توجد طلبات بعد."
@@ -1039,6 +1683,14 @@ msgstr "لا توجد طلبات بعد."
 #: templates/dashboards/dashboard.html
 msgid "No sponsorship is in arrears."
 msgstr "لا توجد كفالات متأخرة."
+
+#: templates/projects/detail.html
+msgid "No staff assigned to this project."
+msgstr "لا يوجد موظفون مكلفون بهذا المشروع."
+
+#: templates/projects/detail.html
+msgid "No tasks yet."
+msgstr "لا توجد مهام بعد."
 
 #: templates/dashboards/dashboard.html
 msgid "No user holds a conflicting combination of roles."
@@ -1060,6 +1712,14 @@ msgstr "عادي"
 msgid "Not assigned"
 msgstr "غير مسندة"
 
+#: templates/finance/funds.html
+msgid "Not assigned to a fund"
+msgstr "غير مخصص لصندوق"
+
+#: finance/models.py
+msgid "Not calculated"
+msgstr "لم يُحتسب"
+
 #: hr/leave.py
 #, python-format
 msgid "Not enough %(type)s balance: %(a)s available, %(n)s requested."
@@ -1069,13 +1729,25 @@ msgstr "رصيد %(type)s غير كافٍ: المتاح %(a)s والمطلوب %
 msgid "Note"
 msgstr "ملاحظة"
 
+#: finance/models.py
+msgid "Nothing can be posted on or before this date (month-end close)."
+msgstr "لا يمكن الترحيل في هذا التاريخ أو قبله (إقفال نهاية الشهر)."
+
 #: templates/approvals/inbox.html
 msgid "Nothing is waiting for you."
 msgstr "لا يوجد ما ينتظر قرارك."
 
+#: templates/supply/_dashboard.html
+msgid "Nothing needs reordering."
+msgstr "لا يوجد ما يحتاج إعادة طلب."
+
 #: dashboards/widgets.py
 msgid "Number of donations"
 msgstr "عدد التبرعات"
+
+#: templates/projects/detail.html
+msgid "Objectives"
+msgstr "الأهداف"
 
 #: core/context.py
 msgid "Official holidays"
@@ -1097,9 +1769,25 @@ msgstr "في إجازة اليوم"
 msgid "On long leave"
 msgstr "في إجازة طويلة"
 
+#: projects/services.py
+msgid "On track"
+msgstr "على المسار"
+
 #: cases/models.py
 msgid "One-off"
 msgstr "مرة واحدة"
+
+#: finance/posting.py
+msgid "Only a posted entry can be reversed."
+msgstr "لا يُعكس إلا قيد مُرحَّل."
+
+#: projects/models.py
+msgid "Only an approved budget can be reopened for revision."
+msgstr "لا يُعاد فتح إلا موازنة معتمدة للتعديل."
+
+#: finance/models.py
+msgid "Only an approved payment can be marked as paid."
+msgstr "لا يُسجَّل كمدفوع إلا إذن صرف معتمد."
 
 #: hr/admin.py
 msgid "Only approved payroll can be paid."
@@ -1117,9 +1805,41 @@ msgstr "أخصائي قانون العمل وحده يمكنه اعتماد قو
 msgid "Only the person who sent the request can cancel it."
 msgstr "لا يلغي الطلب إلا من أرسله."
 
+#: supply/dashboard.py
+msgid "Open purchase orders"
+msgstr "أوامر شراء مفتوحة"
+
 #: hr/models.py
 msgid "Open-ended"
 msgstr "غير محدد المدة"
+
+#: templates/finance/trial_balance.html
+msgid "Opening"
+msgstr "أول المدة"
+
+#: templates/finance/ledger.html
+msgid "Opening balance"
+msgstr "رصيد أول المدة"
+
+#: finance/models.py
+msgid "Opening balances"
+msgstr "أرصدة افتتاحية"
+
+#: supply/models.py
+msgid "Ordered"
+msgstr "تم الطلب"
+
+#: accounts/sod.py
+msgid "Orders goods and also confirms they were received"
+msgstr "يطلب السلع ويؤكد استلامها أيضاً"
+
+#: accounts/sod.py
+msgid "Orders goods and also records the supplier's invoice"
+msgstr "يطلب السلع ويسجل فاتورة المورد أيضاً"
+
+#: supply/dashboard.py
+msgid "Orders placed in period"
+msgstr "أوامر شراء في الفترة"
 
 #: core/apps.py
 msgid "Organisation"
@@ -1145,9 +1865,17 @@ msgstr "أخرى"
 msgid "Outstanding"
 msgstr "ممتاز"
 
+#: projects/dashboard.py
+msgid "Overdue tasks"
+msgstr "مهام متأخرة"
+
 #: hr/models.py
 msgid "Overtime"
 msgstr "عمل إضافي"
+
+#: finance/dashboard.py
+msgid "Owed to suppliers"
+msgstr "المستحق للموردين"
 
 #: cases/models.py
 msgid "Owned"
@@ -1173,9 +1901,35 @@ msgstr "مريض"
 msgid "Paused"
 msgstr "متوقفة مؤقتاً"
 
+#: finance/models.py
+msgid "Payment"
+msgstr "صرف"
+
+#: finance/builders.py
+#, python-format
+msgid "Payment %(no)s — %(payee)s"
+msgstr "صرف %(no)s — %(payee)s"
+
+#: finance/apps.py
+msgid "Payment voucher"
+msgstr "إذن صرف"
+
+#: finance/nav.py
+msgid "Payment vouchers"
+msgstr "أذونات الصرف"
+
+#: finance/dashboard.py
+msgid "Payments waiting"
+msgstr "مدفوعات معلّقة"
+
 #: hr/models.py
 msgid "Payroll"
 msgstr "الرواتب"
+
+#: finance/builders.py
+#, python-format
+msgid "Payroll %(month)s"
+msgstr "رواتب %(month)s"
 
 #: templates/dashboards/dashboard.html
 msgid "Payroll cost by department / cost centre"
@@ -1241,6 +1995,18 @@ msgstr "الوظيفة"
 msgid "Positions and job descriptions"
 msgstr "الوظائف والأوصاف الوظيفية"
 
+#: finance/models.py
+msgid "Posted"
+msgstr "مُرحَّل"
+
+#: finance/dashboard.py
+msgid "Posting problems"
+msgstr "مشكلات الترحيل"
+
+#: finance/nav.py
+msgid "Posting rules"
+msgstr "قواعد الترحيل"
+
 #: accounts/sod.py
 msgid "Prepares payroll and also approves it"
 msgstr "يعد الرواتب ويعتمدها أيضاً"
@@ -1249,13 +2015,93 @@ msgstr "يعد الرواتب ويعتمدها أيضاً"
 msgid "Prepares payroll and also gives final approval"
 msgstr "يعد الرواتب ويعطي الاعتماد النهائي أيضاً"
 
+#: supply/models.py
+msgid "Price lower than ordered"
+msgstr "سعر أقل من أمر الشراء"
+
 #: templates/hr/payslip.html
 msgid "Print"
 msgstr "طباعة"
 
+#: accounts/roles.py
+msgid "Procurement officer"
+msgstr "مسؤول المشتريات"
+
+#: templates/projects/list.html
+msgid "Progress"
+msgstr "الإنجاز"
+
 #: templates/dashboards/dashboard.html
 msgid "Project"
 msgstr "المشروع"
+
+#: supply/models.py
+msgid "Project / programme"
+msgstr "مشروع / برنامج"
+
+#: projects/models.py
+msgid "Project budget"
+msgstr "موازنة المشروع"
+
+#: projects/nav.py
+msgid "Project budgets"
+msgstr "موازنات المشروعات"
+
+#: projects/nav.py
+msgid "Project management"
+msgstr "إدارة المشروعات"
+
+#: accounts/roles.py
+msgid "Project manager"
+msgstr "مدير مشروع"
+
+#: projects/dashboard.py
+msgid "Projects at risk"
+msgstr "مشروعات متعثرة"
+
+#: templates/projects/_dashboard.html
+msgid "Projects needing attention"
+msgstr "مشروعات تحتاج متابعة"
+
+#: projects/nav.py
+msgid "Projects overview"
+msgstr "نظرة عامة على المشروعات"
+
+#: supply/apps.py
+msgid "Purchase order"
+msgstr "أمر شراء"
+
+#: supply/nav.py
+msgid "Purchase orders"
+msgstr "أوامر الشراء"
+
+#: supply/models.py
+msgid "Purchase orders: taken from the order. In-kind: the agreed value."
+msgstr "أوامر الشراء: من أمر الشراء. التبرع العيني: القيمة المتفق عليها."
+
+#: supply/apps.py
+msgid "Purchase request"
+msgstr "طلب شراء"
+
+#: supply/nav.py
+msgid "Purchase requests"
+msgstr "طلبات الشراء"
+
+#: supply/dashboard.py
+msgid "Purchase requests waiting"
+msgstr "طلبات شراء معلّقة"
+
+#: finance/models.py
+msgid "Purchasing"
+msgstr "مشتريات"
+
+#: templates/supply/stock.html
+msgid "Quantity"
+msgstr "الكمية"
+
+#: templates/finance/funds.html
+msgid "Received"
+msgstr "المحصل"
 
 #: dashboards/widgets.py
 msgid "Recorded changes"
@@ -1264,6 +2110,14 @@ msgstr "تعديلات مسجلة"
 #: accounts/sod.py
 msgid "Records donations and also decides who receives them"
 msgstr "يسجل التبرعات ويقرر من يستفيد منها أيضاً"
+
+#: accounts/sod.py
+msgid "Records donations and also keeps the cash and bank accounts"
+msgstr "يسجل التبرعات ويمسك حسابات النقدية والبنوك أيضاً"
+
+#: accounts/sod.py
+msgid "Records journal entries and payments and also approves them"
+msgstr "يسجل القيود والمدفوعات ويعتمدها أيضاً"
 
 #: approvals/models.py
 msgid "Reject"
@@ -1276,6 +2130,18 @@ msgstr "مرفوض"
 #: dashboards/widgets.py
 msgid "Rejected / suspended"
 msgstr "مرفوضة / موقوفة"
+
+#: templates/projects/detail.html
+msgid "Remaining"
+msgstr "المتبقي"
+
+#: projects/admin.py
+msgid "Reopen approved budget for revision"
+msgstr "إعادة فتح الموازنة المعتمدة للتعديل"
+
+#: templates/supply/stock.html
+msgid "Reorder"
+msgstr "إعادة الطلب"
 
 #: templates/hr/structure.html
 msgid "Reports to"
@@ -1309,6 +2175,14 @@ msgstr "إعادة ضبط"
 msgid "Restricted"
 msgstr "مقيد"
 
+#: templates/finance/funds.html
+msgid "Restricted and zakat funds may only be spent on their permitted purposes. A negative balance means a fund spent more than it received."
+msgstr "الأموال المقيدة وأموال الزكاة لا تُصرف إلا في أغراضها المسموح بها. الرصيد السالب يعني أن الصندوق صرف أكثر مما حصّل."
+
+#: finance/admin.py
+msgid "Retry (after fixing the posting rule or the locked month)"
+msgstr "إعادة المحاولة (بعد إصلاح قاعدة الترحيل أو الشهر المقفل)"
+
 #: approvals/models.py
 msgid "Return for changes"
 msgstr "إعادة للتعديل"
@@ -1324,6 +2198,19 @@ msgstr "أُعيدت إليّ للتعديل"
 #: dashboards/widgets.py
 msgid "Returned to researcher"
 msgstr "أُعيدت للباحث"
+
+#: finance/models.py
+msgid "Reversal"
+msgstr "قيد عكسي"
+
+#: finance/posting.py
+#, python-format
+msgid "Reversal of %(no)s"
+msgstr "عكس القيد %(no)s"
+
+#: finance/admin.py
+msgid "Reverse (creates a reversing entry for approval)"
+msgstr "عكس القيد (يُنشئ قيداً عكسياً للاعتماد)"
 
 #: templates/accounts/access.html
 msgid "Risk"
@@ -1341,9 +2228,18 @@ msgstr "القواعد المطبقة"
 msgid "Sadaqa"
 msgstr "صدقة"
 
+#: finance/builders.py
+#, python-format
+msgid "Salaries paid %(month)s"
+msgstr "صرف رواتب %(month)s"
+
 #: templates/dashboards/dashboard.html
 msgid "Segregation of duties"
 msgstr "الفصل بين المهام"
+
+#: projects/admin.py
+msgid "Send budget for approval"
+msgstr "إرسال الموازنة للاعتماد"
 
 #: cases/admin.py
 msgid "Send for approval"
@@ -1352,6 +2248,10 @@ msgstr "إرسال للاعتماد"
 #: templates/hr/my_leave.html
 msgid "Send to my manager"
 msgstr "إرسال إلى مديري"
+
+#: supply/models.py
+msgid "Service / used at once (expense)"
+msgstr "خدمة / تُستهلك فوراً (مصروف)"
 
 #: templates/dashboards/_chart.html
 msgid "Show as table"
@@ -1389,6 +2289,18 @@ msgstr "التأمينات الاجتماعية (حصة الموظف)"
 msgid "Son"
 msgstr "ابن"
 
+#: templates/projects/_dashboard.html
+msgid "Spend by project in period"
+msgstr "المنصرف حسب المشروع في الفترة"
+
+#: templates/projects/list.html
+msgid "Spent"
+msgstr "المنصرف"
+
+#: projects/dashboard.py
+msgid "Spent in period"
+msgstr "المنصرف في الفترة"
+
 #: hr/leave.py
 msgid "Split leave that crosses the year end into two requests."
 msgstr "قسّم الإجازة التي تتخطى نهاية السنة إلى طلبين."
@@ -1401,6 +2313,18 @@ msgstr "الكفالات"
 msgid "Sponsorships can only be created for approved cases."
 msgstr "لا يمكن إنشاء كفالة إلا لحالة معتمدة."
 
+#: templates/projects/detail.html
+msgid "Staff cost"
+msgstr "تكلفة العاملين"
+
+#: templates/registration/setup.html
+msgid "Start for real"
+msgstr "البدء الفعلي"
+
+#: templates/finance/balance_sheet.html
+msgid "Statement of financial position"
+msgstr "قائمة المركز المالي"
+
 #: templates/approvals/request.html
 msgid "Status"
 msgstr "الحالة"
@@ -1412,6 +2336,38 @@ msgstr "المرحلة"
 #: templates/dashboards/dashboard.html
 msgid "Still missing"
 msgstr "ما ينقص"
+
+#: finance/models.py
+msgid "Stock"
+msgstr "مخزون"
+
+#: supply/nav.py
+msgid "Stock issues"
+msgstr "أذونات الصرف المخزني"
+
+#: supply/nav.py
+msgid "Stock on hand"
+msgstr "رصيد المخزون"
+
+#: supply/dashboard.py
+msgid "Stock value"
+msgstr "قيمة المخزون"
+
+#: templates/supply/_dashboard.html
+msgid "Stock value by category"
+msgstr "قيمة المخزون حسب الفئة"
+
+#: templates/supply/stock.html
+msgid "Store"
+msgstr "المخزن"
+
+#: accounts/roles.py
+msgid "Storekeeper"
+msgstr "أمين المخزن"
+
+#: supply/nav.py
+msgid "Stores"
+msgstr "المخازن"
 
 #: cases/models.py
 msgid "Student"
@@ -1437,9 +2393,38 @@ msgstr "مستخدم فائق"
 msgid "Superusers bypass every permission check; keep them for emergencies only"
 msgstr "المستخدم الفائق يتجاوز كل الصلاحيات؛ احتفظ به للطوارئ فقط"
 
+#: supply/apps.py
+msgid "Supplier invoice"
+msgstr "فاتورة مورد"
+
+#: supply/postings.py
+#, python-format
+msgid "Supplier invoice %(no)s — %(sup)s (%(ref)s)"
+msgstr "فاتورة مورد %(no)s — %(sup)s (%(ref)s)"
+
+#: supply/nav.py
+msgid "Supplier invoices"
+msgstr "فواتير الموردين"
+
+#: supply/nav.py
+msgid "Suppliers"
+msgstr "الموردون"
+
+#: supply/nav.py
+msgid "Supply chain"
+msgstr "سلاسل الإمداد"
+
 #: hr/views.py
 msgid "Supporting document (PDF, JPG or PNG)"
 msgstr "مستند مؤيد (PDF أو JPG أو PNG)"
+
+#: finance/dashboard.py
+msgid "Surplus / (deficit)"
+msgstr "الفائض / (العجز)"
+
+#: templates/finance/trial_balance.html
+msgid "Surplus / (deficit) of previous years, not yet closed"
+msgstr "فائض / (عجز) سنوات سابقة لم يُقفل بعد"
 
 #: cases/models.py
 msgid "Suspended"
@@ -1453,9 +2438,30 @@ msgstr "مدير النظام"
 msgid "Taken"
 msgstr "المستخدم"
 
+#: projects/nav.py
+msgid "Tasks"
+msgstr "المهام"
+
+#: templates/projects/detail.html
+msgid "Team"
+msgstr "فريق العمل"
+
+#: supply/models.py
+msgid "The aid must be approved and marked as goods from the store."
+msgstr "يجب أن تكون المساعدة معتمدة ومحددة كسلع من المخزن."
+
 #: crm/models.py
 msgid "The amount must be greater than zero."
 msgstr "المبلغ يجب أن يكون أكبر من صفر."
+
+#: finance/models.py
+#, python-format
+msgid "The books are locked up to %(d)s. Choose a later date or ask the finance manager."
+msgstr "الدفاتر مقفلة حتى %(d)s. اختر تاريخاً لاحقاً أو راجع المدير المالي."
+
+#: projects/models.py
+msgid "The budget is awaiting approval or approved. Reopen it to revise."
+msgstr "الموازنة بانتظار الاعتماد أو معتمدة. أعد فتحها لتعديلها."
 
 #: hr/leave.py
 msgid "The chosen dates are all weekly rest days or official holidays."
@@ -1464,6 +2470,10 @@ msgstr "كل التواريخ المختارة أيام راحة أسبوعية 
 #: hr/leave.py
 msgid "The dates are outside the employee's service."
 msgstr "التواريخ خارج فترة خدمة الموظف."
+
+#: projects/models.py
+msgid "The due date is before the start date."
+msgstr "تاريخ الاستحقاق قبل تاريخ البداية."
 
 #: hr/leave.py
 msgid "The employee is already on leave that day."
@@ -1477,6 +2487,11 @@ msgstr "تاريخ النهاية قبل تاريخ البداية."
 msgid "The end of service is before the hire date."
 msgstr "تاريخ نهاية الخدمة قبل تاريخ التعيين."
 
+#: finance/models.py
+#, python-format
+msgid "The entry does not balance: debit %(d)s, credit %(c)s."
+msgstr "القيد غير متوازن: مدين %(d)s ودائن %(c)s."
+
 #: core/models.py
 msgid "The file content does not match its type."
 msgstr "محتوى الملف لا يطابق نوعه."
@@ -1485,6 +2500,20 @@ msgstr "محتوى الملف لا يطابق نوعه."
 #, python-format
 msgid "The file is larger than %(mb)s MB."
 msgstr "حجم الملف أكبر من %(mb)s ميجابايت."
+
+#: finance/models.py
+#, python-format
+msgid "The financial year %(y)s is closed."
+msgstr "السنة المالية %(y)s مقفلة."
+
+#: supply/models.py
+#, python-format
+msgid "The goods are valued at %(t)s but the donation receipt says %(d)s."
+msgstr "قيمة السلع %(t)s بينما إيصال التبرع %(d)s."
+
+#: projects/models.py
+msgid "The milestone belongs to another project."
+msgstr "المرحلة تتبع مشروعاً آخر."
 
 #: cases/models.py
 msgid "The national ID must be exactly 14 digits."
@@ -1498,9 +2527,21 @@ msgstr "الاحتياج لا يخص الحالة المختارة."
 msgid "The need does not belong to this case."
 msgstr "الاحتياج لا يخص هذه الحالة."
 
+#: finance/models.py
+msgid "The parent must be a heading account (entries not allowed)."
+msgstr "الحساب الرئيسي يجب أن يكون حساب تجميع (لا يقبل القيود)."
+
 #: hr/models.py
 msgid "The project belongs to another department."
 msgstr "المشروع يتبع إدارة أخرى."
+
+#: supply/models.py
+msgid "The purchase order is not approved."
+msgstr "أمر الشراء غير معتمد."
+
+#: supply/models.py
+msgid "The purchase request is not approved."
+msgstr "طلب الشراء غير معتمد."
 
 #: hr/models.py
 msgid "The salary is outside the range of the employee's grade."
@@ -1513,6 +2554,10 @@ msgstr "الراتب يجب أن يكون أكبر من صفر."
 #: crm/models.py
 msgid "The sponsorship is not for the selected case."
 msgstr "الكفالة لا تخص الحالة المختارة."
+
+#: templates/supply/stock.html
+msgid "The store is empty."
+msgstr "المخزن فارغ."
 
 #: cases/models.py
 msgid "The value must be greater than zero."
@@ -1545,9 +2590,25 @@ msgstr "هذه الحالة غير مستحقة للزكاة."
 msgid "This contract overlaps another active contract (%(no)s)."
 msgstr "هذا العقد يتداخل مع عقد ساري آخر (%(no)s)."
 
+#: finance/assets.py
+msgid "This depreciation is awaiting approval or already posted."
+msgstr "هذا الإهلاك بانتظار الاعتماد أو مُرحَّل بالفعل."
+
 #: approvals/services.py
 msgid "This document is already waiting for approval."
 msgstr "هذا المستند بانتظار الاعتماد بالفعل."
+
+#: supply/models.py
+msgid "This donation is not an in-kind donation."
+msgstr "هذا التبرع ليس تبرعاً عينياً."
+
+#: finance/posting.py
+msgid "This entry has already been reversed."
+msgstr "تم عكس هذا القيد بالفعل."
+
+#: supply/models.py
+msgid "This issue is already confirmed."
+msgstr "تم تأكيد هذا الصرف بالفعل."
 
 #: hr/leave.py
 #, python-format
@@ -1578,9 +2639,21 @@ msgstr "مسير الرواتب بانتظار الاعتماد أو معتمد 
 msgid "This quarter"
 msgstr "هذا الربع"
 
+#: supply/models.py
+msgid "This receipt is already confirmed."
+msgstr "تم تأكيد هذا الاستلام بالفعل."
+
 #: crm/models.py
 msgid "This sponsorship belongs to another donor."
 msgstr "هذه الكفالة باسم متبرع آخر."
+
+#: supply/models.py
+msgid "This supplier invoice number was already recorded."
+msgstr "رقم فاتورة المورد هذا مسجل من قبل."
+
+#: supply/models.py
+msgid "This supplier is not active."
+msgstr "هذا المورد غير نشط."
 
 #: dashboards/filters.py
 msgid "This year"
@@ -1590,21 +2663,65 @@ msgstr "هذا العام"
 msgid "To"
 msgstr "إلى"
 
+#: projects/models.py
+msgid "To do"
+msgstr "لم تبدأ"
+
 #: templates/dashboards/dashboard.html
 msgid "Top donors in period"
 msgstr "أكبر المتبرعين في الفترة"
+
+#: templates/finance/_fund_head.html
+msgid "Total"
+msgstr "الإجمالي"
 
 #: dashboards/widgets.py
 msgid "Total arrears now"
 msgstr "إجمالي المتأخرات حالياً"
 
+#: templates/finance/balance_sheet.html
+msgid "Total assets"
+msgstr "إجمالي الأصول"
+
 #: templates/hr/payslip.html
 msgid "Total deductions"
 msgstr "إجمالي الاستقطاعات"
 
+#: templates/finance/income_statement.html
+msgid "Total expenses"
+msgstr "إجمالي المصروفات"
+
+#: templates/finance/balance_sheet.html
+msgid "Total funds"
+msgstr "إجمالي الأرصدة الصندوقية"
+
+#: templates/finance/income_statement.html
+msgid "Total income"
+msgstr "إجمالي الإيرادات"
+
+#: templates/finance/balance_sheet.html
+msgid "Total liabilities"
+msgstr "إجمالي الالتزامات"
+
 #: hr/models.py
 msgid "Trainee"
 msgstr "متدرب"
+
+#: templates/finance/index.html
+msgid "Transactions that could not be booked automatically:"
+msgstr "عمليات لم يمكن قيدها آلياً:"
+
+#: templates/finance/funds.html
+msgid "Transfers / adjustments"
+msgstr "تحويلات / تسويات"
+
+#: templates/finance/index.html
+msgid "Trial balance"
+msgstr "ميزان المراجعة"
+
+#: templates/registration/setup.html
+msgid "Try the system with demo data"
+msgstr "جرّب النظام ببيانات تجريبية"
 
 #: templates/approvals/inbox.html
 msgid "Type"
@@ -1629,6 +2746,10 @@ msgstr "غير آمنة"
 #: hr/models.py
 msgid "Unsatisfactory"
 msgstr "غير مرضٍ"
+
+#: finance/models.py
+msgid "Untick for heading accounts that only group others."
+msgstr "ألغِ الاختيار للحسابات الرئيسية التي تجمع حسابات أخرى فقط."
 
 #: cases/models.py
 msgid "Urgent"
@@ -1658,6 +2779,14 @@ msgstr "شاغر"
 msgid "Vacant posts"
 msgstr "وظائف شاغرة"
 
+#: templates/supply/stock.html
+msgid "Value"
+msgstr "القيمة"
+
+#: templates/projects/detail.html
+msgid "Variance"
+msgstr "الانحراف"
+
 #: templates/core/dashboard.html
 msgid "Version 2 is being built step by step. Day-to-day screens for cases and donations come next; until then, use the back office."
 msgstr "الإصدار الثاني قيد البناء على مراحل. شاشات العمل اليومي للحالات والتبرعات هي الخطوة التالية؛ وحتى ذلك الحين استخدم الإدارة الخلفية."
@@ -1674,9 +2803,21 @@ msgstr "بانتظار اعتمادي"
 msgid "Waiting for my decision"
 msgstr "بانتظار قراري"
 
+#: projects/services.py
+msgid "Watch"
+msgstr "تحت المراقبة"
+
+#: templates/finance/index.html
+msgid "What each fund received, spent and still holds"
+msgstr "ما حصّله كل صندوق وما صرفه وما تبقى لديه"
+
 #: templates/base.html
 msgid "Who can do what"
 msgstr "من يستطيع ماذا"
+
+#: templates/projects/detail.html
+msgid "Whole project"
+msgstr "المشروع بالكامل"
 
 #: cases/models.py
 msgid "Widow / divorcee"
@@ -1701,6 +2842,10 @@ msgstr "بدون وظيفة"
 #: hr/models.py
 msgid "Women only"
 msgstr "النساء فقط"
+
+#: templates/projects/detail.html
+msgid "Work done"
+msgstr "الإنجاز"
 
 #: approvals/services.py
 msgid "Write the reason for this decision."
@@ -1735,9 +2880,17 @@ msgstr "ليس لديك صلاحية إعداد الرواتب."
 msgid "You cannot approve a request you submitted yourself."
 msgstr "لا يمكنك اعتماد طلب قدمته بنفسك."
 
+#: supply/models.py
+msgid "You raised this purchase order, so someone else must confirm receiving the goods."
+msgstr "أنت من أصدر أمر الشراء، لذا يجب أن يؤكد شخص آخر استلام السلع."
+
 #: templates/hr/my_payslips.html
 msgid "Your login is not linked to an employee record."
 msgstr "حسابك غير مرتبط بسجل موظف."
+
+#: accounts/views.py
+msgid "Your name"
+msgstr "اسمك"
 
 #: hr/views.py
 msgid "Your request was sent to your manager for approval."
@@ -1759,6 +2912,14 @@ msgstr "زكاة مال"
 msgid "Zakat must go to a zakat fund."
 msgstr "يجب أن تذهب الزكاة إلى صندوق الزكاة."
 
+#: finance/models.py
+msgid "account"
+msgstr "الحساب"
+
+#: finance/models.py
+msgid "accumulated depreciation account"
+msgstr "حساب مجمع الإهلاك"
+
 #: crm/models.py
 msgid "active"
 msgstr "نشط"
@@ -1771,6 +2932,10 @@ msgstr "إضافة"
 msgid "address"
 msgstr "العنوان"
 
+#: supply/models.py
+msgid "agreed unit price"
+msgstr "سعر الوحدة المتفق عليه"
+
 #: cases/models.py
 msgid "aid"
 msgstr "مساعدة"
@@ -1778,6 +2943,10 @@ msgstr "مساعدة"
 #: cases/models.py
 msgid "aid no."
 msgstr "رقم المساعدة"
+
+#: finance/admin.py
+msgid "amount"
+msgstr "المبلغ"
 
 #: crm/models.py
 msgid "amount (EGP)"
@@ -1823,6 +2992,10 @@ msgstr "مرحلة اعتماد"
 msgid "approval steps"
 msgstr "مراحل الاعتماد"
 
+#: projects/models.py
+msgid "approved budget (EGP)"
+msgstr "الموازنة المعتمدة (ج.م)"
+
 #: hr/models.py
 msgid "approved headcount"
 msgstr "العدد المعتمد"
@@ -1842,6 +3015,26 @@ msgstr "المنطقة"
 #: hr/models.py
 msgid "areas to develop"
 msgstr "مجالات التطوير"
+
+#: finance/models.py
+msgid "asset account"
+msgstr "حساب الأصل"
+
+#: finance/models.py
+msgid "asset categories"
+msgstr "فئات الأصول"
+
+#: finance/models.py
+msgid "asset category"
+msgstr "فئة الأصل"
+
+#: finance/models.py
+msgid "asset no."
+msgstr "رقم الأصل"
+
+#: projects/models.py
+msgid "assigned to"
+msgstr "مسندة إلى"
 
 #: hr/models.py
 msgid "assignment"
@@ -1899,6 +3092,14 @@ msgstr "تاريخ الميلاد"
 msgid "birth year"
 msgstr "سنة الميلاد"
 
+#: finance/admin.py
+msgid "book value"
+msgstr "القيمة الدفترية"
+
+#: finance/models.py
+msgid "books locked up to and including"
+msgstr "الدفاتر مقفلة حتى تاريخ (شاملاً)"
+
 #: core/models.py
 msgid "branch"
 msgstr "فرع"
@@ -1906,6 +3107,26 @@ msgstr "فرع"
 #: core/models.py
 msgid "branches"
 msgstr "الفروع"
+
+#: projects/models.py
+msgid "budget line"
+msgstr "بند موازنة"
+
+#: projects/models.py
+msgid "budget lines"
+msgstr "بنود الموازنة"
+
+#: projects/admin.py
+msgid "budget lines total"
+msgstr "إجمالي بنود الموازنة"
+
+#: projects/models.py
+msgid "budget status"
+msgstr "حالة الموازنة"
+
+#: projects/models.py
+msgid "budget version"
+msgstr "إصدار الموازنة"
 
 #: crm/models.py
 msgid "campaign"
@@ -1939,13 +3160,37 @@ msgstr "الفئة"
 msgid "change"
 msgstr "تعديل"
 
+#: finance/models.py
+msgid "charge to account"
+msgstr "يُحمَّل على حساب"
+
+#: finance/models.py
+msgid "chart of accounts"
+msgstr "دليل الحسابات"
+
+#: finance/models.py
+msgid "cheque / transfer reference"
+msgstr "رقم الشيك / التحويل"
+
 #: crm/models.py
 msgid "code"
 msgstr "الكود"
 
+#: supply/models.py
+msgid "commercial register no."
+msgstr "رقم السجل التجاري"
+
 #: hr/models.py
 msgid "component"
 msgstr "البند"
+
+#: supply/models.py
+msgid "contact person"
+msgstr "مسؤول التواصل"
+
+#: finance/models.py
+msgid "contra account"
+msgstr "حساب مقابل (مخصص)"
 
 #: hr/models.py
 msgid "contract"
@@ -1958,6 +3203,14 @@ msgstr "رقم العقد"
 #: hr/models.py
 msgid "contracts"
 msgstr "العقود"
+
+#: finance/models.py
+msgid "cost (EGP)"
+msgstr "التكلفة (ج.م)"
+
+#: finance/models.py
+msgid "cost centre"
+msgstr "مركز التكلفة"
 
 #: core/models.py
 msgid "cost centre code"
@@ -1975,9 +3228,21 @@ msgstr "تُحسب بـ"
 msgid "counts for social insurance"
 msgstr "يدخل في الأجر التأميني"
 
+#: finance/models.py
+msgid "credit"
+msgstr "دائن"
+
+#: finance/models.py
+msgid "custodian"
+msgstr "العهدة لدى"
+
 #: crm/models.py
 msgid "date"
 msgstr "التاريخ"
+
+#: supply/models.py
+msgid "date received"
+msgstr "تاريخ الاستلام"
 
 #: hr/models.py
 msgid "days (+ add / - remove)"
@@ -1991,9 +3256,17 @@ msgstr ""
 msgid "days / hours counted"
 msgstr "الأيام / الساعات المحتسبة"
 
+#: finance/models.py
+msgid "debit"
+msgstr "مدين"
+
 #: cases/models.py
 msgid "debts (EGP)"
 msgstr "الديون (ج.م)"
+
+#: finance/models.py
+msgid "default useful life (months)"
+msgstr "العمر الإنتاجي الافتراضي (بالأشهر)"
 
 #: templates/accounts/access.html
 msgid "delete"
@@ -2002,6 +3275,10 @@ msgstr "حذف"
 #: cases/models.py
 msgid "delivered on"
 msgstr "تاريخ التسليم"
+
+#: templates/projects/detail.html
+msgid "deliveries"
+msgstr "عمليات تسليم"
 
 #: cases/models.py
 msgid "department"
@@ -2019,9 +3296,25 @@ msgstr "نطاق الإدارات"
 msgid "departments / cost centres"
 msgstr "الإدارات / مراكز التكلفة"
 
+#: finance/models.py
+msgid "depreciation expense account"
+msgstr "حساب مصروف الإهلاك"
+
+#: finance/models.py
+msgid "depreciation run"
+msgstr "احتساب إهلاك"
+
+#: finance/models.py
+msgid "depreciation runs"
+msgstr "احتسابات الإهلاك"
+
 #: cases/models.py
 msgid "description"
 msgstr "الوصف"
+
+#: finance/models.py
+msgid "disposed on"
+msgstr "تاريخ الاستبعاد"
 
 #: approvals/models.py
 msgid "document type"
@@ -2035,13 +3328,25 @@ msgstr "تبرع"
 msgid "donations"
 msgstr "التبرعات"
 
+#: templates/projects/detail.html
+msgid "donations and grants booked to this project"
+msgstr "التبرعات والمنح المقيدة لهذا المشروع"
+
 #: crm/models.py
 msgid "donor"
 msgstr "المتبرع"
 
+#: projects/models.py
+msgid "donor / grant reference"
+msgstr "المانح / مرجع المنحة"
+
 #: crm/models.py
 msgid "donors"
 msgstr "المتبرعون"
+
+#: projects/models.py
+msgid "due date"
+msgstr "تاريخ الاستحقاق"
 
 #: crm/models.py
 msgid "dues paid until"
@@ -2050,6 +3355,10 @@ msgstr "الاشتراك مسدد حتى"
 #: hr/models.py
 msgid "e.g. a medical certificate for sick leave."
 msgstr "مثال: شهادة طبية للإجازة المرضية."
+
+#: finance/models.py
+msgid "e.g. accumulated depreciation: shown under assets with a credit balance."
+msgstr "مثال: مجمع الإهلاك: يظهر ضمن الأصول برصيد دائن."
 
 #: hr/models.py
 msgid "e.g. casual leave is taken from annual leave."
@@ -2119,6 +3428,34 @@ msgstr "نهاية فترة الاختبار"
 msgid "end of service"
 msgstr "نهاية الخدمة"
 
+#: finance/models.py
+msgid "entries allowed"
+msgstr "يقبل القيود"
+
+#: finance/models.py
+msgid "entry no."
+msgstr "رقم القيد"
+
+#: supply/admin.py
+msgid "estimated total"
+msgstr "الإجمالي التقديري"
+
+#: supply/models.py
+msgid "estimated unit price"
+msgstr "سعر الوحدة التقديري"
+
+#: finance/models.py
+msgid "event"
+msgstr "الحدث"
+
+#: supply/models.py
+msgid "expected delivery"
+msgstr "موعد التوريد المتوقع"
+
+#: projects/models.py
+msgid "expense account"
+msgstr "حساب المصروف"
+
 #: core/models.py
 msgid "expires on"
 msgstr "ينتهي في"
@@ -2147,9 +3484,25 @@ msgstr "تاريخ الزيارة الميدانية"
 msgid "file"
 msgstr "الملف"
 
+#: finance/models.py
+msgid "financial year"
+msgstr "سنة مالية"
+
+#: finance/models.py
+msgid "financial years"
+msgstr "السنوات المالية"
+
 #: hr/models.py
 msgid "fixed amount (EGP)"
 msgstr "مبلغ ثابت (ج.م)"
+
+#: finance/models.py
+msgid "fixed asset"
+msgstr "أصل ثابت"
+
+#: finance/models.py
+msgid "fixed assets"
+msgstr "الأصول الثابتة"
 
 #: hr/models.py
 msgid "for"
@@ -2166,6 +3519,10 @@ msgstr "من"
 #: approvals/models.py
 msgid "from amount"
 msgstr "من مبلغ"
+
+#: templates/projects/detail.html
+msgid "from payroll assignments"
+msgstr "من توزيع الرواتب على المشروعات"
 
 #: hr/models.py
 msgid "from service (months)"
@@ -2191,6 +3548,26 @@ msgstr "عضو جمعية عمومية"
 msgid "general-assembly members"
 msgstr "أعضاء الجمعية العمومية"
 
+#: cases/models.py
+msgid "given as"
+msgstr "تُصرف في صورة"
+
+#: supply/models.py
+msgid "goods receipt"
+msgstr "إذن استلام"
+
+#: supply/models.py
+msgid "goods receipt line"
+msgstr "سطر إذن استلام"
+
+#: supply/models.py
+msgid "goods receipt lines"
+msgstr "سطور أذونات الاستلام"
+
+#: supply/models.py
+msgid "goods receipts"
+msgstr "أذونات الاستلام"
+
 #: hr/models.py
 msgid "grade"
 msgstr "الدرجة"
@@ -2198,6 +3575,10 @@ msgstr "الدرجة"
 #: hr/models.py
 msgid "grades"
 msgstr "الدرجات الوظيفية"
+
+#: supply/models.py
+msgid "handed to"
+msgstr "سُلِّم إلى"
 
 #: cases/models.py
 msgid "health"
@@ -2227,6 +3608,14 @@ msgstr "حالة السكن"
 msgid "housing type"
 msgstr "نوع السكن"
 
+#: finance/models.py
+msgid "in use from"
+msgstr "مستخدم منذ"
+
+#: supply/models.py
+msgid "in-kind donation"
+msgstr "تبرع عيني"
+
 #: hr/models.py
 msgid "incentive / bonus / penalty"
 msgstr "حافز / مكافأة / جزاء"
@@ -2247,6 +3636,34 @@ msgstr "شرائح ضريبة كسب العمل"
 msgid "intake notes"
 msgstr "ملاحظات التسجيل"
 
+#: supply/models.py
+msgid "invoice date"
+msgstr "تاريخ الفاتورة"
+
+#: supply/models.py
+msgid "issue no."
+msgstr "رقم إذن الصرف"
+
+#: supply/models.py
+msgid "issued for"
+msgstr "يُصرف لـ"
+
+#: supply/models.py
+msgid "item"
+msgstr "الصنف"
+
+#: supply/models.py
+msgid "item categories"
+msgstr "فئات الأصناف"
+
+#: supply/models.py
+msgid "item category"
+msgstr "فئة صنف"
+
+#: supply/models.py
+msgid "items"
+msgstr "الأصناف"
+
 #: hr/models.py
 msgid "job purpose"
 msgstr "الغرض من الوظيفة"
@@ -2254,6 +3671,26 @@ msgstr "الغرض من الوظيفة"
 #: crm/models.py
 msgid "join date"
 msgstr "تاريخ الانضمام"
+
+#: finance/models.py
+msgid "journal entries"
+msgstr "قيود اليومية"
+
+#: finance/models.py
+msgid "journal entry"
+msgstr "قيد يومية"
+
+#: finance/models.py
+msgid "journal line"
+msgstr "سطر قيد"
+
+#: finance/models.py
+msgid "journal lines"
+msgstr "سطور القيود"
+
+#: supply/models.py
+msgid "kind"
+msgstr "النوع"
 
 #: accounts/models.py
 msgid "language"
@@ -2290,6 +3727,10 @@ msgstr "المستوى"
 #: hr/models.py
 msgid "line manager"
 msgstr "المدير المباشر"
+
+#: projects/models.py
+msgid "location"
+msgstr "الموقع"
 
 #: core/models.py
 msgid "manager"
@@ -2330,6 +3771,22 @@ msgstr "رقم العضوية"
 #: crm/models.py
 msgid "membership type"
 msgstr "نوع العضوية"
+
+#: finance/models.py
+msgid "memo"
+msgstr "البيان"
+
+#: finance/models.py
+msgid "method"
+msgstr "طريقة الصرف"
+
+#: projects/models.py
+msgid "milestone"
+msgstr "مرحلة"
+
+#: projects/models.py
+msgid "milestones"
+msgstr "المراحل"
 
 #: hr/models.py
 msgid "military service status"
@@ -2387,6 +3844,10 @@ msgstr "الطبيعة"
 msgid "need"
 msgstr "الاحتياج"
 
+#: supply/models.py
+msgid "needed by"
+msgstr "مطلوب قبل"
+
 #: cases/models.py
 msgid "needs"
 msgstr "الاحتياجات"
@@ -2407,9 +3868,17 @@ msgstr "تسلسل ترقيم"
 msgid "number sequences"
 msgstr "تسلسلات الترقيم"
 
+#: projects/models.py
+msgid "objectives"
+msgstr "الأهداف"
+
 #: hr/models.py
 msgid "objectives and results"
 msgstr "الأهداف والنتائج"
+
+#: templates/projects/detail.html
+msgid "of budget"
+msgstr "من الموازنة"
 
 #: hr/models.py
 msgid "official holiday"
@@ -2432,6 +3901,14 @@ msgstr "أو نسبة من الأساسي"
 msgid "order"
 msgstr "الترتيب"
 
+#: supply/models.py
+msgid "order no."
+msgstr "رقم أمر الشراء"
+
+#: supply/models.py
+msgid "our reference"
+msgstr "مرجعنا"
+
 #: hr/models.py
 msgid "overall rating"
 msgstr "التقييم العام"
@@ -2443,6 +3920,14 @@ msgstr "نسبة الأجر المدفوع من الجمعية (%)"
 #: cases/models.py
 msgid "paid from fund"
 msgstr "يُصرف من صندوق"
+
+#: finance/models.py
+msgid "paid to"
+msgstr "المستفيد"
+
+#: finance/models.py
+msgid "parent account"
+msgstr "الحساب الرئيسي"
 
 #: core/models.py
 msgid "parent department"
@@ -2464,9 +3949,25 @@ msgstr "شهر الصرف"
 msgid "pay year"
 msgstr "سنة الصرف"
 
+#: supply/models.py
+msgid "payment and delivery terms"
+msgstr "شروط السداد والتوريد"
+
+#: finance/models.py
+msgid "payment date"
+msgstr "تاريخ الصرف"
+
 #: crm/models.py
 msgid "payment method"
 msgstr "طريقة الدفع"
+
+#: finance/models.py
+msgid "payment voucher"
+msgstr "إذن صرف"
+
+#: finance/models.py
+msgid "payment vouchers"
+msgstr "أذونات الصرف"
 
 #: hr/models.py
 msgid "payroll run"
@@ -2524,13 +4025,45 @@ msgstr "وظيفة / وصف وظيفي"
 msgid "positions / job descriptions"
 msgstr "الوظائف / الأوصاف الوظيفية"
 
+#: finance/models.py
+msgid "posting key"
+msgstr "مفتاح الترحيل"
+
+#: finance/models.py
+msgid "posting problem"
+msgstr "مشكلة ترحيل"
+
+#: finance/models.py
+msgid "posting problems"
+msgstr "مشكلات الترحيل"
+
+#: finance/models.py
+msgid "posting rule"
+msgstr "قاعدة ترحيل"
+
+#: finance/models.py
+msgid "posting rules (automatic entries)"
+msgstr "قواعد الترحيل (القيود الآلية)"
+
 #: cases/models.py
 msgid "priority"
 msgstr "الأولوية"
 
+#: finance/models.py
+msgid "problem"
+msgstr "المشكلة"
+
 #: cases/models.py
 msgid "project"
 msgstr "المشروع"
+
+#: projects/models.py
+msgid "project budget and profile"
+msgstr "موازنة وبيانات مشروع"
+
+#: projects/models.py
+msgid "project budgets and profiles"
+msgstr "موازنات وبيانات المشروعات"
 
 #: accounts/models.py
 msgid "project scope"
@@ -2540,6 +4073,38 @@ msgstr "نطاق المشروعات"
 msgid "projects"
 msgstr "المشروعات"
 
+#: supply/models.py
+msgid "purchase order"
+msgstr "أمر شراء"
+
+#: supply/models.py
+msgid "purchase order line"
+msgstr "سطر أمر شراء"
+
+#: supply/models.py
+msgid "purchase order lines"
+msgstr "سطور أوامر الشراء"
+
+#: supply/models.py
+msgid "purchase orders"
+msgstr "أوامر الشراء"
+
+#: supply/models.py
+msgid "purchase request"
+msgstr "طلب شراء"
+
+#: supply/models.py
+msgid "purchase request line"
+msgstr "سطر طلب شراء"
+
+#: supply/models.py
+msgid "purchase request lines"
+msgstr "سطور طلبات الشراء"
+
+#: supply/models.py
+msgid "purchase requests"
+msgstr "طلبات الشراء"
+
 #: crm/models.py
 msgid "purpose"
 msgstr "الغرض"
@@ -2547,6 +4112,10 @@ msgstr "الغرض"
 #: hr/models.py
 msgid "qualifications and experience"
 msgstr "المؤهلات والخبرات"
+
+#: supply/models.py
+msgid "quantity"
+msgstr "الكمية"
 
 #: hr/models.py
 msgid "rate (%)"
@@ -2568,6 +4137,10 @@ msgstr "سبب ترك العمل"
 msgid "receipt no."
 msgstr "رقم الإيصال"
 
+#: supply/models.py
+msgid "received by"
+msgstr "المستلم"
+
 #: cases/models.py
 msgid "recommendation"
 msgstr "التوصية"
@@ -2576,9 +4149,21 @@ msgstr "التوصية"
 msgid "relation"
 msgstr "الصلة"
 
+#: supply/models.py
+msgid "reorder level"
+msgstr "حد إعادة الطلب"
+
 #: hr/models.py
 msgid "reports to"
 msgstr "يتبع"
+
+#: supply/models.py
+msgid "request no."
+msgstr "رقم الطلب"
+
+#: supply/models.py
+msgid "requested by"
+msgstr "مقدم الطلب"
 
 #: cases/models.py
 msgid "research findings"
@@ -2588,13 +4173,25 @@ msgstr "نتائج البحث"
 msgid "researcher"
 msgstr "الباحث"
 
+#: finance/models.py
+msgid "resolved at"
+msgstr "تاريخ الحل"
+
 #: hr/models.py
 msgid "responsibilities"
 msgstr "المسؤوليات"
 
+#: finance/models.py
+msgid "reverses entry"
+msgstr "يعكس القيد"
+
 #: hr/models.py
 msgid "reviewer"
 msgstr "المقيِّم"
+
+#: finance/models.py
+msgid "serial / plate no."
+msgstr "الرقم المسلسل / رقم اللوحة"
 
 #: hr/models.py
 msgid "share of time (%)"
@@ -2620,6 +4217,10 @@ msgstr "قاعدة التأمينات الاجتماعية"
 msgid "social insurance rules"
 msgstr "قواعد التأمينات الاجتماعية"
 
+#: finance/models.py
+msgid "source"
+msgstr "المصدر"
+
 #: hr/models.py
 msgid "source (law article or internal policy)"
 msgstr "المصدر (مادة القانون أو اللائحة الداخلية)"
@@ -2635,6 +4236,10 @@ msgstr "المصدر / مرجع القانون"
 #: templates/accounts/access.html
 msgid "special right"
 msgstr "صلاحية خاصة"
+
+#: supply/models.py
+msgid "specification"
+msgstr "المواصفات"
 
 #: crm/models.py
 msgid "sponsor"
@@ -2652,6 +4257,10 @@ msgstr "دفعة كفالة"
 msgid "sponsorships"
 msgstr "الكفالات"
 
+#: projects/models.py
+msgid "start"
+msgstr "البداية"
+
 #: crm/models.py
 msgid "start date"
 msgstr "تاريخ البداية"
@@ -2665,6 +4274,50 @@ msgstr "الحالة"
 msgid "step %(n)s"
 msgstr "المرحلة %(n)s"
 
+#: supply/admin.py
+msgid "still to pay"
+msgstr "المتبقي للسداد"
+
+#: supply/models.py
+msgid "stock account"
+msgstr "حساب المخزون"
+
+#: supply/models.py
+msgid "stock issue"
+msgstr "إذن صرف مخزني"
+
+#: supply/models.py
+msgid "stock issue line"
+msgstr "سطر إذن صرف"
+
+#: supply/models.py
+msgid "stock issue lines"
+msgstr "سطور أذونات الصرف"
+
+#: supply/models.py
+msgid "stock issues"
+msgstr "أذونات الصرف المخزني"
+
+#: supply/models.py
+msgid "stock movement"
+msgstr "حركة مخزون"
+
+#: supply/models.py
+msgid "stock movements"
+msgstr "حركات المخزون"
+
+#: supply/models.py
+msgid "store"
+msgstr "المخزن"
+
+#: supply/models.py
+msgid "storekeeper"
+msgstr "أمين المخزن"
+
+#: supply/models.py
+msgid "stores"
+msgstr "المخازن"
+
 #: hr/models.py
 msgid "strengths"
 msgstr "نقاط القوة"
@@ -2672,6 +4325,38 @@ msgstr "نقاط القوة"
 #: hr/models.py
 msgid "subject to income tax"
 msgstr "خاضع لضريبة كسب العمل"
+
+#: supply/models.py
+msgid "supplier"
+msgstr "المورد"
+
+#: supply/models.py
+msgid "supplier delivery note no."
+msgstr "رقم إذن تسليم المورد"
+
+#: supply/models.py
+msgid "supplier invoice"
+msgstr "فاتورة مورد"
+
+#: supply/models.py
+msgid "supplier invoice line"
+msgstr "سطر فاتورة مورد"
+
+#: supply/models.py
+msgid "supplier invoice lines"
+msgstr "سطور فواتير الموردين"
+
+#: supply/models.py
+msgid "supplier invoices"
+msgstr "فواتير الموردين"
+
+#: supply/models.py
+msgid "supplier's invoice no."
+msgstr "رقم فاتورة المورد"
+
+#: supply/models.py
+msgid "suppliers"
+msgstr "الموردون"
 
 #: hr/models.py
 msgid "supporting document required"
@@ -2685,9 +4370,29 @@ msgstr "حساب الدخول للنظام"
 msgid "taken from the balance of"
 msgstr "تُخصم من رصيد"
 
+#: templates/projects/detail.html
+msgid "target"
+msgstr "المستهدف"
+
 #: crm/models.py
 msgid "target (EGP)"
 msgstr "المستهدف (ج.م)"
+
+#: projects/models.py
+msgid "target number of beneficiaries"
+msgstr "العدد المستهدف من المستفيدين"
+
+#: projects/models.py
+msgid "task"
+msgstr "مهمة"
+
+#: projects/models.py
+msgid "tasks"
+msgstr "المهام"
+
+#: supply/models.py
+msgid "tax registration no."
+msgstr "رقم التسجيل الضريبي"
 
 #: core/models.py
 msgid "title"
@@ -2696,6 +4401,10 @@ msgstr "العنوان"
 #: hr/models.py
 msgid "to"
 msgstr "إلى"
+
+#: finance/models.py
+msgid "total"
+msgstr "الإجمالي"
 
 #: hr/models.py
 msgid "total cost to the association"
@@ -2713,6 +4422,26 @@ msgstr "إجمالي الصافي"
 msgid "type"
 msgstr "النوع"
 
+#: supply/models.py
+msgid "unit"
+msgstr "الوحدة"
+
+#: supply/models.py
+msgid "unit price"
+msgstr "سعر الوحدة"
+
+#: supply/models.py
+msgid "unit value"
+msgstr "قيمة الوحدة"
+
+#: finance/models.py
+msgid "used for"
+msgstr "يُستخدم في"
+
+#: finance/models.py
+msgid "useful life (months)"
+msgstr "العمر الإنتاجي (بالأشهر)"
+
 #: accounts/models.py
 msgid "user"
 msgstr "مستخدم"
@@ -2724,6 +4453,14 @@ msgstr "المستخدمون"
 #: cases/models.py
 msgid "value (EGP)"
 msgstr "القيمة (ج.م)"
+
+#: supply/models.py
+msgid "value at cost"
+msgstr "القيمة بالتكلفة"
+
+#: finance/models.py
+msgid "value at end of life"
+msgstr "القيمة في نهاية العمر"
 
 #: hr/models.py
 msgid "verified at"
@@ -2749,6 +4486,10 @@ msgstr "متطوع"
 msgid "volunteers"
 msgstr "المتطوعون"
 
+#: finance/models.py
+msgid "voucher no."
+msgstr "رقم الإذن"
+
 #: templates/dashboards/_kpis.html
 msgid "vs previous period"
 msgstr "مقارنة بالفترة السابقة"
@@ -2757,9 +4498,21 @@ msgstr "مقارنة بالفترة السابقة"
 msgid "weekly hours"
 msgstr "ساعات العمل الأسبوعية"
 
+#: projects/models.py
+msgid "weight"
+msgstr "الوزن"
+
+#: templates/projects/detail.html
+msgid "weighted by task"
+msgstr "مرجح بوزن المهام"
+
 #: hr/models.py
 msgid "year"
 msgstr "السنة"
+
+#: finance/models.py
+msgid "year closed"
+msgstr "السنة مقفلة"
 
 #: hr/models.py
 msgid "yearly balance rule"

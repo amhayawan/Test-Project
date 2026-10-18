@@ -23,7 +23,7 @@ EXPECTED = {
     "hrmanager": {"hr", "supply"},
     "payroll": {"hr"},
     "accountant": {"finance", "supply", "projects", "crm"},
-    "finmanager": {"finance", "supply", "projects", "crm", "cases", "hr"},
+    "finmanager": {"finance", "supply", "projects", "crm", "cases"},   # payroll reaches finance as journals, no salaries
     "procurement": {"supply"},
     "storekeeper": {"supply", "cases", "crm"},
     "pm": {"projects", "supply"},
@@ -37,8 +37,8 @@ PAGES = [
     ("/finance/balance-sheet/", {"accountant", "finmanager", "director", "admin"}),
     ("/hr/structure/", {"hrofficer", "hrmanager", "payroll", "director", "admin"}),
     ("/projects/", {"pm", "accountant", "finmanager", "director", "admin"}),
-    ("/backoffice/hr/payrollrun/", {"payroll", "director", "admin"}),
-    ("/backoffice/crm/donor/", {"fundraiser", "casemanager", "accountant", "finmanager", "director", "admin"}),
+    ("/backoffice/hr/payrollrun/", {"payroll", "hrmanager", "director", "admin"}),   # HR manager approves payroll
+    ("/backoffice/crm/donor/", {"fundraiser", "casemanager", "finmanager", "director", "admin"}),  # accountant: donations only
 ]
 
 

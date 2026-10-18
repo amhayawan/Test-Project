@@ -32,7 +32,9 @@ def collect():
         if path.suffix == ".py":
             text = path.read_text(encoding="utf-8")
             for m in PY.finditer(text):
-                found.setdefault(m.group("s").encode().decode("unicode_escape"), str(path.relative_to(ROOT)))
+                # resolve \n, \" ... without mangling non-ASCII characters such as — or →
+                s = m.group("s").encode("latin-1", "backslashreplace").decode("unicode_escape")
+                found.setdefault(s, str(path.relative_to(ROOT)))
         elif path.suffix == ".html":
             text = path.read_text(encoding="utf-8")
             for m in TPL.finditer(text):

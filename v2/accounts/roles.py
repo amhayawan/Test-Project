@@ -38,6 +38,8 @@ ROLES = {
     "hr_manager": (_("HR manager"), [
         "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",
         "core.change_attachment", "hr.*", "-hr.run_payroll", "-hr.verify_hr_rules", "accounts.view_user",
+        "supply.view_purchaserequest", "supply.add_purchaserequest", "supply.change_purchaserequest",
+        "supply.*_purchaserequestline", "supply.view_item",
     ]),
     "hr_officer": (_("HR officer"), [
         "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",

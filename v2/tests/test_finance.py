@@ -21,6 +21,13 @@ pytestmark = pytest.mark.django_db
 D = Decimal
 
 
+@pytest.fixture(autouse=True)
+def _english():
+    from django.utils import translation
+    with translation.override("en"):
+        yield
+
+
 def acc(code):
     return Account.objects.get(code=code)
 

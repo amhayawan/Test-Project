@@ -2,7 +2,7 @@
 
 The new foundation for the association's integrated system: Django 5.2 LTS + PostgreSQL. It is built in phases (see [`../docs/SYSTEM_FRAMEWORK.md`](../docs/SYSTEM_FRAMEWORK.md)). **v1 (the folder above) stays the system in daily use until v2 reaches parity.**
 
-## What exists now (phase 1, step 1: platform core)
+## What exists now
 
 | Part | Status |
 |---|---|
@@ -23,9 +23,14 @@ The new foundation for the association's integrated system: Django 5.2 LTS + Pos
 | Salaries hidden from anyone without the "see salaries" permission (HR officer, by default) | ✅ |
 | **Leave**: annual, casual (taken from annual), sick, maternity, paternity, Hajj, exam, unpaid, hourly permissions and missions. Working days exclude the weekly rest days (`HAZ_WEEKEND_DAYS`, default Fri + Sat) and official holidays. Balances by service length and age, carried-over days and corrections, limits per request / month / year / service, supporting documents, approval by the employee's **own line manager** (HR manager if none), unpaid leave deducted in payroll. Employees request and track leave on **My leave** | ✅ — **leave types are seeded by name only. No day counts are shipped: HR enters them and the labour-law specialist (role "Labour-law / payroll specialist") signs them off. Any edit removes the sign-off; unsigned types cannot be requested** |
 | Attendance (clock-in / out) | ⏳ not built yet |
-| Finance, supply chain, projects modules | ⏳ later phases |
+| **One platform, separate access**: each module plugs in its own menu, approvals, dashboard section and demo data; each role sees only its modules; the executive director and administrator see all of them, and the modules feed each other through the accounts | ✅ (tested per role) |
+| **Finance**: starter chart of accounts (for the accountant to review), posting rules, journal with fund / project / cost centre, month-end lock, payment vouchers, fixed assets and depreciation, trial balance, ledger, income and expenditure by fund, statement of financial position, fund balances. Donations, aid, payroll, purchases and stock post automatically; problems are queued, never blocking | ✅ |
+| **Supply chain**: suppliers, items, stores, purchase request → order → receipt → supplier invoice (3-way match) → payment, in-kind donations into stock, goods issued to aid cases and projects at average cost | ✅ |
+| **Project management**: budgets with approval, milestones and tasks, budget against actual from the accounts, funding, staff cost, aid and beneficiaries, red / amber / green flags; project managers see only their own projects | ✅ |
+| Approval limits for purchases, payments, journals and budgets | ⚠️ placeholders until the board sets them |
 | Field tablet app | ⏳ phase 3 |
-| Cloud deployment (Docker, Egypt-hosted) and Windows desktop client for v2 | ⏳ with the day-to-day screens |
+| **Windows app for v2**: `HAZ-v2.exe` (own window) and `HAZ-v2-Server.exe` (office network), built by GitHub Actions (artifact *HAZ-v2-windows*). First start offers demo data with one login per role (password `Demo@2026`) | ✅ |
+| Cloud deployment (Docker, Egypt-hosted) for v2 | ⏳ |
 
 ## Running it (developer PC)
 
