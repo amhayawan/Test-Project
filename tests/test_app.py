@@ -299,3 +299,16 @@ def test_migrate_sqlite_to_another_database(admin, app, tmp_path):
     post(c, "/donors/new", {"name": "جديد", "donor_type": "individual"})
     with new.app_context():
         assert Donor.query.count() == 2
+
+
+def test_demo_data_loads_once_and_renders(app, client):
+    from crm.demo import load_demo_data
+    with app.app_context():
+        counts = load_demo_data(today=date(2026, 10, 18))
+        assert counts["donations"] > 100 and counts["beneficiaries"] == 46
+        assert len({b.national_id for b in Beneficiary.query.all()}) == 46
+        with pytest.raises(RuntimeError):
+            load_demo_data()
+    login(client, "admin", "demo1234")
+    for path in ("/", "/donors/", "/beneficiaries/", "/donations/", "/aids/", "/members/", "/volunteers/"):
+        assert client.get(path).status_code == 200

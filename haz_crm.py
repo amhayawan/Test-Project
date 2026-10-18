@@ -85,6 +85,8 @@ def main():
                                              "(default: <data folder>\\backups). "
                                              "Use a USB drive or synced folder.")
     parser.add_argument("--no-auto-backup", action="store_true")
+    parser.add_argument("--load-demo", action="store_true",
+                        help="fill an EMPTY database with fictional sample data for demos, then exit")
     parser.add_argument("--migrate-to", metavar="DATABASE_URL",
                         help="copy all data into another (empty) database, then exit")
     args = parser.parse_args()
@@ -99,6 +101,14 @@ def main():
     app = create_app(config or None)
     db_url = app.config["DATABASE_URL"]
     print(f"Database: {storage.masked(db_url)}")
+
+    if args.load_demo:
+        from crm.demo import load_demo_data
+        with app.app_context():
+            counts = load_demo_data()
+        print("Fictional demo data loaded:", ", ".join(f"{k}: {v}" for k, v in counts.items()))
+        print("Logins (password demo1234): admin, accountant, researcher")
+        return
 
     if args.migrate_to:
         target = storage.normalize_url(args.migrate_to)

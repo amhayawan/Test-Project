@@ -14,6 +14,11 @@ A Windows desktop CRM for the Hassan Abbas Zaki Association. Arabic, right-to-le
 | General-assembly members | أعضاء الجمعية العمومية | Membership no., dues paid-until year, members behind on dues flagged on the dashboard |
 | Dashboard | لوحة التحكم | Donations this month and year, aid disbursed, monthly donations vs aid, totals by purpose |
 
+Guides (in `docs/`):
+- `HAZ-CRM-User-Guide-AR.pdf`: the Arabic user guide for staff. It covers registering cases, donors and donations, finding and exporting data, and the management dashboard.
+- `HAZ-CRM-Product-Walkthrough.pdf`: an English product walkthrough for investors and partners.
+- `HAZ-CRM-Testing-and-Change-Guide.pdf`: how to test on Windows and how to request changes.
+
 Also included:
 - Search on every list, plus **Export to Excel** (CSV with Arabic encoding preserved).
 - Users with two roles. **Admin** can delete records, manage users, download backups, and view the audit log. **Staff** can add and edit records.
@@ -53,6 +58,7 @@ HAZ-CRM.exe [--server] [--port 8080] [--data D:\HAZ-CRM-Data]
 - `--backup-dir`: where daily backups go. Point it at a USB drive or a synced folder.
 - `--database-url`: use a PostgreSQL database instead of the local file. You can also put this in `settings.ini`.
 - `--migrate-to`: copy all data into another, empty database, then exit.
+- `--load-demo`: fill an **empty** database with fictional sample data for demos and training (logins `admin` / `accountant` / `researcher`, password `demo1234`). Use it with a separate `--data` folder, never on real data.
 
 ## Building the .exe yourself
 
