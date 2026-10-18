@@ -32,7 +32,7 @@
         <form method="post" action="{{ url_for('case_assign', case_id=c.id) }}" class="inline">
           <input type="hidden" name="_csrf" value="{{ csrf_token }}">
           <input type="hidden" name="next" value="{{ url_for('cases_dashboard', stage='unassigned') }}">
-          <select name="researcher_id" onchange="this.form.submit()">
+          <select name="researcher_id" data-search data-placeholder="اكتب اسم الباحث…" onchange="this.form.submit()">
             <option value="">— اختر باحثاً —</option>
             {% for r in researchers %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
           </select>

@@ -19,10 +19,10 @@
           {% endfor %}
         </select>
       {% elif f.type.startswith('fk:') %}
-        <select name="{{ f.name }}">
+        <select name="{{ f.name }}" data-search>
           <option value="">— اختر —</option>
           {% for o in fk[f.name] %}
-          <option value="{{ o.id }}" {{ 'selected' if v|string == o.id|string }}>{{ o }}{% if o.national_id %} — {{ o.national_id }}{% endif %}{% if o.phone %} — {{ o.phone }}{% endif %}</option>
+          <option value="{{ o.id }}" {{ 'selected' if v|string == o.id|string }}>{{ o }}{% if o.national_id %} — {{ o.national_id }}{% endif %}{% if o.phone %} — {{ o.phone }}{% endif %}{% if o.area %} — {{ o.area }}{% endif %}</option>
           {% endfor %}
         </select>
       {% elif f.type == 'date' %}

@@ -37,7 +37,7 @@
     <form method="post" action="{{ url_for('case_assign', case_id=case.id) }}">
       <input type="hidden" name="_csrf" value="{{ csrf_token }}">
       <label>{{ 'إعادة إسناد إلى' if case.researcher else 'إسناد إلى' }}
-        <select name="researcher_id">{% for r in researchers %}<option value="{{ r.id }}" {{ 'selected' if case.researcher_id == r.id }}>{{ r.name }}</option>{% endfor %}</select></label>
+        <select name="researcher_id" data-search data-placeholder="اكتب اسم الباحث…">{% for r in researchers %}<option value="{{ r.id }}" {{ 'selected' if case.researcher_id == r.id }}>{{ r.name }}</option>{% endfor %}</select></label>
       <button class="btn">إسناد</button>
     </form>
     {% endif %}

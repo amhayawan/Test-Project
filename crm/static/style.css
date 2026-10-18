@@ -112,3 +112,15 @@ form.inline { display: inline; margin: 0; } form.inline select { margin: 0; widt
 .muted-box { color: var(--muted); font-size: .9rem; }
 .btn.warn { color: #8a5300; border-color: #efd9a8; }
 @media (max-width: 900px) { .stages { grid-template-columns: repeat(2, 1fr); } }
+/* type-to-search picker (picker.js) */
+.picker { position: relative; }
+.picker-native { display: none !important; }
+.picker-input { width: 100%; }
+.picker-list { position: absolute; z-index: 50; inset-inline: 0; top: calc(100% + 2px); margin: 0; padding: 4px 0;
+  list-style: none; background: #fff; border: 1px solid #cfd8d4; border-radius: 8px; max-height: 280px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(13, 59, 46, .14); }
+.picker-list li { padding: 7px 12px; cursor: pointer; font-size: .92rem; }
+.picker-list li.active, .picker-list li:hover { background: #e7f4ee; }
+.picker-list li[aria-selected="true"] { font-weight: 700; }
+.picker-list li.picker-empty { color: var(--muted); cursor: default; background: none; font-size: .85rem; }
+td .picker { min-width: 220px; }

@@ -312,3 +312,11 @@ def test_demo_data_loads_once_and_renders(app, client):
     login(client, "admin", "demo1234")
     for path in ("/", "/donors/", "/beneficiaries/", "/donations/", "/aids/", "/members/", "/volunteers/"):
         assert client.get(path).status_code == 200
+
+
+def test_long_pickers_are_searchable(admin):
+    page = admin.get("/donations/new").get_data(as_text=True)
+    assert page.count("data-search") == 4  # donor, case, need, sponsorship
+    assert "picker.js" in page
+    js = admin.get("/static/picker.js")
+    assert js.status_code == 200 and b"normalize" in js.data
