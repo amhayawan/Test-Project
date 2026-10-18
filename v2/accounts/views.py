@@ -45,3 +45,43 @@ def set_language(request):
     if not url_has_allowed_host_and_scheme(nxt, allowed_hosts={request.get_host()}):
         nxt = "/"
     return redirect(nxt)
+
+
+ACTION_CODES = ("view", "add", "change", "delete")
+
+
+@login_required
+def access_matrix(request):
+    """Who can do what: every role against every module, as management can review it."""
+    from django.apps import apps
+    from django.contrib.auth.models import Group
+    from django.core.exceptions import PermissionDenied
+    from django.shortcuts import render
+
+    from .roles import ROLES, role_label
+    from .sod import CONFLICTS, conflicts
+
+    if not request.user.has_perm("accounts.view_user"):
+        raise PermissionDenied
+    groups = {g.name: {f"{p.content_type.app_label}.{p.codename}" for p in g.permissions.select_related("content_type")}
+              for g in Group.objects.filter(name__in=ROLES).prefetch_related("permissions")}
+    roles = [(code, role_label(code)) for code in ROLES if code in groups]
+    sections = []
+    for app_label in ("cases", "crm", "approvals", "core", "accounts"):
+        app = apps.get_app_config(app_label)
+        rows = []
+        for model in app.get_models():
+            meta = model._meta
+            cells = []
+            for code, _label in roles:
+                held = [a for a in ACTION_CODES if f"{app_label}.{a}_{meta.model_name}" in groups[code]]
+                cells.append(held)
+            rows.append({"label": meta.verbose_name_plural, "cells": cells})
+            for codename, label in meta.permissions:
+                rows.append({"label": label, "special": True,
+                             "cells": [[f"{app_label}.{codename}" in groups[code]] for code, _l in roles]})
+        sections.append({"label": app.verbose_name, "rows": rows})
+    return render(request, "accounts/access.html", {
+        "roles": roles, "sections": sections, "conflicts": conflicts(),
+        "rules": [(role_label(a), role_label(b), why) for a, b, why in CONFLICTS],
+    })

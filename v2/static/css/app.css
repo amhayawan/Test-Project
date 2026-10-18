@@ -129,3 +129,37 @@ td .picker { min-width: 220px; }
 .lang { margin: 6px 0 0; } .auth-lang { text-align: center; margin-top: 10px; }
 .auth { flex-direction: column; }
 .pill.pending { background: #fff1d6; color: #8a5300; } .pill.returned { background: #e8f0fb; color: #1d4f91; }
+
+/* ---- dashboards ---- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; background: var(--card);
+  border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; }
+.filters label { font-size: .82rem; color: var(--muted); display: flex; flex-direction: column; min-width: 140px; }
+.filters select, .filters input { margin-top: 4px; }
+.small { font-size: .8rem; }
+.stats.compact { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.stat em.change { display: block; margin-top: 4px; }
+.stat em.change.up { color: #0d5a43; } .stat em.change.down { color: #a32620; }
+.card h3 { font-size: .95rem; margin: 14px 0 8px; color: var(--muted); }
+.chart { margin: 8px 0 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .grid { stroke: #e6ebe9; stroke-width: 1; }
+.chart .axis { stroke: #b9c4bf; stroke-width: 1; }
+.chart .tick, .chart .xlabel { font: 11px "Inter", "Segoe UI", sans-serif; fill: #5e6e69; }
+.chart .vbar.s1, .sw.s1, .hbar { fill: #2a78d6; background: #2a78d6; }
+.chart .vbar.s2, .sw.s2 { fill: #eb6834; background: #eb6834; }
+.chart .vbar:hover { opacity: .8; }
+.legend { display: flex; gap: 16px; font-size: .85rem; color: var(--muted); margin-bottom: 4px; }
+.legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-inline-end: 6px; }
+.chart details { margin-top: 6px; font-size: .85rem; }
+.hbars td { padding: 5px 8px; border: 0; }
+.hbars td:first-child { width: 34%; }
+.barcell { width: 50%; }
+.hbar { height: 10px; border-radius: 2px; min-width: 2px; }
+.ok-line { color: #0d5a43; }
+.matrix th, .matrix td { text-align: center; font-size: .85rem; }
+.matrix td:first-child, .matrix th:first-child { text-align: start; }
+.matrix tr.group th { background: #eef6f2; text-align: start; color: #0d3b2e; }
+.matrix tr.special td:first-child { padding-inline-start: 24px; color: #5e6e69; }
+.perm { display: inline-block; min-width: 16px; margin: 0 1px; border-radius: 3px; font-size: .75rem; padding: 0 3px; }
+.perm-view { background: #e8f0fb; color: #1d4f91; } .perm-add { background: #dff3ea; color: #0d5a43; }
+.perm-change { background: #fff1d6; color: #8a5300; } .perm-delete { background: #fde4e2; color: #a32620; }

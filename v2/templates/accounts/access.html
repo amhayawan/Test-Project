@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% load i18n %}
+{% block content %}
+<h1>{% translate "Who can do what" %}</h1>
+<p class="muted">{% translate "Each role sees only the modules and actions ticked below. Researchers additionally see only the cases assigned to them. Changes to roles are recorded in the audit trail." %}</p>
+<p class="legend-line"><b>{% translate "V" %}</b> {% translate "view" %} · <b>{% translate "A" %}</b> {% translate "add" %} · <b>{% translate "C" %}</b> {% translate "change" %} · <b>{% translate "D" %}</b> {% translate "delete" %} · ✓ {% translate "special right" %}</p>
+
+<section class="card">
+  <h2>{% translate "Segregation of duties" %}</h2>
+  {% if conflicts %}
+  <div class="flash error">{% translate "Conflicts found:" %} {{ conflicts|length }}</div>
+  <table>
+    <tr><th>{% translate "User" %}</th><th>{% translate "Roles" %}</th><th>{% translate "Risk" %}</th></tr>
+    {% for c in conflicts %}<tr><td>{{ c.user.display_name }}</td><td>{{ c.roles }}</td><td>{{ c.why }}</td></tr>{% endfor %}
+  </table>
+  {% else %}<p class="ok-line">✓ {% translate "No user holds a conflicting combination of roles." %}</p>{% endif %}
+  <details><summary>{% translate "Rules checked" %}</summary>
+    <ul>{% for a, b, why in rules %}<li><b>{{ a }} + {{ b }}</b>: {{ why }}</li>{% endfor %}</ul>
+  </details>
+</section>
+
+<div class="card table-wrap">
+<table class="matrix">
+  <tr><th></th>{% for code, label in roles %}<th>{{ label }}</th>{% endfor %}</tr>
+  {% for sec in sections %}
+  <tr class="group"><th colspan="{{ roles|length|add:1 }}">{{ sec.label }}</th></tr>
+  {% for row in sec.rows %}
+  <tr{% if row.special %} class="special"{% endif %}><td>{{ row.label }}</td>
+    {% for held in row.cells %}<td class="cell">
+      {% if row.special %}{% if held.0 %}✓{% endif %}
+      {% else %}{% for a in held %}<b class="perm perm-{{ a }}">{% if a == 'view' %}{% translate "V" %}{% elif a == 'add' %}{% translate "A" %}{% elif a == 'change' %}{% translate "C" %}{% else %}{% translate "D" %}{% endif %}</b>{% endfor %}{% endif %}
+    </td>{% endfor %}</tr>
+  {% endfor %}
+  {% endfor %}
+</table>
+</div>
+{% endblock %}

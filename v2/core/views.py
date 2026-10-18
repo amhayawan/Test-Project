@@ -1,23 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, Http404
-from django.shortcuts import get_object_or_404, render
-
-from approvals.services import inbox
+from django.shortcuts import get_object_or_404
 
 from .audit import log_event
 from .models import Attachment
-
-
-@login_required
-def dashboard(request):
-    from cases.models import Beneficiary
-    cases = Beneficiary.objects.visible_to(request.user)
-    stats = {
-        "under_study": cases.filter(status=Beneficiary.UNDER_STUDY).count(),
-        "recommended": cases.filter(status=Beneficiary.RECOMMENDED).count(),
-        "approved": cases.filter(status=Beneficiary.APPROVED).count(),
-    }
-    return render(request, "core/dashboard.html", {"stats": stats, "waiting": inbox(request.user)[:10]})
 
 
 def user_can_view_record(user, record):

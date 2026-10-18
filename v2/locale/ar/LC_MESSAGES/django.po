@@ -15,6 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+#: templates/dashboards/dashboard.html
+#, python-format
+msgid "%(n)s open needs not fully funded (%(u)s urgent)."
+msgstr "%(n)s احتياج مفتوح غير مكتمل التمويل (%(u)s عاجل)."
+
 #: cases/admin.py
 #, python-format
 msgid "%(n)s sent for approval."
@@ -25,21 +30,57 @@ msgstr "تم إرسال %(n)s للاعتماد."
 msgid "%(n)s skipped: not approved."
 msgstr "تم تخطي %(n)s: غير معتمدة."
 
+#: templates/accounts/access.html
+msgid "A"
+msgstr "إ"
+
+#: dashboards/widgets.py
+msgid "Accounts locked now"
+msgstr "حسابات مقفلة حالياً"
+
 #: crm/models.py
 msgid "Active"
 msgstr "نشط"
+
+#: dashboards/widgets.py
+msgid "Active sponsorships"
+msgstr "كفالات سارية"
+
+#: dashboards/widgets.py
+msgid "Active users"
+msgstr "مستخدمون نشطون"
+
+#: templates/dashboards/dashboard.html
+msgid "Active users by role"
+msgstr "المستخدمون النشطون حسب الدور"
+
+#: templates/dashboards/dashboard.html
+msgid "Administration"
+msgstr "الإدارة والنظام"
 
 #: core/context.py
 msgid "Aid"
 msgstr "المساعدات"
 
+#: dashboards/widgets.py
+msgid "Aid awaiting approval"
+msgstr "مساعدات بانتظار الاعتماد"
+
 #: cases/models.py
 msgid "Aid can only be given to approved cases."
 msgstr "لا تُصرف المساعدات إلا لحالة معتمدة."
 
+#: dashboards/widgets.py
+msgid "Aid delivered"
+msgstr "مساعدات مسلَّمة"
+
 #: approvals/models.py
 msgid "Aid disbursement"
 msgstr "صرف مساعدة"
+
+#: templates/dashboards/dashboard.html
+msgid "All"
+msgstr "الكل"
 
 #: core/models.py
 msgid "Allowed files: PDF, JPG or PNG."
@@ -48,6 +89,14 @@ msgstr "الملفات المسموحة: PDF أو JPG أو PNG."
 #: templates/approvals/inbox.html
 msgid "Amount"
 msgstr "المبلغ"
+
+#: templates/dashboards/dashboard.html
+msgid "Amount still needed:"
+msgstr "المبلغ المتبقي المطلوب:"
+
+#: templates/dashboards/dashboard.html
+msgid "Apply"
+msgstr "تطبيق"
 
 #: templates/base.html
 msgid "Approvals"
@@ -69,13 +118,29 @@ msgstr "معتمد"
 msgid "Approved cases"
 msgstr "حالات معتمدة"
 
+#: dashboards/widgets.py
+msgid "Approved in period"
+msgstr "اعتُمدت في الفترة"
+
 #: haz/settings.py
 msgid "Arabic"
 msgstr "العربية"
 
+#: templates/dashboards/dashboard.html
+msgid "Arrears"
+msgstr "المتأخرات"
+
 #: accounts/admin.py
 msgid "Association"
 msgstr "الجمعية"
+
+#: dashboards/widgets.py
+msgid "Average days to decision"
+msgstr "متوسط أيام اتخاذ القرار"
+
+#: dashboards/widgets.py
+msgid "Average gift"
+msgstr "متوسط التبرع"
 
 #: cases/models.py
 msgid "Awaiting approval"
@@ -88,6 +153,26 @@ msgstr "الإدارة الخلفية"
 #: crm/models.py
 msgid "Bank transfer"
 msgstr "تحويل بنكي"
+
+#: dashboards/widgets.py
+msgid "Being researched"
+msgstr "قيد البحث"
+
+#: templates/dashboards/dashboard.html
+msgid "By payment method"
+msgstr "حسب طريقة الدفع"
+
+#: templates/dashboards/dashboard.html
+msgid "By purpose"
+msgstr "حسب الغرض"
+
+#: templates/accounts/access.html
+msgid "C"
+msgstr "ت"
+
+#: templates/dashboards/dashboard.html
+msgid "Campaign"
+msgstr "الحملة"
 
 #: core/context.py
 msgid "Campaigns"
@@ -117,6 +202,10 @@ msgstr "يمكنه إرسال الحالة للاعتماد"
 msgid "Cancelled"
 msgstr "ملغي"
 
+#: templates/dashboards/dashboard.html
+msgid "Case"
+msgstr "الحالة"
+
 #: approvals/models.py
 msgid "Case acceptance"
 msgstr "قبول حالة"
@@ -133,9 +222,17 @@ msgstr "مدير إدارة الحالات"
 msgid "Cases"
 msgstr "الحالات"
 
+#: dashboards/widgets.py
+msgid "Cases approved"
+msgstr "حالات معتمدة"
+
 #: templates/core/dashboard.html
 msgid "Cases awaiting approval"
 msgstr "حالات بانتظار الاعتماد"
+
+#: dashboards/widgets.py
+msgid "Cases rejected"
+msgstr "حالات مرفوضة"
 
 #: templates/core/dashboard.html
 msgid "Cases under study"
@@ -149,6 +246,14 @@ msgstr "نقدي"
 msgid "Cheque"
 msgstr "شيك"
 
+#: dashboards/filters.py
+msgid "Choose a valid custom date range (from and to)."
+msgstr "اختر فترة مخصصة صحيحة (من وإلى)."
+
+#: templates/dashboards/dashboard.html
+msgid "Choosing a custom From/To date switches the period to Custom range. Totals compare with the previous period of the same length."
+msgstr ""
+
 #: core/models.py
 msgid "Closed"
 msgstr "مغلق"
@@ -157,9 +262,17 @@ msgstr "مغلق"
 msgid "Clothes"
 msgstr "ملابس"
 
+#: dashboards/widgets.py
+msgid "Collected in period"
+msgstr "المحصَّل في الفترة"
+
 #: templates/approvals/request.html
 msgid "Comment (required to reject or return)"
 msgstr "ملاحظة (إلزامية عند الرفض أو الإعادة)"
+
+#: dashboards/widgets.py
+msgid "Committed per month"
+msgstr "الالتزام الشهري"
 
 #: crm/models.py
 msgid "Company / organisation"
@@ -170,9 +283,37 @@ msgstr "شركة / مؤسسة"
 msgid "Complete the research first: %(m)s"
 msgstr "أكمل البحث أولاً: %(m)s"
 
+#: templates/dashboards/dashboard.html
+msgid "Conflicts found:"
+msgstr "تعارضات موجودة:"
+
+#: accounts/sod.py
+msgid "Controls user permissions and also approves cases and aid"
+msgstr "يتحكم في صلاحيات المستخدمين ويعتمد الحالات والمساعدات أيضاً"
+
+#: accounts/sod.py
+msgid "Controls user permissions and also gives final approvals"
+msgstr "يتحكم في صلاحيات المستخدمين ويعطي الاعتماد النهائي أيضاً"
+
+#: accounts/sod.py
+msgid "Controls user permissions and also records donations"
+msgstr "يتحكم في صلاحيات المستخدمين ويسجل التبرعات أيضاً"
+
+#: dashboards/filters.py
+msgid "Custom range"
+msgstr "فترة مخصصة"
+
+#: templates/accounts/access.html
+msgid "D"
+msgstr "ح"
+
 #: templates/base.html
 msgid "Dashboard"
 msgstr "لوحة التحكم"
+
+#: dashboards/apps.py
+msgid "Dashboards"
+msgstr "لوحات التحكم"
 
 #: templates/approvals/inbox.html
 msgid "Date"
@@ -190,9 +331,21 @@ msgstr "سداد ديون"
 msgid "Decisions"
 msgstr "القرارات"
 
+#: templates/dashboards/dashboard.html
+msgid "Decisions I took in period"
+msgstr "قراراتي في الفترة"
+
 #: cases/models.py
 msgid "Delivered"
 msgstr "تم التسليم"
+
+#: templates/dashboards/dashboard.html
+msgid "Delivered by type"
+msgstr "المسلَّم حسب النوع"
+
+#: templates/dashboards/dashboard.html
+msgid "Department"
+msgstr "الإدارة"
 
 #: core/context.py
 msgid "Departments and projects"
@@ -210,6 +363,14 @@ msgstr "التبرعات"
 msgid "Donations can only be earmarked for approved cases."
 msgstr "لا يمكن تخصيص التبرعات إلا لحالة معتمدة."
 
+#: templates/dashboards/dashboard.html
+msgid "Donations over time"
+msgstr "التبرعات عبر الزمن"
+
+#: templates/dashboards/dashboard.html
+msgid "Donations received vs aid delivered"
+msgstr "التبرعات المستلمة مقابل المساعدات المسلَّمة"
+
 #: core/context.py
 msgid "Donors"
 msgstr "المتبرعون"
@@ -218,6 +379,10 @@ msgstr "المتبرعون"
 msgid "Donors and donations"
 msgstr "المتبرعون والتبرعات"
 
+#: dashboards/widgets.py
+msgid "Donors who gave"
+msgstr "متبرعون تبرعوا"
+
 #: templates/base.html
 msgid "Dr. Hassan Abbas Zaki Association"
 msgstr "جمعية د. حسن عباس زكي"
@@ -225,6 +390,14 @@ msgstr "جمعية د. حسن عباس زكي"
 #: cases/models.py
 msgid "Draft"
 msgstr "مسودة"
+
+#: templates/dashboards/dashboard.html
+msgid "EGP"
+msgstr "ج.م"
+
+#: templates/accounts/access.html
+msgid "Each role sees only the modules and actions ticked below. Researchers additionally see only the cases assigned to them. Changes to roles are recorded in the audit trail."
+msgstr "كل دور يرى فقط الأقسام والإجراءات المعلَّمة أدناه. والباحث يرى فقط الحالات المسندة إليه. أي تغيير في الأدوار يُسجَّل في سجل العمليات."
 
 #: cases/models.py
 msgid "Education"
@@ -246,9 +419,17 @@ msgstr "English"
 msgid "Executive director"
 msgstr "المدير التنفيذي"
 
+#: dashboards/widgets.py
+msgid "Failed sign-ins"
+msgstr "محاولات دخول فاشلة"
+
 #: cases/models.py
 msgid "Fair"
 msgstr "متوسطة"
+
+#: dashboards/widgets.py
+msgid "Families helped"
+msgstr "أسر استفادت"
 
 #: cases/models.py
 msgid "Family in need"
@@ -274,9 +455,25 @@ msgstr "غذاء"
 msgid "Food / Ramadan boxes"
 msgstr "إطعام / شنط رمضان"
 
+#: templates/dashboards/dashboard.html
+msgid "For your own dates choose Custom range, then From and To. Changes are compared with the previous period of the same length."
+msgstr "لاختيار تواريخ محددة اختر «فترة مخصصة» ثم «من» و«إلى». تُقارن النسب بالفترة السابقة بنفس الطول."
+
 #: cases/models.py
 msgid "Free / shelter"
 msgstr "بدون مقابل / إيواء"
+
+#: templates/dashboards/dashboard.html
+msgid "From"
+msgstr "من"
+
+#: templates/dashboards/dashboard.html
+msgid "Fund"
+msgstr "الصندوق"
+
+#: templates/dashboards/dashboard.html
+msgid "Fundraising"
+msgstr "تنمية الموارد"
 
 #: accounts/roles.py
 msgid "Fundraising / donations officer"
@@ -297,6 +494,10 @@ msgstr "النظام المتكامل لإدارة الجمعية"
 #: haz/urls.py
 msgid "HAZ system"
 msgstr "نظام الجمعية"
+
+#: accounts/sod.py
+msgid "Has permissions given directly instead of through a role"
+msgstr "لديه صلاحيات ممنوحة مباشرة وليس من خلال دور"
 
 #: cases/models.py
 msgid "Head of family"
@@ -322,6 +523,10 @@ msgstr "زوج"
 msgid "In kind"
 msgstr "عيني"
 
+#: templates/dashboards/dashboard.html
+msgid "In the selected period"
+msgstr "في الفترة المختارة"
+
 #: crm/models.py
 msgid "Inactive"
 msgstr "غير نشط"
@@ -330,6 +535,10 @@ msgstr "غير نشط"
 msgid "Individual"
 msgstr "فرد"
 
+#: accounts/sod.py
+msgid "Individual permissions"
+msgstr "صلاحيات فردية"
+
 #: crm/models.py
 msgid "InstaPay"
 msgstr "إنستاباي"
@@ -337,6 +546,22 @@ msgstr "إنستاباي"
 #: templates/base.html
 msgid "Integrated management system"
 msgstr "النظام المتكامل للإدارة"
+
+#: dashboards/filters.py
+msgid "Last 30 days"
+msgstr "آخر 30 يوماً"
+
+#: dashboards/filters.py
+msgid "Last 90 days"
+msgstr "آخر 90 يوماً"
+
+#: dashboards/filters.py
+msgid "Last month"
+msgstr "الشهر الماضي"
+
+#: dashboards/filters.py
+msgid "Last year"
+msgstr "العام الماضي"
 
 #: cases/models.py
 msgid "Male"
@@ -374,6 +599,30 @@ msgstr "إعانة شهرية"
 msgid "Mother"
 msgstr "أم"
 
+#: templates/dashboards/dashboard.html
+msgid "My cases"
+msgstr "حالاتي"
+
+#: dashboards/widgets.py
+msgid "My cases being researched"
+msgstr "حالاتي قيد البحث"
+
+#: templates/dashboards/dashboard.html
+msgid "My requests still pending"
+msgstr "طلباتي التي لم يُبت فيها"
+
+#: templates/dashboards/dashboard.html
+msgid "New cases by category"
+msgstr "الحالات الجديدة حسب الفئة"
+
+#: dashboards/widgets.py
+msgid "New cases registered"
+msgstr "حالات جديدة مسجلة"
+
+#: dashboards/widgets.py
+msgid "New donors"
+msgstr "متبرعون جدد"
+
 #: cases/models.py
 msgid "New rent"
 msgstr "إيجار جديد"
@@ -386,9 +635,33 @@ msgstr "لا"
 msgid "No approval policy is configured for this document. Ask the administrator."
 msgstr "لا توجد سياسة اعتماد لهذا النوع من المستندات. راجع مدير النظام."
 
+#: templates/dashboards/dashboard.html
+msgid "No campaigns in this period."
+msgstr "لا توجد حملات في هذه الفترة."
+
+#: templates/dashboards/_hbars.html
+msgid "No data for this period."
+msgstr "لا توجد بيانات لهذه الفترة."
+
+#: templates/dashboards/dashboard.html
+msgid "No open cases."
+msgstr "لا توجد حالات مفتوحة."
+
+#: templates/dashboards/dashboard.html
+msgid "No sponsorship is in arrears."
+msgstr "لا توجد كفالات متأخرة."
+
+#: templates/dashboards/dashboard.html
+msgid "No user holds a conflicting combination of roles."
+msgstr "لا يوجد مستخدم يجمع بين أدوار متعارضة."
+
 #: cases/models.py
 msgid "Normal"
 msgstr "عادي"
+
+#: dashboards/widgets.py
+msgid "Not assigned"
+msgstr "غير مسندة"
 
 #: templates/approvals/request.html
 msgid "Note"
@@ -397,6 +670,10 @@ msgstr "ملاحظة"
 #: templates/approvals/inbox.html
 msgid "Nothing is waiting for you."
 msgstr "لا يوجد ما ينتظر قرارك."
+
+#: dashboards/widgets.py
+msgid "Number of donations"
+msgstr "عدد التبرعات"
 
 #: cases/models.py
 msgid "Old rent"
@@ -442,9 +719,17 @@ msgstr "متوقفة مؤقتاً"
 msgid "Pending"
 msgstr "قيد الاعتماد"
 
+#: templates/dashboards/_chart.html
+msgid "Period"
+msgstr "الفترة"
+
 #: cases/models.py
 msgid "Person with disability"
 msgstr "ذوي همم"
+
+#: templates/dashboards/dashboard.html
+msgid "Pipeline now"
+msgstr "الوضع الحالي"
 
 #: core/models.py
 msgid "Planned"
@@ -454,6 +739,18 @@ msgstr "مخطط"
 msgid "Poor"
 msgstr "سيئة"
 
+#: templates/dashboards/dashboard.html
+msgid "Project"
+msgstr "المشروع"
+
+#: dashboards/widgets.py
+msgid "Recorded changes"
+msgstr "تعديلات مسجلة"
+
+#: accounts/sod.py
+msgid "Records donations and also decides who receives them"
+msgstr "يسجل التبرعات ويقرر من يستفيد منها أيضاً"
+
 #: approvals/models.py
 msgid "Reject"
 msgstr "رفض"
@@ -461,6 +758,30 @@ msgstr "رفض"
 #: cases/models.py
 msgid "Rejected"
 msgstr "مرفوض"
+
+#: dashboards/widgets.py
+msgid "Rejected / suspended"
+msgstr "مرفوضة / موقوفة"
+
+#: templates/dashboards/dashboard.html
+msgid "Researcher"
+msgstr "الباحث"
+
+#: templates/dashboards/dashboard.html
+msgid "Researcher workload"
+msgstr "عبء العمل على الباحثين"
+
+#: accounts/sod.py
+msgid "Researches cases and also accepts them"
+msgstr "يبحث الحالات ويعتمدها أيضاً"
+
+#: templates/dashboards/dashboard.html
+msgid "Researching"
+msgstr "قيد البحث"
+
+#: templates/dashboards/dashboard.html
+msgid "Reset"
+msgstr "إعادة ضبط"
 
 #: core/models.py
 msgid "Restricted"
@@ -474,13 +795,41 @@ msgstr "إعادة للتعديل"
 msgid "Returned for changes"
 msgstr "أُعيد للتعديل"
 
+#: dashboards/widgets.py
+msgid "Returned to me for changes"
+msgstr "أُعيدت إليّ للتعديل"
+
+#: dashboards/widgets.py
+msgid "Returned to researcher"
+msgstr "أُعيدت للباحث"
+
+#: templates/accounts/access.html
+msgid "Risk"
+msgstr "الخطر"
+
+#: templates/accounts/access.html
+msgid "Roles"
+msgstr "الأدوار"
+
+#: templates/accounts/access.html
+msgid "Rules checked"
+msgstr "القواعد المطبقة"
+
 #: crm/models.py
 msgid "Sadaqa"
 msgstr "صدقة"
 
+#: templates/dashboards/dashboard.html
+msgid "Segregation of duties"
+msgstr "الفصل بين المهام"
+
 #: cases/admin.py
 msgid "Send for approval"
 msgstr "إرسال للاعتماد"
+
+#: templates/dashboards/_chart.html
+msgid "Show as table"
+msgstr "عرض كجدول"
 
 #: templates/registration/login.html
 msgid "Sign in"
@@ -489,6 +838,10 @@ msgstr "تسجيل الدخول"
 #: templates/base.html
 msgid "Sign out"
 msgstr "تسجيل الخروج"
+
+#: dashboards/widgets.py
+msgid "Sign-ins"
+msgstr "مرات الدخول"
 
 #: cases/models.py
 msgid "Small business"
@@ -514,6 +867,10 @@ msgstr "الحالة"
 msgid "Step"
 msgstr "المرحلة"
 
+#: templates/dashboards/dashboard.html
+msgid "Still missing"
+msgstr "ما ينقص"
+
 #: cases/models.py
 msgid "Student"
 msgstr "طالب"
@@ -525,6 +882,18 @@ msgstr "مقدم من"
 #: templates/approvals/inbox.html
 msgid "Submitted by me"
 msgstr "مقدمة مني"
+
+#: dashboards/widgets.py
+msgid "Submitted in period"
+msgstr "أُرسلت في الفترة"
+
+#: accounts/sod.py
+msgid "Superuser"
+msgstr "مستخدم فائق"
+
+#: accounts/sod.py
+msgid "Superusers bypass every permission check; keep them for emergencies only"
+msgstr "المستخدم الفائق يتجاوز كل الصلاحيات؛ احتفظ به للطوارئ فقط"
 
 #: cases/models.py
 msgid "Suspended"
@@ -588,9 +957,33 @@ msgstr "هذه الحالة غير مستحقة للزكاة."
 msgid "This document is already waiting for approval."
 msgstr "هذا المستند بانتظار الاعتماد بالفعل."
 
+#: dashboards/filters.py
+msgid "This month"
+msgstr "هذا الشهر"
+
+#: dashboards/filters.py
+msgid "This quarter"
+msgstr "هذا الربع"
+
 #: crm/models.py
 msgid "This sponsorship belongs to another donor."
 msgstr "هذه الكفالة باسم متبرع آخر."
+
+#: dashboards/filters.py
+msgid "This year"
+msgstr "هذا العام"
+
+#: templates/dashboards/dashboard.html
+msgid "To"
+msgstr "إلى"
+
+#: templates/dashboards/dashboard.html
+msgid "Top donors in period"
+msgstr "أكبر المتبرعين في الفترة"
+
+#: dashboards/widgets.py
+msgid "Total arrears now"
+msgstr "إجمالي المتأخرات حالياً"
 
 #: templates/approvals/inbox.html
 msgid "Type"
@@ -616,6 +1009,10 @@ msgstr "غير آمنة"
 msgid "Urgent"
 msgstr "عاجل"
 
+#: templates/accounts/access.html
+msgid "User"
+msgstr "المستخدم"
+
 #: templates/registration/login.html
 msgid "Username"
 msgstr "اسم المستخدم"
@@ -624,9 +1021,17 @@ msgstr "اسم المستخدم"
 msgid "Users and roles"
 msgstr "المستخدمون والصلاحيات"
 
+#: templates/accounts/access.html
+msgid "V"
+msgstr "ع"
+
 #: templates/core/dashboard.html
 msgid "Version 2 is being built step by step. Day-to-day screens for cases and donations come next; until then, use the back office."
 msgstr "الإصدار الثاني قيد البناء على مراحل. شاشات العمل اليومي للحالات والتبرعات هي الخطوة التالية؛ وحتى ذلك الحين استخدم الإدارة الخلفية."
+
+#: dashboards/widgets.py
+msgid "Waiting for approval"
+msgstr "بانتظار الاعتماد"
 
 #: templates/core/dashboard.html
 msgid "Waiting for my approval"
@@ -635,6 +1040,10 @@ msgstr "بانتظار اعتمادي"
 #: templates/approvals/inbox.html
 msgid "Waiting for my decision"
 msgstr "بانتظار قراري"
+
+#: templates/base.html
+msgid "Who can do what"
+msgstr "من يستطيع ماذا"
 
 #: cases/models.py
 msgid "Widow / divorcee"
@@ -687,6 +1096,10 @@ msgstr "يجب أن تذهب الزكاة إلى صندوق الزكاة."
 #: crm/models.py
 msgid "active"
 msgstr "نشط"
+
+#: templates/accounts/access.html
+msgid "add"
+msgstr "إضافة"
 
 #: cases/models.py
 msgid "address"
@@ -800,6 +1213,10 @@ msgstr "الحالات / المستفيدون"
 msgid "category"
 msgstr "الفئة"
 
+#: templates/accounts/access.html
+msgid "change"
+msgstr "تعديل"
+
 #: crm/models.py
 msgid "code"
 msgstr "الكود"
@@ -815,6 +1232,10 @@ msgstr "التاريخ"
 #: cases/models.py
 msgid "debts (EGP)"
 msgstr "الديون (ج.م)"
+
+#: templates/accounts/access.html
+msgid "delete"
+msgstr "حذف"
 
 #: cases/models.py
 msgid "delivered on"
@@ -1104,6 +1525,10 @@ msgstr "الباحث"
 msgid "skills"
 msgstr "المهارات"
 
+#: templates/accounts/access.html
+msgid "special right"
+msgstr "صلاحية خاصة"
+
 #: crm/models.py
 msgid "sponsor"
 msgstr "الكافل"
@@ -1157,6 +1582,10 @@ msgstr "المستخدمون"
 msgid "value (EGP)"
 msgstr "القيمة (ج.م)"
 
+#: templates/accounts/access.html
+msgid "view"
+msgstr "عرض"
+
 #: crm/models.py
 msgid "volunteer"
 msgstr "متطوع"
@@ -1164,6 +1593,10 @@ msgstr "متطوع"
 #: crm/models.py
 msgid "volunteers"
 msgstr "المتطوعون"
+
+#: templates/dashboards/_kpis.html
+msgid "vs previous period"
+msgstr "مقارنة بالفترة السابقة"
 
 #: cases/models.py
 msgid "zakat eligibility"

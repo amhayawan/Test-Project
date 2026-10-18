@@ -1,0 +1,127 @@
+{% extends "base.html" %}{% load i18n humanize_lite l10n %}
+{% block content %}
+<div class="head"><h1>{% translate "Dashboard" %}</h1>
+  <span class="muted" dir="ltr">{{ f.start|date:"Y-m-d" }} → {{ f.end|date:"Y-m-d" }}</span></div>
+
+{# ---- filters: one row, above everything they scope ---- #}
+<form method="get" class="filters" id="filters">
+  <label>{% translate "Period" %}
+    <select name="period">{% for key, label in presets %}<option value="{{ key }}" {% if f.preset == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <label class="custom">{% translate "From" %}<input type="date" name="from" value="{{ f.start|date:'Y-m-d' }}"></label>
+  <label class="custom">{% translate "To" %}<input type="date" name="to" value="{{ f.end|date:'Y-m-d' }}"></label>
+  {% if options.campaigns %}<label>{% translate "Campaign" %}<select name="campaign"><option value="">{% translate "All" %}</option>{% for c in options.campaigns %}<option value="{{ c.pk }}" {% if f.campaign == c.pk %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>{% endif %}
+  {% if options.funds %}<label>{% translate "Fund" %}<select name="fund"><option value="">{% translate "All" %}</option>{% for x in options.funds %}<option value="{{ x.pk }}" {% if f.fund == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>{% endif %}
+  {% if options.departments %}<label>{% translate "Department" %}<select name="department"><option value="">{% translate "All" %}</option>{% for x in options.departments %}<option value="{{ x.pk }}" {% if f.department == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>{% endif %}
+  {% if options.projects %}<label>{% translate "Project" %}<select name="project"><option value="">{% translate "All" %}</option>{% for x in options.projects %}<option value="{{ x.pk }}" {% if f.project == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>{% endif %}
+  <button class="btn primary">{% translate "Apply" %}</button>
+  <a href="{% url 'dashboard' %}">{% translate "Reset" %}</a>
+</form>
+{% for e in f.errors %}<div class="flash error">{{ e }}</div>{% endfor %}
+<p class="muted small">{% translate "For your own dates choose Custom range, then From and To. Changes are compared with the previous period of the same length." %}</p>
+
+{# ---- approvals: everyone ---- #}
+<section class="card">
+  <h2>{% translate "Approvals" %}</h2>
+  <div class="stats compact">
+    <div class="stat"><span>{% translate "Waiting for my decision" %}</span><b>{{ s.approvals.waiting_count }}</b></div>
+    <div class="stat"><span>{% translate "My requests still pending" %}</span><b>{{ s.approvals.mine_pending }}</b></div>
+    <div class="stat"><span>{% translate "Decisions I took in period" %}</span><b>{{ s.approvals.decided }}</b></div>
+  </div>
+  {% if s.approvals.waiting %}<table>{% for r in s.approvals.waiting %}<tr><td><a href="{% url 'approval_request' r.pk %}">{{ r.title }}</a></td><td>{{ r.get_doc_type_display }}</td><td class="num">{% if r.amount %}{{ r.amount|money }}{% endif %}</td><td>{{ r.maker.display_name }}</td></tr>{% endfor %}</table>{% endif %}
+</section>
+
+{% if s.overview %}
+<section class="card">
+  <h2>{% translate "Donations received vs aid delivered" %}</h2>
+  <div class="stats compact">
+    <div class="stat"><span>{% translate "Donations" %}</span><b>{{ s.overview.totals.0|money }}</b><em>{% translate "EGP" %}</em></div>
+    <div class="stat"><span>{% translate "Aid delivered" %}</span><b>{{ s.overview.totals.1|money }}</b><em>{% translate "EGP" %}</em></div>
+  </div>
+  {% translate "Donations received vs aid delivered" as title %}{% include "dashboards/_chart.html" with chart=s.overview.chart title=title %}
+</section>
+{% endif %}
+
+{% if s.my_cases %}
+<section class="card">
+  <h2>{% translate "My cases" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.my_cases.kpis %}
+  <table>
+    <tr><th>{% translate "Case" %}</th><th>{% translate "Status" %}</th><th>{% translate "Still missing" %}</th></tr>
+    {% for t in s.my_cases.todo %}<tr><td>{{ t.case }}</td><td>{% if t.returned %}<span class="pill returned">{% translate "Returned for changes" %}</span>{% else %}<span class="pill under_study">{% translate "Under study" %}</span>{% endif %}</td><td>{{ t.missing|join:"، " }}</td></tr>
+    {% empty %}<tr><td class="muted">{% translate "No open cases." %}</td></tr>{% endfor %}
+  </table>
+</section>
+{% endif %}
+
+{% if s.case_management %}
+<section class="card">
+  <h2>{% translate "Case management" %}</h2>
+  <h3>{% translate "Pipeline now" %}</h3>
+  <div class="stats compact">{% for p in s.case_management.pipeline %}<div class="stat"><span>{{ p.label }}</span><b>{{ p.value }}</b></div>{% endfor %}</div>
+  <h3>{% translate "In the selected period" %}</h3>
+  {% include "dashboards/_kpis.html" with kpis=s.case_management.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "New cases by category" %}</h3>{% include "dashboards/_hbars.html" with rows=s.case_management.by_category count=True %}</div>
+    <div><h3>{% translate "Researcher workload" %}</h3>
+      <table><tr><th>{% translate "Researcher" %}</th><th>{% translate "Researching" %}</th><th>{% translate "Awaiting approval" %}</th><th>{% translate "Approved" %}</th></tr>
+        {% for w in s.case_management.workload %}<tr><td>{{ w.name }}</td><td class="num">{{ w.researching }}</td><td class="num">{{ w.waiting }}</td><td class="num">{{ w.approved }}</td></tr>
+        {% empty %}<tr><td class="muted">—</td></tr>{% endfor %}</table>
+      <p class="muted">{% blocktranslate with n=s.case_management.needs.count u=s.case_management.needs.urgent %}{{ n }} open needs not fully funded ({{ u }} urgent).{% endblocktranslate %}
+        {% if s.case_management.needs.needed is not None %}{% translate "Amount still needed:" %} <b>{{ s.case_management.needs.needed|money }}</b> {% translate "EGP" %}{% endif %}</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if s.fundraising %}
+<section class="card">
+  <h2>{% translate "Fundraising" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.fundraising.kpis %}
+  {% translate "Donations over time" as title %}{% include "dashboards/_chart.html" with chart=s.fundraising.chart title=title %}
+  <div class="grid2">
+    <div><h3>{% translate "By purpose" %}</h3>{% include "dashboards/_hbars.html" with rows=s.fundraising.by_purpose %}</div>
+    <div><h3>{% translate "By payment method" %}</h3>{% include "dashboards/_hbars.html" with rows=s.fundraising.by_method %}</div>
+  </div>
+  <div class="grid2">
+    <div><h3>{% translate "Campaigns" %}</h3>
+      <table>{% for c in s.fundraising.campaigns %}<tr><td>{{ c.name }}</td><td class="num">{{ c.raised|money }}{% if c.target %} / {{ c.target|money }}{% endif %}</td><td class="barcell">{% if c.pct is not None %}<div class="progress"><div style="width: {{ c.pct|unlocalize }}%"></div></div>{% endif %}</td></tr>
+      {% empty %}<tr><td class="muted">{% translate "No campaigns in this period." %}</td></tr>{% endfor %}</table></div>
+    {% if s.fundraising.top_donors %}<div><h3>{% translate "Top donors in period" %}</h3>
+      <table>{% for d in s.fundraising.top_donors %}<tr><td>{{ d.donor__name }}</td><td class="num">{{ d.n }}</td><td class="num">{{ d.t|money }}</td></tr>{% endfor %}</table></div>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if s.sponsorships %}
+<section class="card">
+  <h2>{% translate "Sponsorships" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.sponsorships.kpis %}
+  <table>{% for sp in s.sponsorships.late %}<tr><td>{{ sp.donor }}</td><td>{{ sp.beneficiary.name }}</td><td class="num">{{ sp.monthly_amount|money }}</td><td class="num">{% translate "Arrears" %}: {{ sp.arrears|money }}</td></tr>
+  {% empty %}<tr><td class="muted">{% translate "No sponsorship is in arrears." %}</td></tr>{% endfor %}</table>
+</section>
+{% endif %}
+
+{% if s.aid %}
+<section class="card">
+  <h2>{% translate "Aid" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.aid.kpis %}
+  <h3>{% translate "Delivered by type" %}</h3>{% include "dashboards/_hbars.html" with rows=s.aid.by_type %}
+</section>
+{% endif %}
+
+{% if s.administration %}
+<section class="card">
+  <h2>{% translate "Administration" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.administration.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "Active users by role" %}</h3>{% include "dashboards/_hbars.html" with rows=s.administration.by_role count=True %}</div>
+    <div><h3>{% translate "Segregation of duties" %}</h3>
+      {% if s.administration.conflicts %}<div class="flash error">{% translate "Conflicts found:" %} {{ s.administration.conflicts|length }}</div>
+      <table>{% for c in s.administration.conflicts %}<tr><td>{{ c.user.display_name }}</td><td>{{ c.roles }}</td></tr>{% endfor %}</table>
+      {% else %}<p class="ok-line">✓ {% translate "No user holds a conflicting combination of roles." %}</p>{% endif %}
+      <a href="{% url 'access_matrix' %}">{% translate "Who can do what" %} ←</a></div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+{% block scripts %}{% load static %}<script src="{% static 'js/dashboard.js' %}" defer></script>{% endblock %}

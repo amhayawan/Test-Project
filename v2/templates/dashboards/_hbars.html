@@ -1,0 +1,4 @@
+{% load i18n humanize_lite l10n %}<table class="hbars">
+  {% for r in rows %}<tr><td>{{ r.label }}</td><td class="barcell"><div class="hbar" style="width: {{ r.pct|unlocalize }}%" title="{{ r.label }}: {{ r.value|money }}"></div></td><td class="num">{% if count %}{{ r.value }}{% else %}{{ r.value|money }}{% endif %}</td></tr>
+  {% empty %}<tr><td class="muted">{% translate "No data for this period." %}</td></tr>{% endfor %}
+</table>

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "approvals",
     "crm",
     "cases",
+    "dashboards",
 ]
 
 MIDDLEWARE = [

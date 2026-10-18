@@ -1,0 +1,13 @@
+{% load i18n humanize_lite l10n %}<figure class="chart">
+  <div class="legend">{% for i, name in chart.series %}<span><i class="sw s{{ i }}"></i>{{ name }}</span>{% endfor %}</div>
+  {% localize off %}<svg viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="img" aria-label="{{ title }}" dir="ltr">
+    {% for t in chart.ticks %}<line class="grid" x1="{{ chart.x0 }}" x2="{{ chart.x1 }}" y1="{{ t.y }}" y2="{{ t.y }}"/><text class="tick" x="{{ chart.x0|add:'-6' }}" y="{{ t.y }}" text-anchor="end" dominant-baseline="middle">{{ t.text }}</text>{% endfor %}
+    {% for b in chart.bars %}<rect class="vbar s{{ b.series }}" x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" rx="2"><title>{{ b.title }}</title></rect>{% endfor %}
+    <line class="axis" x1="{{ chart.x0 }}" x2="{{ chart.x1 }}" y1="{{ chart.base_y }}" y2="{{ chart.base_y }}"/>
+    {% for l in chart.labels %}<text class="xlabel" x="{{ l.x }}" y="{{ chart.label_y }}" text-anchor="middle">{{ l.text }}</text>{% endfor %}
+  </svg>{% endlocalize %}
+  <details><summary>{% translate "Show as table" %}</summary>
+    <table><tr><th>{% translate "Period" %}</th>{% for i, name in chart.series %}<th>{{ name }}</th>{% endfor %}</tr>
+      {% for r in chart.rows %}<tr><td>{{ r.label }}</td>{% for v in r.values %}<td class="num">{{ v|money }}</td>{% endfor %}</tr>{% endfor %}</table>
+  </details>
+</figure>

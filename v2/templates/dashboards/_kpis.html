@@ -1,0 +1,5 @@
+{% load i18n humanize_lite l10n %}<div class="stats">{% for k in kpis %}
+  <div class="stat"><span>{{ k.label }}</span><b>{% if k.money %}{{ k.value|money }}{% else %}{{ k.value|unlocalize }}{% endif %}</b>
+  {% if k.money %}<em>{% translate "EGP" %}</em>{% endif %}
+  {% if k.change is not None %}<em class="change {% if k.change >= 0 %}up{% else %}down{% endif %}">{% if k.change >= 0 %}▲{% else %}▼{% endif %} {{ k.change }}% {% translate "vs previous period" %}</em>{% endif %}</div>
+{% endfor %}</div>

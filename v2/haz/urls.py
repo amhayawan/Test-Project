@@ -5,13 +5,15 @@ from django.utils.translation import gettext_lazy as _
 from accounts import views as account_views
 from approvals import views as approval_views
 from core import views as core_views
+from dashboards import views as dashboard_views
 
 admin.site.site_header = _("HAZ integrated management system")
 admin.site.site_title = _("HAZ system")
 admin.site.index_title = _("Back office")
 
 urlpatterns = [
-    path("", core_views.dashboard, name="dashboard"),
+    path("", dashboard_views.dashboard, name="dashboard"),
+    path("access/", account_views.access_matrix, name="access_matrix"),
     path("login/", account_views.LoginView.as_view(), name="login"),
     path("logout/", account_views.LogoutView.as_view(), name="logout"),
     path("language/", account_views.set_language, name="set_language"),
