@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head">
+  <h1>سجل العمليات <small class="muted">({{ pagination.total }})</small></h1>
+</div>
+<p class="muted">كل عملية دخول وإضافة وتعديل وحذف ونسخ احتياطي مسجلة هنا ولا يمكن تعديلها من البرنامج.</p>
+<form class="search" method="get">
+  <input name="q" value="{{ q }}" placeholder="بحث باسم المستخدم أو التفاصيل…">
+  <button class="btn">بحث</button>
+  {% if q %}<a href="{{ url_for('audit_log') }}">مسح</a>{% endif %}
+</form>
+<div class="card table-wrap">
+<table class="list">
+  <tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>القسم</th><th>التفاصيل</th><th>IP</th></tr>
+  {% for a in pagination.items %}
+  <tr>
+    <td class="num">{{ a.at.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td dir="ltr">{{ a.username or '—' }}</td>
+    <td>{{ actions.get(a.action, a.action) }}</td>
+    <td>{% if a.entity and a.entity in entities %}{% if a.record_id and a.action != 'delete' %}<a href="{{ url_for('entity_detail', entity_name=a.entity, obj_id=a.record_id) }}">{{ entities[a.entity].singular }} #{{ a.record_id }}</a>{% else %}{{ entities[a.entity].singular }} #{{ a.record_id }}{% endif %}{% elif a.entity == 'users' %}مستخدم{% endif %}</td>
+    <td class="summary">{{ a.summary or '' }}</td>
+    <td class="num">{{ a.ip or '' }}</td>
+  </tr>
+  {% else %}<tr><td colspan="6" class="muted">لا توجد عمليات</td></tr>{% endfor %}
+</table>
+</div>
+{% if pagination.pages > 1 %}
+<div class="pager">
+  {% if pagination.has_prev %}<a href="{{ url_for('audit_log', q=q, page=pagination.prev_num) }}">الأحدث</a>{% endif %}
+  <span>صفحة {{ pagination.page }} من {{ pagination.pages }}</span>
+  {% if pagination.has_next %}<a href="{{ url_for('audit_log', q=q, page=pagination.next_num) }}">الأقدم</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

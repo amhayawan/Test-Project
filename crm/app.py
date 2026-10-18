@@ -3,7 +3,7 @@ import io
 import os
 import re
 import secrets
-from datetime import date
+from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from functools import wraps
 from pathlib import Path
@@ -16,11 +16,16 @@ from sqlalchemy import extract, func, or_
 from sqlalchemy.exc import IntegrityError
 
 from .entities import CHOICES, ENTITIES
-from .models import Aid, Beneficiary, Donation, Donor, Member, User, Volunteer, db
+from . import storage
+from .models import (ADDED_COLUMNS, Aid, AuditLog, Beneficiary, Donation, Donor,
+                     Member, User, Volunteer, db)
 
 APP_NAME = "جمعية حسن عباس زكي"
 PHONE_RE = re.compile(r"^\+?[0-9][0-9 \-]{5,19}$")
 PER_PAGE = 25
+MIN_PASSWORD = 8
+MAX_FAILED_LOGINS = 5
+LOCKOUT = timedelta(minutes=15)
 
 
 def default_data_dir():
@@ -32,6 +37,8 @@ def default_data_dir():
 
 
 def load_secret_key(data_dir):
+    if os.environ.get("HAZ_CRM_SECRET_KEY"):
+        return os.environ["HAZ_CRM_SECRET_KEY"]
     key_file = Path(data_dir) / "secret.key"
     if not key_file.exists():
         key_file.write_text(secrets.token_hex(32))
@@ -42,19 +49,27 @@ def create_app(config=None):
     app = Flask(__name__)
     data_dir = Path((config or {}).get("DATA_DIR") or os.environ.get("HAZ_CRM_DATA") or default_data_dir()).resolve()
     data_dir.mkdir(parents=True, exist_ok=True)
+    db_url = storage.resolve_database_url(data_dir, (config or {}).get("DATABASE_URL"))
+    behind_proxy = os.environ.get("HAZ_CRM_BEHIND_PROXY") == "1"
     app.config.update(
         DATA_DIR=str(data_dir),
-        DB_PATH=str(data_dir / "crm.db"),
-        SQLALCHEMY_DATABASE_URI=f"sqlite:///{data_dir / 'crm.db'}",
+        DATABASE_URL=db_url,
+        SQLALCHEMY_DATABASE_URI=db_url,
+        SQLALCHEMY_ENGINE_OPTIONS={"pool_pre_ping": True},
         SECRET_KEY=load_secret_key(data_dir),
         SESSION_COOKIE_SAMESITE="Lax",
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SECURE=behind_proxy,  # cookies only over HTTPS when served behind Caddy/nginx
+        PERMANENT_SESSION_LIFETIME=timedelta(
+            minutes=int(os.environ.get("HAZ_CRM_SESSION_MINUTES", "30"))),
     )
     if config:
-        app.config.update({k: v for k, v in config.items() if k != "DATA_DIR"})
+        app.config.update({k: v for k, v in config.items() if k not in ("DATA_DIR", "DATABASE_URL")})
 
     db.init_app(app)
     with app.app_context():
         db.create_all()
+        storage.upgrade_schema(db.engine, ADDED_COLUMNS)
 
     login_manager = LoginManager(app)
     login_manager.login_view = "login"
@@ -78,6 +93,18 @@ def admin_required(view):
             abort(403)
         return view(*args, **kwargs)
     return wrapper
+
+
+def audit(action, entity=None, record_id=None, summary=None, user=None):
+    """Add an audit row to the current session (committed with the caller's change)."""
+    user = user or (current_user if current_user.is_authenticated else None)
+    db.session.add(AuditLog(
+        user_id=user.id if user else None,
+        username=user.username if user else None,
+        action=action, entity=entity, record_id=record_id,
+        summary=(summary or "")[:500] or None,
+        ip=request.remote_addr if request else None,
+    ))
 
 
 def get_entity(name):
@@ -127,6 +154,19 @@ def register_template_helpers(app):
             token = request.form.get("_csrf")
             if not token or token != session.get("_csrf"):
                 abort(400, "انتهت صلاحية الصفحة، أعد المحاولة")
+
+    @app.after_request
+    def security_headers(resp):
+        resp.headers.setdefault("X-Frame-Options", "DENY")
+        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+        resp.headers.setdefault("Referrer-Policy", "same-origin")
+        resp.headers.setdefault(
+            "Content-Security-Policy",
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; frame-ancestors 'none'; form-action 'self'")
+        if request.endpoint not in ("static",):
+            resp.headers.setdefault("Cache-Control", "no-store")
+        return resp
 
     @app.before_request
     def first_run_setup():
@@ -226,15 +266,18 @@ def register_routes(app):
             username = request.form.get("username", "").strip()
             name = request.form.get("name", "").strip()
             password = request.form.get("password", "")
-            if not username or not name or len(password) < 6:
-                error = "أكمل البيانات (كلمة المرور 6 أحرف على الأقل)"
+            if not username or not name or len(password) < MIN_PASSWORD:
+                error = f"أكمل البيانات (كلمة المرور {MIN_PASSWORD} أحرف على الأقل)"
             elif password != request.form.get("password2"):
                 error = "كلمتا المرور غير متطابقتين"
             else:
                 user = User(username=username, name=name, role="admin")
                 user.set_password(password)
                 db.session.add(user)
+                db.session.flush()
+                audit("setup", "users", user.id, "إنشاء حساب المدير الأول", user=user)
                 db.session.commit()
+                session.permanent = True
                 login_user(user)
                 flash("تم إنشاء حساب المدير بنجاح", "success")
                 return redirect(url_for("dashboard"))
@@ -244,17 +287,39 @@ def register_routes(app):
     def login():
         error = None
         if request.method == "POST":
-            user = User.query.filter_by(username=request.form.get("username", "").strip()).first()
-            if user and user.active and user.check_password(request.form.get("password", "")):
+            username = request.form.get("username", "").strip()
+            user = User.query.filter_by(username=username).first()
+            now = datetime.now()
+            if user and user.locked_until and user.locked_until > now:
+                minutes = int((user.locked_until - now).total_seconds() // 60) + 1
+                error = f"الحساب مقفل مؤقتاً بسبب محاولات دخول خاطئة. حاول بعد {minutes} دقيقة"
+            elif user and user.active and user.check_password(request.form.get("password", "")):
+                user.failed_logins = 0
+                user.locked_until = None
+                user.last_login = now
+                audit("login", user=user)
+                db.session.commit()
+                session.permanent = True
                 login_user(user)
                 nxt = request.args.get("next", "")
                 return redirect(nxt if nxt.startswith("/") and not nxt.startswith("//") else url_for("dashboard"))
-            error = "اسم المستخدم أو كلمة المرور غير صحيحة"
+            else:
+                error = "اسم المستخدم أو كلمة المرور غير صحيحة"
+                audit("login_failed", summary=f"اسم المستخدم: {username[:64]}")
+                if user:
+                    user.failed_logins = (user.failed_logins or 0) + 1
+                    if user.failed_logins >= MAX_FAILED_LOGINS:
+                        user.failed_logins = 0
+                        user.locked_until = now + LOCKOUT
+                        audit("locked", "users", user.id, f"قفل الحساب {user.username} لمدة 15 دقيقة")
+                db.session.commit()
         return render_template("login.html", error=error)
 
     @app.route("/logout", methods=["POST"])
     @login_required
     def logout():
+        audit("logout")
+        db.session.commit()
         logout_user()
         return redirect(url_for("login"))
 
@@ -338,7 +403,9 @@ def register_routes(app):
                 if hasattr(obj, "recorded_by_id"):
                     obj.recorded_by_id = current_user.id
                 db.session.add(obj)
-                if save(errors):
+                if save(errors, flush_only=True):
+                    audit("create", entity_name, obj.id, describe(entity, obj))
+                if not errors and save(errors):
                     flash(f"تم حفظ {entity['singular']} بنجاح", "success")
                     return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj.id))
             values = request.form
@@ -367,8 +434,15 @@ def register_routes(app):
         if request.method == "POST":
             new_values, errors = parse_form(entity, request.form, obj)
             if not errors:
+                changes = []
                 for k, v in new_values.items():
-                    setattr(obj, k, v)
+                    if getattr(obj, k) != v:
+                        field = next(f for f in entity["fields"] if f["name"] == k)
+                        old = display_value(obj, field)
+                        setattr(obj, k, v)
+                        changes.append(f"{field['label']}: {old or '—'} ← {display_value(obj, field) or '—'}")
+                if changes:
+                    audit("update", entity_name, obj.id, f"{obj} | " + " ؛ ".join(changes))
                 if save(errors):
                     flash("تم حفظ التعديلات", "success")
                     return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj.id))
@@ -386,6 +460,7 @@ def register_routes(app):
         if children is not None and children.count():
             flash("لا يمكن الحذف لوجود سجلات مرتبطة بهذا السجل", "error")
             return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj_id))
+        audit("delete", entity_name, obj.id, describe(entity, obj))
         db.session.delete(obj)
         db.session.commit()
         flash("تم الحذف", "success")
@@ -409,14 +484,16 @@ def register_routes(app):
             name = request.form.get("name", "").strip()
             password = request.form.get("password", "")
             role = request.form.get("role", "staff")
-            if not username or not name or len(password) < 6 or role not in ("admin", "staff"):
-                error = "أكمل البيانات (كلمة المرور 6 أحرف على الأقل)"
+            if not username or not name or len(password) < MIN_PASSWORD or role not in ("admin", "staff"):
+                error = f"أكمل البيانات (كلمة المرور {MIN_PASSWORD} أحرف على الأقل)"
             elif User.query.filter_by(username=username).first():
                 error = "اسم المستخدم مستخدم بالفعل"
             else:
                 user = User(username=username, name=name, role=role)
                 user.set_password(password)
                 db.session.add(user)
+                db.session.flush()
+                audit("user_add", "users", user.id, f"{username} ({role})")
                 db.session.commit()
                 flash("تمت إضافة المستخدم", "success")
                 return redirect(url_for("users"))
@@ -431,6 +508,7 @@ def register_routes(app):
             flash("لا يمكنك إيقاف حسابك", "error")
         else:
             user.active = not user.active
+            audit("user_toggle", "users", user.id, f"{user.username}: {'تفعيل' if user.active else 'إيقاف'}")
             db.session.commit()
         return redirect(url_for("users"))
 
@@ -440,10 +518,13 @@ def register_routes(app):
     def user_reset(user_id):
         user = db.get_or_404(User, user_id)
         password = request.form.get("password", "")
-        if len(password) < 6:
-            flash("كلمة المرور 6 أحرف على الأقل", "error")
+        if len(password) < MIN_PASSWORD:
+            flash(f"كلمة المرور {MIN_PASSWORD} أحرف على الأقل", "error")
         else:
             user.set_password(password)
+            user.failed_logins = 0
+            user.locked_until = None
+            audit("password_reset", "users", user.id, user.username)
             db.session.commit()
             flash(f"تم تغيير كلمة مرور {user.username}", "success")
         return redirect(url_for("users"))
@@ -455,12 +536,13 @@ def register_routes(app):
         if request.method == "POST":
             if not current_user.check_password(request.form.get("current", "")):
                 error = "كلمة المرور الحالية غير صحيحة"
-            elif len(request.form.get("new", "")) < 6:
-                error = "كلمة المرور الجديدة 6 أحرف على الأقل"
+            elif len(request.form.get("new", "")) < MIN_PASSWORD:
+                error = f"كلمة المرور الجديدة {MIN_PASSWORD} أحرف على الأقل"
             elif request.form.get("new") != request.form.get("new2"):
                 error = "كلمتا المرور غير متطابقتين"
             else:
                 current_user.set_password(request.form["new"])
+                audit("password_change", "users", current_user.id)
                 db.session.commit()
                 flash("تم تغيير كلمة المرور", "success")
                 return redirect(url_for("dashboard"))
@@ -470,21 +552,26 @@ def register_routes(app):
     @login_required
     @admin_required
     def backup():
-        """Download a consistent copy of the SQLite database."""
-        import sqlite3
-        import tempfile
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp = Path(tmpdir) / "backup.db"
-            src = sqlite3.connect(app.config["DB_PATH"])
-            dst = sqlite3.connect(tmp)
-            with dst:
-                src.backup(dst)
-            src.close()
-            dst.close()
-            data = tmp.read_bytes()
+        """Download a complete copy of the data as a portable SQLite file."""
+        data = storage.backup_bytes(app.config["DATABASE_URL"], db.metadata)
+        audit("backup")
+        db.session.commit()
         return send_file(io.BytesIO(data), as_attachment=True,
                          download_name=f"haz-crm-backup-{date.today()}.db",
                          mimetype="application/octet-stream")
+
+    @app.route("/audit/")
+    @login_required
+    @admin_required
+    def audit_log():
+        q = request.args.get("q", "").strip()
+        page = max(request.args.get("page", 1, type=int), 1)
+        query = AuditLog.query
+        if q:
+            query = query.filter(or_(AuditLog.username.ilike(f"%{q}%"), AuditLog.summary.ilike(f"%{q}%"),
+                                     AuditLog.action.ilike(f"%{q}%"), AuditLog.entity.ilike(f"%{q}%")))
+        pagination = query.order_by(AuditLog.id.desc()).paginate(page=page, per_page=50, error_out=False)
+        return render_template("audit.html", pagination=pagination, q=q, actions=AUDIT_ACTIONS)
 
     @app.errorhandler(403)
     def forbidden(_):
@@ -497,6 +584,24 @@ def register_routes(app):
                                message="الصفحة أو السجل المطلوب غير موجود"), 404
 
 
+AUDIT_ACTIONS = {
+    "setup": "إعداد أول", "login": "دخول", "logout": "خروج", "login_failed": "محاولة دخول فاشلة",
+    "locked": "قفل حساب", "create": "إضافة", "update": "تعديل", "delete": "حذف", "backup": "نسخة احتياطية",
+    "user_add": "إضافة مستخدم", "user_toggle": "تفعيل/إيقاف مستخدم", "password_reset": "تغيير كلمة مرور مستخدم",
+    "password_change": "تغيير كلمة المرور",
+}
+
+
+def describe(entity, obj):
+    parts = [str(obj)]
+    for f in entity["fields"]:
+        if f["type"] in ("money", "select") or f["type"].startswith("fk:"):
+            value = display_value(obj, f)
+            if value:
+                parts.append(f"{f['label']}: {value}")
+    return " | ".join(parts)
+
+
 def raw_value(obj, field):
     value = getattr(obj, field["name"])
     if value is None:
@@ -506,9 +611,9 @@ def raw_value(obj, field):
     return str(value)
 
 
-def save(errors):
+def save(errors, flush_only=False):
     try:
-        db.session.commit()
+        db.session.flush() if flush_only else db.session.commit()
         return True
     except IntegrityError:
         db.session.rollback()

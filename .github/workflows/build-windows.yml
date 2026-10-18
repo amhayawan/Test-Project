@@ -7,6 +7,28 @@ on:
   workflow_dispatch:
 
 jobs:
+  test-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: hazcrm_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt pytest==9.1.1
+      - name: Tests on SQLite and PostgreSQL
+        env:
+          HAZ_TEST_PG_URL: postgresql://postgres:test@localhost:5432/hazcrm_test
+        run: python -m pytest -q
+
   build:
     runs-on: windows-latest
     steps:
@@ -22,11 +44,18 @@ jobs:
         run: >
           python -m PyInstaller --noconfirm --clean --onefile --windowed --name HAZ-CRM
           --add-data "crm/templates;crm/templates" --add-data "crm/static;crm/static"
+          --collect-all psycopg_binary --hidden-import psycopg_binary
+          haz_crm.py
+      - name: Build HAZ-CRM-Server.exe
+        run: >
+          python -m PyInstaller --noconfirm --onefile --console --name HAZ-CRM-Server
+          --add-data "crm/templates;crm/templates" --add-data "crm/static;crm/static"
+          --collect-all psycopg_binary --hidden-import psycopg_binary
           haz_crm.py
       - name: Smoke test (server mode starts and serves the setup page)
         shell: pwsh
         run: |
-          $p = Start-Process -FilePath dist\HAZ-CRM.exe -ArgumentList "--server","--port","8099","--data","$env:RUNNER_TEMP\crmdata" -PassThru
+          $p = Start-Process -FilePath dist\HAZ-CRM-Server.exe -ArgumentList "--no-browser","--port","8099","--data","$env:RUNNER_TEMP\crmdata" -PassThru
           $ok = $false
           for ($i = 0; $i -lt 30; $i++) {
             Start-Sleep -Seconds 2
@@ -37,4 +66,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: HAZ-CRM-windows
-          path: dist/HAZ-CRM.exe
+          path: |
+            dist/HAZ-CRM.exe
+            dist/HAZ-CRM-Server.exe

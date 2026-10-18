@@ -1,0 +1,51 @@
+# Cloud setup: HTTPS (Caddy) -> CRM app -> PostgreSQL. Only ports 80/443 are open to the internet.
+# 1. Copy .env.example to .env and fill it in.   2. docker compose up -d
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: crm
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm -d crm"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # No "ports:" on purpose - the database is reachable only by the app, never from the internet.
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # "db" is the private network between these containers, so no TLS is needed on this hop.
+      HAZ_CRM_DATABASE_URL: postgresql://crm:${POSTGRES_PASSWORD}@db:5432/crm?sslmode=disable
+      HAZ_CRM_SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+      HAZ_CRM_BEHIND_PROXY: "1"
+      TZ: Africa/Cairo
+    volumes:
+      - appdata:/data
+      - backups:/backups   # copy to your PC with: docker compose cp app:/backups ./backups
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [app]
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+
+volumes:
+  pgdata:
+  appdata:
+  backups:
+  caddy_data:

@@ -19,6 +19,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(16), nullable=False, default="staff")  # admin | staff
     active = db.Column(db.Boolean, nullable=False, default=True)
+    failed_logins = db.Column(db.Integer, nullable=False, default=0)
+    locked_until = db.Column(db.DateTime)
+    last_login = db.Column(db.DateTime)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -153,3 +156,27 @@ class Member(TimestampMixin, db.Model):
 
     def __str__(self):
         return self.name
+
+
+class AuditLog(db.Model):
+    """Who did what and when. Rows are only ever added, never edited."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    at = db.Column(db.DateTime, default=datetime.now, nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    username = db.Column(db.String(64))
+    action = db.Column(db.String(30), nullable=False)
+    entity = db.Column(db.String(30))
+    record_id = db.Column(db.Integer)
+    summary = db.Column(db.String(500))
+    ip = db.Column(db.String(64))
+
+
+# Columns added after the first release. Existing databases get them on startup.
+ADDED_COLUMNS = {
+    "user": {
+        "failed_logins": "INTEGER NOT NULL DEFAULT 0",
+        "locked_until": "TIMESTAMP",
+        "last_login": "TIMESTAMP",
+    },
+}

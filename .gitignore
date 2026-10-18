@@ -7,3 +7,5 @@ dist/
 *.db
 secret.key
 .venv/
+.env
+backups/

@@ -1,15 +1,34 @@
+import os
 import re
-from datetime import date
+from datetime import date, datetime, timedelta
 
 import pytest
 
-from crm import create_app
-from crm.models import Aid, Beneficiary, Donation, Donor, User, db
+from crm import create_app, storage
+from crm.models import Aid, AuditLog, Beneficiary, Donation, Donor, User, db
+
+# Set HAZ_TEST_PG_URL (e.g. postgresql://postgres@localhost:5432/hazcrm_test) to also
+# run every test against PostgreSQL. The database is wiped before each test.
+PG_URL = os.environ.get("HAZ_TEST_PG_URL")
 
 
-@pytest.fixture
-def app(tmp_path):
-    return create_app({"DATA_DIR": str(tmp_path), "TESTING": True})
+@pytest.fixture(params=["sqlite", "postgres"])
+def app(request, tmp_path):
+    config = {"DATA_DIR": str(tmp_path), "TESTING": True}
+    if request.param == "postgres":
+        if not PG_URL:
+            pytest.skip("HAZ_TEST_PG_URL not set")
+        config["DATABASE_URL"] = PG_URL
+        app = create_app(config)
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
+        yield app
+        with app.app_context():
+            db.session.remove()
+            db.engine.dispose()
+        return
+    yield create_app(config)
 
 
 @pytest.fixture
@@ -27,7 +46,7 @@ def post(client, path, data, form_page=None):
     return client.post(path, data=data, follow_redirects=True)
 
 
-def make_user(app, username="admin", role="admin", password="secret123"):
+def make_user(app, username="admin", role="admin", password="secret1234"):
     with app.app_context():
         u = User(username=username, name=username, role=role)
         u.set_password(password)
@@ -35,7 +54,7 @@ def make_user(app, username="admin", role="admin", password="secret123"):
         db.session.commit()
 
 
-def login(client, username="admin", password="secret123"):
+def login(client, username="admin", password="secret1234"):
     return post(client, "/login", {"username": username, "password": password})
 
 
@@ -49,7 +68,7 @@ def admin(app, client):
 def test_first_run_redirects_to_setup_and_creates_admin(client, app):
     assert client.get("/").headers["Location"].endswith("/setup")
     r = post(client, "/setup", {"name": "مدير", "username": "boss",
-                                "password": "secret123", "password2": "secret123"})
+                                "password": "secret1234", "password2": "secret1234"})
     assert "لوحة التحكم" in r.get_data(as_text=True)
     with app.app_context():
         assert User.query.one().role == "admin"
@@ -153,3 +172,130 @@ def test_all_list_and_new_pages_render(admin):
         assert admin.get(f"/{name}/").status_code == 200
         assert admin.get(f"/{name}/new").status_code == 200
     assert admin.get("/nope/").status_code == 404
+
+
+def test_short_password_rejected_at_setup(client):
+    r = post(client, "/setup", {"name": "x", "username": "x", "password": "short7!", "password2": "short7!"})
+    assert "8 أحرف" in r.get_data(as_text=True)
+
+
+def test_lockout_after_five_failed_logins(app, client):
+    make_user(app)
+    for _ in range(5):
+        login(client, password="wrong")
+    r = login(client)  # correct password, but locked
+    assert "مقفل مؤقتاً" in r.get_data(as_text=True)
+    with app.app_context():
+        u = User.query.one()
+        assert u.locked_until > datetime.now()
+        actions = [a.action for a in AuditLog.query.all()]
+        assert actions.count("login_failed") == 5 and "locked" in actions
+        u.locked_until = datetime.now() - timedelta(seconds=1)  # lock expires
+        db.session.commit()
+    assert "لوحة التحكم" in login(client).get_data(as_text=True)
+
+
+def test_session_expires_and_security_headers(app, admin):
+    assert app.config["PERMANENT_SESSION_LIFETIME"] == timedelta(minutes=30)
+    r = admin.get("/")
+    assert r.headers["X-Frame-Options"] == "DENY"
+    assert "frame-ancestors 'none'" in r.headers["Content-Security-Policy"]
+    assert r.headers["Cache-Control"] == "no-store"
+    cookie = admin.get_cookie("session")
+    assert cookie.expires is not None and cookie.http_only
+
+
+def test_audit_log_records_changes(admin, app):
+    post(admin, "/donors/new", {"name": "متبرع أ", "donor_type": "individual"})
+    with app.app_context():
+        did = Donor.query.one().id
+    post(admin, f"/donors/{did}/edit", {"name": "متبرع ب", "donor_type": "company"})
+    post(admin, f"/donors/{did}/delete", {}, form_page=f"/donors/{did}")
+    with app.app_context():
+        rows = AuditLog.query.order_by(AuditLog.id).all()
+        acts = [(a.action, a.entity) for a in rows if a.entity == "donors"]
+        assert acts == [("create", "donors"), ("update", "donors"), ("delete", "donors")]
+        update = next(a for a in rows if a.action == "update")
+        assert "متبرع أ" in update.summary and "متبرع ب" in update.summary
+        assert all(a.username == "admin" for a in rows if a.entity == "donors")
+    page = admin.get("/audit/").get_data(as_text=True)
+    assert "متبرع ب" in page and "حذف" in page
+
+
+def test_staff_cannot_see_audit_log(app, client):
+    make_user(app)
+    make_user(app, "clerk", "staff")
+    login(client, "clerk")
+    assert client.get("/audit/").status_code == 403
+
+
+def test_database_url_rules(tmp_path, monkeypatch):
+    monkeypatch.delenv("HAZ_CRM_DATABASE_URL", raising=False)
+    assert storage.resolve_database_url(tmp_path).startswith("sqlite:///")
+    (tmp_path / "settings.ini").write_text("[database]\nurl = postgres://u:p@db.example.com/crm\n")
+    url = storage.resolve_database_url(tmp_path)
+    assert url.startswith("postgresql+psycopg://u:p@db.example.com/crm") and "sslmode=require" in url
+    # local or explicitly configured connections are left alone
+    assert "sslmode" not in storage.normalize_url("postgresql://u:p@localhost/crm")
+    assert "sslmode=disable" in storage.normalize_url("postgresql://u:p@db/crm?sslmode=disable")
+    assert "p@" not in storage.masked(url)
+    monkeypatch.setenv("HAZ_CRM_DATABASE_URL", "postgresql://x:y@other.example.com/z")
+    assert "other.example.com" in storage.resolve_database_url(tmp_path)
+
+
+def test_old_database_gets_new_columns(tmp_path):
+    import sqlite3
+    path = tmp_path / "crm.db"
+    con = sqlite3.connect(path)
+    con.execute('CREATE TABLE "user" (id INTEGER PRIMARY KEY, username VARCHAR(64) UNIQUE NOT NULL, '
+                'name VARCHAR(120) NOT NULL, password_hash VARCHAR(256) NOT NULL, role VARCHAR(16) NOT NULL, '
+                'active BOOLEAN NOT NULL)')
+    con.execute("INSERT INTO user VALUES (1, 'old', 'Old', 'x', 'admin', 1)")
+    con.commit()
+    con.close()
+    app = create_app({"DATA_DIR": str(tmp_path)})
+    with app.app_context():
+        assert User.query.one().failed_logins == 0
+
+
+def test_auto_backup_keeps_last_n(app, tmp_path):
+    make_user(app)
+    bdir = tmp_path / "backups"
+    with app.app_context():
+        first = storage.auto_backup(app.config["DATABASE_URL"], bdir, db.metadata, keep=3)
+        assert first and first.read_bytes()[:15] == b"SQLite format 3"
+        assert storage.auto_backup(app.config["DATABASE_URL"], bdir, db.metadata, keep=3) is None
+        for _ in range(5):
+            storage.auto_backup(app.config["DATABASE_URL"], bdir, db.metadata, keep=3,
+                                min_age=timedelta(0))
+            import time
+            time.sleep(1.05)  # file names have 1-second resolution
+    assert len(list(bdir.glob("haz-crm-*.db"))) == 3
+
+
+def test_migrate_sqlite_to_another_database(admin, app, tmp_path):
+    if not storage.is_sqlite(app.config["DATABASE_URL"]):
+        pytest.skip("source must be the local file")
+    post(admin, "/donors/new", {"name": "منقول", "donor_type": "individual"})
+    with app.app_context():
+        did = Donor.query.one().id
+    post(admin, "/donations/new", {"donor_id": did, "amount": "100", "method": "cash",
+                                   "purpose": "general", "donation_date": "2026-05-01"})
+    target = PG_URL or f"sqlite:///{tmp_path / 'target.db'}"
+    if PG_URL:
+        tgt_app = create_app({"DATA_DIR": str(tmp_path / "t"), "DATABASE_URL": PG_URL})
+        with tgt_app.app_context():
+            db.drop_all()
+            db.engine.dispose()
+    counts = storage.copy_database(app.config["DATABASE_URL"], storage.normalize_url(target), db.metadata)
+    assert counts["donor"] == 1 and counts["donation"] == 1 and counts["user"] == 1
+    with pytest.raises(RuntimeError):  # refuses to copy into a database that has data
+        storage.copy_database(app.config["DATABASE_URL"], storage.normalize_url(target), db.metadata)
+    new = create_app({"DATA_DIR": str(tmp_path / "n"), "DATABASE_URL": target})
+    c = new.test_client()
+    login(c)
+    assert "منقول" in c.get(f"/donors/{did}").get_data(as_text=True)
+    # IDs keep counting after the copied rows (PostgreSQL sequences were reset)
+    post(c, "/donors/new", {"name": "جديد", "donor_type": "individual"})
+    with new.app_context():
+        assert Donor.query.count() == 2

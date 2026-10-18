@@ -78,3 +78,4 @@ tr.row { cursor: pointer; } tr.row:hover td { background: #f1f8f5; }
 @media print { .no-print { display: none; } .receipt-page { padding: 0; } }
 @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } .sidebar { width: 190px; } }
 td a, td.num { white-space: nowrap; }
+td.summary { max-width: 480px; white-space: normal; font-size: .85rem; }
