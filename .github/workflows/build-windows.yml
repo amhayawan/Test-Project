@@ -135,6 +135,14 @@ jobs:
           }
           python -m PyInstaller --clean --windowed --name HAZ-v2 @common haz_v2.py
           python -m PyInstaller --console --name HAZ-v2-Server @common haz_v2.py
+      - name: Smoke test the windowed exe (no console, like double-clicking it)
+        shell: pwsh
+        run: |
+          $data = "$env:RUNNER_TEMP\hazv2win"
+          $p = Start-Process -FilePath dist\HAZ-v2.exe -ArgumentList "--data",$data,"--load-demo" -PassThru -Wait
+          if (Test-Path "$data\haz-v2.log") { Get-Content "$data\haz-v2.log" }
+          if ($p.ExitCode -ne 0) { throw "HAZ-v2.exe failed with exit code $($p.ExitCode)" }
+          if (-not (Test-Path "$data\DEMO")) { throw "HAZ-v2.exe did not finish preparing the data" }
       - name: Smoke test (first start shows setup; demo loads; login page works)
         shell: pwsh
         run: |

@@ -100,6 +100,13 @@ def main():
     args = parser.parse_args()
     if "server" in Path(sys.argv[0]).stem.lower():
         args.server = True
+    if sys.stdout is None or sys.stderr is None:
+        # The windowed exe has no console: send messages and errors to a log file in the data folder.
+        data = Path(args.data or os.environ.get("HAZ_DATA_DIR") or default_data_dir())
+        data.mkdir(parents=True, exist_ok=True)
+        log = open(data / "haz-v2.log", "a", encoding="utf-8", buffering=1)
+        sys.stdout = sys.stdout or log
+        sys.stderr = sys.stderr or log
 
     prepare(args)
     from waitress import serve
