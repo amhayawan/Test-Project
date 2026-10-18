@@ -309,7 +309,7 @@ class Incentive(models.Model):
     pay_month = models.PositiveSmallIntegerField(_("pay month"), validators=[MinValueValidator(1), MaxValueValidator(12)])
     reason = models.CharField(_("reason"), max_length=255)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
-    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("requested by"), null=True, editable=False, related_name="+",
                                      on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -420,7 +420,7 @@ class PayrollRun(models.Model):
     year = models.PositiveSmallIntegerField(_("year"))
     month = models.PositiveSmallIntegerField(_("month"), validators=[MinValueValidator(1), MaxValueValidator(12)])
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
-    prepared_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    prepared_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("prepared by"), null=True, editable=False, related_name="+",
                                     on_delete=models.SET_NULL)
     calculated_at = models.DateTimeField(null=True, editable=False)
     total_gross = models.DecimalField(_("total gross"), max_digits=14, decimal_places=2, default=0, editable=False)
@@ -571,7 +571,7 @@ class LeaveType(BilingualName):
                                          help_text=_("e.g. a medical certificate for sick leave."))
     source = models.CharField(_("source (law article or internal policy)"), max_length=255, blank=True)
     is_active = models.BooleanField(_("active"), default=True)
-    changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("last changed by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
     verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("verified by"), null=True, blank=True,
                                     editable=False, related_name="+", on_delete=models.SET_NULL)
@@ -641,7 +641,7 @@ class LeaveAdjustment(models.Model):
     year = models.PositiveSmallIntegerField(_("year"))
     days = models.DecimalField(_("days (+ add / - remove)"), max_digits=6, decimal_places=2)
     reason = models.CharField(_("reason"), max_length=255)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("created by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -675,7 +675,7 @@ class LeaveRequest(models.Model):
     amount = models.DecimalField(_("days / hours counted"), max_digits=6, decimal_places=2, default=0, editable=False)
     reason = models.CharField(_("reason / notes"), max_length=255, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
-    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("requested by"), null=True, editable=False, related_name="+",
                                      on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 

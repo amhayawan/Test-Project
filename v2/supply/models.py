@@ -296,7 +296,7 @@ class PurchaseOrder(ApprovalDocument):
     terms = models.CharField(_("payment and delivery terms"), max_length=255, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=ApprovalDocument.DRAFT,
                               editable=False)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("created by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -522,7 +522,7 @@ class SupplierInvoice(ApprovalDocument):
     due_date = models.DateField(_("due date"), null=True, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=ApprovalDocument.DRAFT,
                               editable=False)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("created by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -655,7 +655,7 @@ class StockIssue(models.Model):
                                on_delete=models.PROTECT)
     received_by_name = models.CharField(_("handed to"), max_length=160, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
-    issued_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    issued_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("issued by"), null=True, editable=False, related_name="+",
                                   on_delete=models.SET_NULL)
     confirmed_at = models.DateTimeField(null=True, blank=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)

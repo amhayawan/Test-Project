@@ -644,6 +644,10 @@ msgstr "سيراميك"
 msgid "Chairs"
 msgstr "كراسي"
 
+#: templates/admin/base_site.html
+msgid "Change password"
+msgstr "تغيير كلمة المرور"
+
 #: finance/nav.py
 msgid "Chart of accounts"
 msgstr "دليل الحسابات"
@@ -3551,6 +3555,10 @@ msgstr "يدخل في الأجر التأميني"
 msgid "covered by the state"
 msgstr "نفقة الدولة"
 
+#: cases/models.py
+msgid "created by"
+msgstr "أنشأه"
+
 #: finance/models.py
 msgid "credit"
 msgstr "دائن"
@@ -4048,6 +4056,10 @@ msgid "issue no."
 msgstr "رقم إذن الصرف"
 
 #: supply/models.py
+msgid "issued by"
+msgstr "صرفه"
+
+#: supply/models.py
 msgid "issued for"
 msgstr "يُصرف لـ"
 
@@ -4098,6 +4110,10 @@ msgstr "النوع"
 #: accounts/models.py
 msgid "language"
 msgstr "اللغة"
+
+#: hr/models.py
+msgid "last changed by"
+msgstr "آخر تعديل بواسطة"
 
 #: hr/models.py
 msgid "leave balance adjustment"
@@ -4512,6 +4528,10 @@ msgstr "قاعدة ترحيل"
 msgid "posting rules (automatic entries)"
 msgstr "قواعد الترحيل (القيود الآلية)"
 
+#: hr/models.py
+msgid "prepared by"
+msgstr "أعدّه"
+
 #: cases/models.py
 msgid "priority"
 msgstr "الأولوية"
@@ -4619,6 +4639,10 @@ msgstr "المستلم"
 #: cases/models.py
 msgid "recommendation"
 msgstr "التوصية"
+
+#: crm/models.py
+msgid "recorded by"
+msgstr "سجّله"
 
 #: cases/models.py
 msgid "referred to the Projects Department"
@@ -4840,6 +4864,10 @@ msgstr "نقاط القوة"
 #: hr/models.py
 msgid "subject to income tax"
 msgstr "خاضع لضريبة كسب العمل"
+
+#: projects/models.py
+msgid "submitted by"
+msgstr "أرسله"
 
 #: supply/models.py
 msgid "supplier"

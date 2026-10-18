@@ -1,0 +1,37 @@
+/* Back office in the platform's colours (same palette as static/css/app.css). Light only. */
+:root, html[data-theme="light"], html[data-theme="dark"], html[data-theme="auto"] {
+  color-scheme: light;
+  --primary: #13795b; --secondary: #0f3d31; --accent: #ffffff; --primary-fg: #fff;
+  --body-fg: #1d2b27; --body-bg: #ffffff; --body-quiet-color: #6b7a75; --body-medium-color: #33443f;
+  --body-loud-color: #0d1f1a;
+  --header-color: #dfeee8; --header-branding-color: #ffffff; --header-bg: #0f3d31; --header-link-color: #dfeee8;
+  --breadcrumbs-fg: #cfe3db; --breadcrumbs-link-fg: #ffffff; --breadcrumbs-bg: #13795b;
+  --link-fg: #13795b; --link-hover-color: #0d5a43; --link-selected-fg: #0d5a43;
+  --hairline-color: #e1e7e4; --border-color: #cfd8d4;
+  --error-fg: #b3261e; --message-success-bg: #dff3ea; --message-warning-bg: #fff1d6; --message-error-bg: #fde8e7;
+  --darkened-bg: #f4f6f5; --selected-bg: #e6f2ed; --selected-row: #eef7f2;
+  --button-fg: #fff; --button-bg: #13795b; --button-hover-bg: #0d5a43;
+  --default-button-bg: #0d5a43; --default-button-hover-bg: #13795b;
+  --close-button-bg: #6b7a75; --close-button-hover-bg: #33443f;
+  --delete-button-bg: #b3261e; --delete-button-hover-bg: #8f1e18;
+  --object-tools-fg: #fff; --object-tools-bg: #13795b; --object-tools-hover-bg: #0d5a43;
+  --font-family-primary: "Segoe UI", Tahoma, "Noto Kufi Arabic", Arial, sans-serif;
+}
+body { background: #f4f6f5; font-size: 15px; }
+#header { background: var(--header-bg); padding: 12px 28px; }
+#site-name a { color: #fff; font-weight: 700; font-size: 1.05rem; display: flex; flex-direction: column; }
+#site-name small { color: #9fc7b7; font-weight: 400; font-size: .8rem; }
+#user-tools { color: #dfeee8; display: flex; gap: 14px; align-items: center; font-size: .9rem; }
+#user-tools a, #logout-form button { color: #dfeee8; border: 0; background: none; font: inherit; cursor: pointer; text-transform: none; }
+#user-tools a.to-dashboard { background: #13795b; color: #fff; padding: 6px 12px; border-radius: 7px; }
+div.breadcrumbs { background: var(--breadcrumbs-bg); }
+#content { background: #fff; border: 1px solid #e1e7e4; border-radius: 10px; margin: 18px 24px; padding: 20px 24px; }
+.module h2, .module caption, .inline-group h2, fieldset.module h2 { background: #13795b; color: #fff; }
+#nav-sidebar { background: #fff; border-inline-end: 1px solid #e1e7e4; }
+#nav-sidebar .current-app .section:link, #nav-sidebar .current-model { background: #e6f2ed; }
+.button, input[type=submit], input[type=button], .submit-row input, a.button { border-radius: 7px; }
+#changelist-filter h2 { background: #0f3d31; }
+#nav-sidebar .current-app .section:link, #nav-sidebar .current-app .section:visited,
+#nav-sidebar .current-app caption a { background: #0d5a43; color: #fff; }
+#nav-sidebar .current-app caption { background: #0d5a43; }
+#result_list tbody th, #result_list td.field-date, #result_list td.nowrap { white-space: nowrap; }

@@ -124,7 +124,7 @@ class Beneficiary(models.Model):
     referred_at = models.DateTimeField(_("referred to the Projects Department"), null=True, blank=True, editable=False)
     next_review_date = models.DateField(_("next re-assessment"), null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("created by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
 
     objects = BeneficiaryQuerySet.as_manager()
@@ -384,7 +384,7 @@ class Aid(models.Model):
     description = models.CharField(_("description"), max_length=255, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
     delivered_on = models.DateField(_("delivered on"), null=True, blank=True)
-    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("requested by"), null=True, editable=False, related_name="+",
                                      on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 

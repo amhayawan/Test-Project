@@ -33,7 +33,7 @@ class ProjectProfile(models.Model):
     budget_version = models.PositiveSmallIntegerField(_("budget version"), default=1, editable=False)
     approved_total = models.DecimalField(_("approved budget (EGP)"), max_digits=14, decimal_places=2, default=0,
                                          editable=False)
-    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    submitted_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("submitted by"), null=True, editable=False, related_name="+",
                                      on_delete=models.SET_NULL)
 
     class Meta:

@@ -84,7 +84,7 @@ class Donation(models.Model):
     sponsorship = models.ForeignKey("Sponsorship", verbose_name=_("sponsorship payment"), null=True, blank=True,
                                     related_name="payments", on_delete=models.PROTECT)
     notes = models.TextField(_("notes"), blank=True)
-    recorded_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, on_delete=models.SET_NULL)
+    recorded_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("recorded by"), null=True, editable=False, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -149,7 +149,7 @@ class JournalEntry(models.Model):
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
     reverses = models.OneToOneField("self", verbose_name=_("reverses entry"), null=True, blank=True, editable=False,
                                     related_name="reversed_by", on_delete=models.PROTECT)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("created by"), null=True, editable=False, related_name="+",
                                    on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     posted_at = models.DateTimeField(null=True, blank=True, editable=False)
@@ -312,7 +312,7 @@ class Payment(models.Model):
     for_id = models.PositiveBigIntegerField(null=True, blank=True, editable=False)
     for_document = GenericForeignKey("for_type", "for_id")
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
-    prepared_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+    prepared_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("prepared by"), null=True, editable=False, related_name="+",
                                     on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
