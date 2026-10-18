@@ -1,6 +1,17 @@
+from django import forms
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
+from . import registry
 from .models import ApprovalAction, ApprovalPolicy, ApprovalRequest, ApprovalStep
+
+
+class PolicyForm(forms.ModelForm):
+    doc_type = forms.ChoiceField(label=_("document type"), choices=registry.choices)
+
+    class Meta:
+        model = ApprovalPolicy
+        fields = "__all__"
 
 
 class StepInline(admin.TabularInline):
@@ -10,8 +21,13 @@ class StepInline(admin.TabularInline):
 
 @admin.register(ApprovalPolicy)
 class ApprovalPolicyAdmin(admin.ModelAdmin):
-    list_display = ("doc_type", "min_amount", "is_active")
+    form = PolicyForm
+    list_display = ("doc_type_label", "min_amount", "is_active")
     inlines = [StepInline]
+
+    @admin.display(description=_("document type"))
+    def doc_type_label(self, obj):
+        return obj.get_doc_type_display()
 
 
 class ActionInline(admin.TabularInline):

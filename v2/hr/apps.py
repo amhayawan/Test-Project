@@ -7,6 +7,10 @@ class HrConfig(AppConfig):
     verbose_name = _("Human resources")
 
     def ready(self):
+        from approvals.registry import register
+        register("hr.incentive", _("Incentive / bonus / penalty"))
+        register("hr.payroll", _("Monthly payroll"))
+        register("hr.leave", _("Leave / permission / mission"))
         from core.audit import track
         from . import models as m
         for model in (m.Grade, m.Position, m.Employee, m.Contract, m.Assignment, m.PayComponent,

@@ -95,10 +95,9 @@ class AidAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Mark as delivered (approved aid only)"))
     def mark_delivered(self, request, queryset):
-        done = queryset.filter(status=Aid.APPROVED)
+        done = queryset.filter(status=Aid.APPROVED).exclude(paid_by="stock")
         for aid in done:
-            aid.status, aid.delivered_on = Aid.DELIVERED, timezone.localdate()
-            aid.save(update_fields=["status", "delivered_on"])
+            aid.mark_delivered(timezone.localdate())
         skipped = queryset.count() - len(done)
         if skipped:
             self.message_user(request, _("%(n)s skipped: not approved.") % {"n": skipped}, messages.WARNING)

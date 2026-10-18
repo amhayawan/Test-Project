@@ -462,13 +462,20 @@ class PayrollRun(models.Model):
         self._set(self.PENDING)
 
     def on_approval_approved(self, request):
+        from core.events import emit
         self._set(self.APPROVED)
+        emit("payroll.approved", self)
 
     def on_approval_rejected(self, request):
         self._set(self.REJECTED)
 
     def on_approval_returned(self, request):
         self._set(self.RETURNED)
+
+    def mark_paid(self, day):
+        from core.events import emit
+        self._set(self.PAID)
+        emit("payroll.paid", self, day=day)
 
 
 class Payslip(models.Model):

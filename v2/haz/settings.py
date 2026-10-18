@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     "cases",
     "dashboards",
     "hr",
+    "finance",
+    "supply",
+    "projects",
 ]
 
 MIDDLEWARE = [

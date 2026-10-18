@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load i18n %}
+{% block content %}
+<h1>{% translate "Financial reports" %}</h1>
+{% if issues %}<div class="flash error"><a href="/backoffice/finance/postingissue/?resolved_at__isempty=1">{% translate "Transactions that could not be booked automatically:" %} {{ issues }}</a></div>{% endif %}
+<div class="stats">
+  <a class="stat" href="{% url 'finance_trial_balance' %}"><b>{% translate "Trial balance" %}</b><span>{% translate "Every account: opening, movements, closing" %}</span></a>
+  <a class="stat" href="{% url 'finance_ledger' %}"><b>{% translate "General ledger" %}</b><span>{% translate "All entries of one account with running balance" %}</span></a>
+  <a class="stat" href="{% url 'finance_income_statement' %}"><b>{% translate "Income and expenditure" %}</b><span>{% translate "By fund: unrestricted, restricted, zakat" %}</span></a>
+  <a class="stat" href="{% url 'finance_balance_sheet' %}"><b>{% translate "Statement of financial position" %}</b><span>{% translate "Assets, liabilities and fund balances" %}</span></a>
+  <a class="stat" href="{% url 'finance_funds' %}"><b>{% translate "Fund balances" %}</b><span>{% translate "What each fund received, spent and still holds" %}</span></a>
+</div>
+{% if pending %}<p><a href="{% url 'approvals_inbox' %}">{% translate "Journal entries waiting for approval:" %} {{ pending }}</a></p>{% endif %}
+{% endblock %}

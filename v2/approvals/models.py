@@ -5,13 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-DOC_TYPES = [
-    ("cases.case", _("Case acceptance")),
-    ("cases.aid", _("Aid disbursement")),
-    ("hr.incentive", _("Incentive / bonus / penalty")),
-    ("hr.payroll", _("Monthly payroll")),
-    ("hr.leave", _("Leave / permission / mission")),
-]
+# Document types are registered by each module (see approvals.registry); no DB choices, so a new
+# module can add its own types without a migration here.
+from .registry import doc_type_label  # noqa: E402
 
 
 class ApprovalPolicy(models.Model):
@@ -20,9 +16,12 @@ class ApprovalPolicy(models.Model):
     The policy with the highest min_amount that is <= the document amount applies.
     """
 
-    doc_type = models.CharField(_("document type"), max_length=40, choices=DOC_TYPES)
+    doc_type = models.CharField(_("document type"), max_length=40)
     min_amount = models.DecimalField(_("from amount"), max_digits=14, decimal_places=2, default=0)
     is_active = models.BooleanField(_("active"), default=True)
+
+    def get_doc_type_display(self):
+        return doc_type_label(self.doc_type)
 
     class Meta:
         verbose_name = _("approval policy")
@@ -62,7 +61,7 @@ class ApprovalRequest(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveBigIntegerField()
     document = GenericForeignKey("content_type", "object_id")
-    doc_type = models.CharField(max_length=40, choices=DOC_TYPES)
+    doc_type = models.CharField(max_length=40)
     title = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     policy = models.ForeignKey(ApprovalPolicy, on_delete=models.PROTECT)
@@ -72,6 +71,9 @@ class ApprovalRequest(models.Model):
     current_step = models.PositiveSmallIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     closed_at = models.DateTimeField(null=True, blank=True)
+
+    def get_doc_type_display(self):
+        return doc_type_label(self.doc_type)
 
     class Meta:
         verbose_name = _("approval request")

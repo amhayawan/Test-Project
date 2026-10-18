@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load i18n humanize_lite %}
+{% block content %}
+<h1>{% translate "Statement of financial position" %}</h1><p class="muted" dir="ltr">{% translate "As of" %} {{ as_of|date:"Y-m-d" }}</p>
+{% include "finance/_filters.html" with no_dims=True %}
+{% if r.check %}<div class="flash error">{% translate "Assets do not equal liabilities plus funds. Check the posting problems." %} ({{ r.check|money }})</div>{% endif %}
+<div class="card table-wrap"><table class="report">
+  {% include "finance/_fund_head.html" %}
+  <tr class="section"><td colspan="5">{% translate "Assets" %}</td></tr>
+  {% include "finance/_statement_rows.html" with groups=r.assets %}
+  <tr class="total"><td>{% translate "Total assets" %}</td>{% include "finance/_fund_cells.html" with cells=r.assets_total %}</tr>
+  <tr class="section"><td colspan="5">{% translate "Liabilities" %}</td></tr>
+  {% include "finance/_statement_rows.html" with groups=r.liabilities %}
+  <tr class="total"><td>{% translate "Total liabilities" %}</td>{% include "finance/_fund_cells.html" with cells=r.liabilities_total %}</tr>
+  <tr class="section"><td colspan="5">{% translate "Net assets (funds)" %}</td></tr>
+  {% include "finance/_statement_rows.html" with groups=r.net_assets %}
+  <tr><td class="indent">{% translate "Accumulated surplus / (deficit)" %}</td>{% include "finance/_fund_cells.html" with cells=r.surplus %}</tr>
+  <tr class="total"><td>{% translate "Total funds" %}</td>{% include "finance/_fund_cells.html" with cells=r.funds_total %}</tr>
+</table></div>
+{% endblock %}
+{% block scripts %}{% include "finance/_scripts.html" %}{% endblock %}

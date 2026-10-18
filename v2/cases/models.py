@@ -212,6 +212,7 @@ class Aid(models.Model):
         "draft", "pending", "approved", "rejected", "returned", "delivered")
     STATUSES = [(DRAFT, _("Draft")), (PENDING, _("Awaiting approval")), (APPROVED, _("Approved")),
                 (REJECTED, _("Rejected")), (RETURNED, _("Returned for changes")), (DELIVERED, _("Delivered"))]
+    PAID_BY = [("cash", _("Cash")), ("bank", _("Bank transfer")), ("stock", _("Goods from the store"))]
     TYPES = [("cash", _("Cash")), ("food", _("Food")), ("medical", _("Medical")), ("education", _("Education")),
              ("clothes", _("Clothes")), ("housing", _("Housing / repairs")), ("other", _("Other"))]
 
@@ -221,6 +222,10 @@ class Aid(models.Model):
     aid_type = models.CharField(_("type"), max_length=20, choices=TYPES, default="cash")
     value = models.DecimalField(_("value (EGP)"), max_digits=12, decimal_places=2)
     fund = models.ForeignKey(Fund, verbose_name=_("paid from fund"), null=True, blank=True, on_delete=models.PROTECT)
+    project = models.ForeignKey("core.Project", verbose_name=_("project"), null=True, blank=True,
+                                on_delete=models.PROTECT, related_name="aids")
+    paid_by = models.CharField(_("given as"), max_length=10, choices=PAID_BY, default="cash",
+                               help_text=_("Goods from the store are issued by the storekeeper against this aid."))
     description = models.CharField(_("description"), max_length=255, blank=True)
     status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
     delivered_on = models.DateField(_("delivered on"), null=True, blank=True)
@@ -254,6 +259,13 @@ class Aid(models.Model):
         if not self.aid_no:
             self.aid_no = next_number("aid", timezone.localdate().year)
         super().save(*args, **kwargs)
+
+    def mark_delivered(self, day, **extra):
+        """Record delivery; finance books the expense (cash/bank now, goods via the stock issue)."""
+        from core.events import emit
+        self.status, self.delivered_on = self.DELIVERED, day
+        self.save(update_fields=["status", "delivered_on"])
+        emit("aid.delivered", self, **extra)
 
     approval_doc_type = "cases.aid"
 

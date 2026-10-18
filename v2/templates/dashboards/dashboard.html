@@ -131,6 +131,8 @@
 </section>
 {% endif %}
 
+{% for template, d in extras %}{% include template %}{% endfor %}
+
 {% if s.administration %}
 <section class="card">
   <h2>{% translate "Administration" %}</h2>

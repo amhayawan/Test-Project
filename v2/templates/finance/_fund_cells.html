@@ -1,0 +1,1 @@
+{% load humanize_lite %}{% for key, label in columns %}{% for k, v in cells.items %}{% if k == key %}<td class="num">{{ v|money }}</td>{% endif %}{% endfor %}{% endfor %}<td class="num"><b>{{ cells.total|money }}</b></td>

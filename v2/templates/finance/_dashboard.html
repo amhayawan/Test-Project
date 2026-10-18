@@ -1,0 +1,9 @@
+{% load i18n %}<section class="card">
+  <h2>{% translate "Finance" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=d.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "Expenses by category" %}</h3>{% include "dashboards/_hbars.html" with rows=d.expenses %}</div>
+    <div><h3>{% translate "Fund balances at end of period" %}</h3>{% include "dashboards/_hbars.html" with rows=d.funds %}
+      <a href="{% url 'finance_index' %}">{% translate "Financial reports" %} ←</a></div>
+  </div>
+</section>

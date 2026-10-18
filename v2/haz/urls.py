@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 
 from accounts import views as account_views
@@ -26,5 +26,8 @@ urlpatterns = [
     path("hr/my-payslips/", hr_views.my_payslips, name="my_payslips"),
     path("hr/my-leave/", hr_views.my_leave, name="my_leave"),
     path("hr/my-leave/<int:pk>/cancel/", hr_views.cancel_leave, name="cancel_leave"),
+    path("finance/", include("finance.urls")),
+    path("supply/", include("supply.urls")),
+    path("projects/", include("projects.urls")),
     path("backoffice/", admin.site.urls),
 ]

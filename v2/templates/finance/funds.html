@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n humanize_lite %}
+{% block content %}
+<h1>{% translate "Fund balances" %}</h1><p class="muted" dir="ltr">{{ f.start|date:"Y-m-d" }} → {{ f.end|date:"Y-m-d" }}</p>
+{% include "finance/_filters.html" with no_dims=True %}
+<div class="card table-wrap"><table class="report">
+  <tr><th>{% translate "Fund" %}</th><th>{% translate "Balance at start" %}</th><th>{% translate "Received" %}</th><th>{% translate "Spent" %}</th><th>{% translate "Transfers / adjustments" %}</th><th>{% translate "Balance at end" %}</th></tr>
+  {% for r in rows %}<tr><td>{% if r.fund %}{{ r.fund.code }} {{ r.fund.name }} <small class="muted">{{ r.fund.get_kind_display }}</small>{% else %}{% translate "Not assigned to a fund" %}{% endif %}</td>
+    <td class="num">{{ r.opening|money }}</td><td class="num">{{ r.income|money }}</td><td class="num">{{ r.expense|money }}</td><td class="num">{{ r.other|money }}</td><td class="num"><b>{{ r.closing|money }}</b></td></tr>{% endfor %}
+</table></div>
+<p class="muted small">{% translate "Restricted and zakat funds may only be spent on their permitted purposes. A negative balance means a fund spent more than it received." %}</p>
+{% endblock %}
+{% block scripts %}{% include "finance/_scripts.html" %}{% endblock %}

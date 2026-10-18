@@ -28,6 +28,25 @@ def dashboard(request):
     if sections["case_management"] or sections["overview"] or sections["human_resources"]:
         options["departments"] = Department.objects.filter(is_active=True)
         options["projects"] = Project.objects.exclude(status=Project.CLOSED)
+    # sections contributed by other modules: <app>/dashboard.py → SECTIONS = [(func(user, f), template)]
+    extras = []
+    from importlib import import_module
+    from django.apps import apps
+    for cfg in apps.get_app_configs():
+        try:
+            module = import_module(f"{cfg.name}.dashboard")
+        except ModuleNotFoundError:
+            continue
+        for func, template in module.SECTIONS:
+            data = func(user, f)
+            if data:
+                extras.append((template, data))
+                for key in data.get("filters", ()):
+                    if key == "funds":
+                        options["funds"] = Fund.objects.filter(is_active=True)
+                    elif key in ("departments", "projects"):
+                        options["departments"] = Department.objects.filter(is_active=True)
+                        options["projects"] = Project.objects.exclude(status=Project.CLOSED)
     return render(request, "dashboards/dashboard.html", {
-        "f": f, "s": sections, "presets": flt.PRESETS, "options": options,
+        "f": f, "s": sections, "presets": flt.PRESETS, "options": options, "extras": extras,
     })

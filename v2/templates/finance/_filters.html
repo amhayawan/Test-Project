@@ -1,0 +1,14 @@
+{% load i18n %}<form method="get" class="filters no-print" id="filters">
+  {% if accounts %}<label>{% translate "Account" %}<select name="account" data-search>{% for a in accounts %}<option value="{{ a.pk }}" {% if account.pk == a.pk %}selected{% endif %}>{{ a }}</option>{% endfor %}</select></label>{% endif %}
+  <label>{% translate "Period" %}<select name="period">{% for key, label in presets %}<option value="{{ key }}" {% if f.preset == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  {% if not as_of %}<label class="custom">{% translate "From" %}<input type="date" name="from" value="{{ f.start|date:'Y-m-d' }}"></label>{% endif %}
+  <label class="custom">{% if as_of %}{% translate "As of" %}{% else %}{% translate "To" %}{% endif %}<input type="date" name="to" value="{{ f.end|date:'Y-m-d' }}"></label>
+  {% if not no_dims %}
+  <label>{% translate "Fund" %}<select name="fund"><option value="">{% translate "All" %}</option>{% for x in funds %}<option value="{{ x.pk }}" {% if f.fund == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>
+  <label>{% translate "Project" %}<select name="project"><option value="">{% translate "All" %}</option>{% for x in projects %}<option value="{{ x.pk }}" {% if f.project == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>
+  <label>{% translate "Cost centre" %}<select name="department"><option value="">{% translate "All" %}</option>{% for x in departments %}<option value="{{ x.pk }}" {% if f.department == x.pk %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></label>
+  {% endif %}
+  <button class="btn primary">{% translate "Apply" %}</button>
+  <button type="button" class="btn" id="print">{% translate "Print" %}</button>
+</form>
+{% for e in f.errors %}<div class="flash error">{{ e }}</div>{% endfor %}

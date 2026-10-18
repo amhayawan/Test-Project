@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n humanize_lite %}
+{% block content %}
+<h1>{% translate "General ledger" %}{% if account %}: {{ account }}{% endif %}</h1><p class="muted" dir="ltr">{{ f.start|date:"Y-m-d" }} → {{ f.end|date:"Y-m-d" }}</p>
+{% include "finance/_filters.html" %}
+{% if data %}{% with opening=data.0 rows=data.1 closing=data.2 %}
+<div class="card table-wrap"><table class="report">
+  <tr><th>{% translate "Date" %}</th><th>{% translate "Entry" %}</th><th>{% translate "Description" %}</th><th>{% translate "Fund" %}</th><th>{% translate "Project" %}</th><th>{% translate "Debit" %}</th><th>{% translate "Credit" %}</th><th>{% translate "Balance" %}</th></tr>
+  <tr class="total"><td colspan="7">{% translate "Opening balance" %}</td><td class="num">{{ opening|money }}</td></tr>
+  {% for r in rows %}<tr><td class="num">{{ r.line.entry.date|date:"Y-m-d" }}</td><td><a href="/backoffice/finance/journalentry/{{ r.line.entry_id }}/change/">{{ r.line.entry.entry_no }}</a></td>
+    <td>{{ r.line.entry.description }}{% if r.line.memo %}<br><small class="muted">{{ r.line.memo }}</small>{% endif %}</td><td>{{ r.line.fund.code|default:"" }}</td><td>{{ r.line.project.code|default:"" }}</td>
+    <td class="num">{% if r.line.debit %}{{ r.line.debit|money }}{% endif %}</td><td class="num">{% if r.line.credit %}{{ r.line.credit|money }}{% endif %}</td><td class="num">{{ r.balance|money }}</td></tr>
+  {% endfor %}
+  <tr class="total"><td colspan="7">{% translate "Closing balance" %}</td><td class="num">{{ closing|money }}</td></tr>
+</table></div>{% endwith %}
+{% else %}<p class="muted">{% translate "Choose an account." %}</p>{% endif %}
+{% endblock %}
+{% block scripts %}{% include "finance/_scripts.html" %}{% endblock %}

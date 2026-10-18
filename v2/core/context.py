@@ -1,24 +1,17 @@
 from django.utils.translation import gettext_lazy as _
 
-# (label, url name or admin path, permission needed) — grows as modules are added
-MODULES = [
-    (_("Cases"), "/backoffice/cases/beneficiary/", "cases.view_beneficiary"),
-    (_("Aid"), "/backoffice/cases/aid/", "cases.view_aid"),
-    (_("Donors"), "/backoffice/crm/donor/", "crm.view_donor"),
-    (_("Donations"), "/backoffice/crm/donation/", "crm.view_donation"),
-    (_("Campaigns"), "/backoffice/crm/campaign/", "crm.view_campaign"),
-    (_("Sponsorships"), "/backoffice/crm/sponsorship/", "crm.view_sponsorship"),
-    (_("Employees"), "/backoffice/hr/employee/", "hr.view_employee"),
-    (_("Organisation structure"), "/hr/structure/", "hr.view_position"),
-    (_("Positions and job descriptions"), "/backoffice/hr/position/", "hr.view_position"),
-    (_("Contracts"), "/backoffice/hr/contract/", "hr.view_contract"),
-    (_("Incentives and penalties"), "/backoffice/hr/incentive/", "hr.view_incentive"),
-    (_("Leave requests"), "/backoffice/hr/leaverequest/", "hr.view_leaverequest"),
-    (_("Leave types and rules"), "/backoffice/hr/leavetype/", "hr.view_leavetype"),
-    (_("Official holidays"), "/backoffice/hr/publicholiday/", "hr.view_publicholiday"),
-    (_("Payroll"), "/backoffice/hr/payrollrun/", "hr.view_salary"),
-    (_("Departments and projects"), "/backoffice/core/", "core.view_department"),
-]
+def modules():
+    """Menu groups collected from each installed app's nav.py, in INSTALLED_APPS order."""
+    from importlib import import_module
+    from django.apps import apps
+    found = []
+    for cfg in apps.get_app_configs():
+        try:
+            nav = import_module(f"{cfg.name}.nav")
+        except ModuleNotFoundError:
+            continue
+        found.append((nav.GROUP, nav.ITEMS))
+    return found
 
 
 def navigation(request):
@@ -27,8 +20,12 @@ def navigation(request):
         return {}
     from approvals.services import inbox
     return {
-        "nav_modules": [(label, url) for label, url, perm in MODULES
+        "nav_modules": [(label, url) for _group, items in modules() for label, url, perm in items
                         if user.has_perm(perm) and (user.is_staff or not url.startswith("/backoffice/"))],
+        "nav_groups": [(group, links, any(request.path.startswith(u) for _l, u in links))
+                       for group, items in modules()
+                       if (links := [(label, url) for label, url, perm in items if user.has_perm(perm)
+                                     and (user.is_staff or not url.startswith("/backoffice/"))])],
         "has_employee_record": hasattr(user, "employee"),
         "approvals_waiting": len(inbox(user)),
     }

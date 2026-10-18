@@ -1,0 +1,4 @@
+{% load humanize_lite %}{% for g in groups %}
+  <tr class="heading"><td colspan="{{ columns|length|add:2 }}">{{ g.heading.name|default:"" }}</td></tr>
+  {% for r in g.rows %}<tr><td class="indent">{{ r.account.code }} {{ r.account.name }}</td>{% for key, label in columns %}{% for k, v in r.cells.items %}{% if k == key %}<td class="num">{{ v|money }}</td>{% endif %}{% endfor %}{% endfor %}<td class="num"><b>{{ r.cells.total|money }}</b></td></tr>{% endfor %}
+{% endfor %}

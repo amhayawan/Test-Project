@@ -59,4 +59,13 @@ class Command(BaseCommand):
             if "deduct_from" in extra:
                 extra["deduct_from"] = LeaveType.objects.get(code=extra["deduct_from"])
             LeaveType.objects.get_or_create(code=code, defaults={"name_ar": ar, "name_en": en, **extra})
+        # each module may add its own defaults in <app>/seed.py: def run(stdout)
+        from importlib import import_module
+        from django.apps import apps
+        for cfg in apps.get_app_configs():
+            try:
+                module = import_module(f"{cfg.name}.seed")
+            except ModuleNotFoundError:
+                continue
+            module.run(self.stdout)
         self.stdout.write(self.style.SUCCESS("Defaults ready."))

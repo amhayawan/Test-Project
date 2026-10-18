@@ -219,8 +219,9 @@ class PayrollRunAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Mark as paid"))
     def mark_paid(self, request, queryset):
+        from django.utils import timezone
         for run in queryset.filter(status=PayrollRun.APPROVED):
-            run._set(PayrollRun.PAID)
+            run.mark_paid(timezone.localdate())
 
 
 @admin.register(Appraisal)

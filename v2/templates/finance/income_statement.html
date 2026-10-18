@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n humanize_lite %}
+{% block content %}
+<h1>{% translate "Income and expenditure" %}</h1><p class="muted" dir="ltr">{{ f.start|date:"Y-m-d" }} → {{ f.end|date:"Y-m-d" }}</p>
+{% include "finance/_filters.html" %}
+<div class="card table-wrap"><table class="report">
+  {% include "finance/_fund_head.html" %}
+  <tr class="section"><td colspan="5">{% translate "Income" %}</td></tr>
+  {% include "finance/_statement_rows.html" with groups=r.income %}
+  <tr class="total"><td>{% translate "Total income" %}</td>{% include "finance/_fund_cells.html" with cells=r.income_total %}</tr>
+  <tr class="section"><td colspan="5">{% translate "Expenses" %}</td></tr>
+  {% include "finance/_statement_rows.html" with groups=r.expense %}
+  <tr class="total"><td>{% translate "Total expenses" %}</td>{% include "finance/_fund_cells.html" with cells=r.expense_total %}</tr>
+  <tr class="grand"><td>{% translate "Surplus / (deficit)" %}</td>{% include "finance/_fund_cells.html" with cells=r.surplus %}</tr>
+</table></div>
+{% endblock %}
+{% block scripts %}{% include "finance/_scripts.html" %}{% endblock %}

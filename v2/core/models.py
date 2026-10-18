@@ -115,6 +115,14 @@ SEQUENCE_FORMATS = {
     "aid": "A-{period}-{n:05d}",
     "employee": "E-{period}-{n:04d}",
     "contract": "HR-{period}-{n:04d}",
+    "journal": "JV-{period}-{n:05d}",
+    "payment": "PV-{period}-{n:05d}",
+    "asset": "FA-{period}-{n:04d}",
+    "purchase_request": "PR-{period}-{n:05d}",
+    "purchase_order": "PO-{period}-{n:05d}",
+    "goods_receipt": "GRN-{period}-{n:05d}",
+    "supplier_invoice": "SI-{period}-{n:05d}",
+    "stock_issue": "SIV-{period}-{n:05d}",
 }
 
 
