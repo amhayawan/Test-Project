@@ -1,3 +1,7 @@
-from django.urls import path  # noqa: F401
+from django.urls import path
 
-urlpatterns = []
+from . import views
+
+urlpatterns = [
+    path("stock/", views.stock, name="supply_stock"),
+]

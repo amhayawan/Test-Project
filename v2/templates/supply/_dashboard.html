@@ -1,0 +1,11 @@
+{% load i18n humanize_lite %}<section class="card">
+  <h2>{% translate "Supply chain" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=d.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "Stock value by category" %}</h3>{% include "dashboards/_hbars.html" with rows=d.by_category %}</div>
+    <div><h3>{% translate "Items at or below reorder level" %}</h3>
+      <table>{% for r in d.low %}<tr><td>{{ r.item }}</td><td>{{ r.warehouse.code }}</td><td class="num">{{ r.qty|plain }} {{ r.item.unit }}</td></tr>
+      {% empty %}<tr><td class="muted">{% translate "Nothing needs reordering." %}</td></tr>{% endfor %}</table>
+      <a href="{% url 'supply_stock' %}">{% translate "Stock on hand" %} ←</a></div>
+  </div>
+</section>
