@@ -10,6 +10,7 @@ DOC_TYPES = [
     ("cases.aid", _("Aid disbursement")),
     ("hr.incentive", _("Incentive / bonus / penalty")),
     ("hr.payroll", _("Monthly payroll")),
+    ("hr.leave", _("Leave / permission / mission")),
 ]
 
 

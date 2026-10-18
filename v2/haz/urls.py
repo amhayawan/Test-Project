@@ -24,5 +24,7 @@ urlpatterns = [
     path("hr/structure/", hr_views.structure, name="hr_structure"),
     path("hr/payslips/<int:pk>/", hr_views.payslip, name="payslip"),
     path("hr/my-payslips/", hr_views.my_payslips, name="my_payslips"),
+    path("hr/my-leave/", hr_views.my_leave, name="my_leave"),
+    path("hr/my-leave/<int:pk>/cancel/", hr_views.cancel_leave, name="cancel_leave"),
     path("backoffice/", admin.site.urls),
 ]

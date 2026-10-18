@@ -12,6 +12,8 @@ Documents that need approval implement (approval_excluded_user_ids() is optional
     approval_amount() -> Decimal | None
     on_approval_submitted(request), on_approval_approved(request),
     on_approval_rejected(request), on_approval_returned(request)
+Optional: approval_step_user_ids(step) -> list | None  (who may act on a step instead of the role),
+          on_approval_cancelled(request).
 """
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
@@ -74,7 +76,30 @@ def can_act(req, user):
     if document is not None and user.pk in getattr(document, "approval_excluded_user_ids", lambda: [])():
         return False      # e.g. whoever prepared a payroll may not approve it
     step = req.step
-    return bool(step and (user.is_superuser or user.groups.filter(pk=step.role_id).exists()))
+    if not step:
+        return False
+    if document is not None and hasattr(document, "approval_step_user_ids"):
+        assigned = document.approval_step_user_ids(step)
+        if assigned is not None:      # e.g. a "line manager" step goes to that employee's own manager
+            return user.pk in assigned
+    return bool(user.is_superuser or user.groups.filter(pk=step.role_id).exists())
+
+
+@transaction.atomic
+def cancel(document, user):
+    """The maker withdraws a request that nobody has finished deciding."""
+    req = open_request(document)
+    if not req:
+        raise ApprovalError(_("There is no pending request to cancel."))
+    if user.pk != req.maker_id:
+        raise ApprovalError(_("Only the person who sent the request can cancel it."))
+    req.status = ApprovalRequest.CANCELLED
+    req.closed_at = timezone.now()
+    req.save(update_fields=["status", "closed_at"])
+    if hasattr(document, "on_approval_cancelled"):
+        document.on_approval_cancelled(req)
+    log_event("cancel", document)
+    return req
 
 
 @transaction.atomic

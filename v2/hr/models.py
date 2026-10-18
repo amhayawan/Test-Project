@@ -526,3 +526,212 @@ class Appraisal(models.Model):
     def clean(self):
         if self.reviewer_id and self.reviewer_id == self.employee_id:
             raise ValidationError({"reviewer": _("Employees cannot appraise themselves.")})
+
+
+# ---------------------------------------------------------------- leave (rules are configuration, verified by a specialist)
+
+class LeaveType(BilingualName):
+    """A kind of leave, permission or mission, with its rules.
+
+    Day counts are NOT shipped. HR enters them from the labour law / internal policy, and a
+    second person holding "verify HR rules" (the labour-law / payroll specialist) signs them off.
+    Any later change removes the sign-off, and unverified types cannot be requested.
+    """
+
+    DAYS, HOURS = "days", "hours"
+    UNITS = [(DAYS, _("Days")), (HOURS, _("Hours"))]
+    ABSENCE, DUTY = "absence", "duty"
+    NATURES = [(ABSENCE, _("Absence (leave or permission)")), (DUTY, _("On duty outside the office (mission)"))]
+    ANY, FEMALE, MALE = "", "f", "m"
+    GENDERS = [(ANY, _("Everyone")), (FEMALE, _("Women only")), (MALE, _("Men only"))]
+
+    code = models.CharField(_("code"), max_length=20, unique=True)
+    unit = models.CharField(_("counted in"), max_length=5, choices=UNITS, default=DAYS)
+    nature = models.CharField(_("nature"), max_length=8, choices=NATURES, default=ABSENCE)
+    calendar_days = models.BooleanField(_("count calendar days (include weekends and holidays)"), default=False)
+    paid_percent = models.DecimalField(_("paid by the association (%)"), max_digits=5, decimal_places=2, default=100,
+                                       validators=[MinValueValidator(0), MaxValueValidator(100)],
+                                       help_text=_("100 = fully paid; 0 = unpaid (deducted in payroll)."))
+    deduct_from = models.ForeignKey("self", verbose_name=_("taken from the balance of"), null=True, blank=True,
+                                    on_delete=models.PROTECT, help_text=_("e.g. casual leave is taken from annual leave."))
+    max_per_request = models.DecimalField(_("maximum per request"), max_digits=6, decimal_places=2, null=True, blank=True)
+    max_per_month = models.DecimalField(_("maximum per month"), max_digits=6, decimal_places=2, null=True, blank=True)
+    max_per_year = models.DecimalField(_("maximum per year"), max_digits=6, decimal_places=2, null=True, blank=True)
+    max_times_in_service = models.PositiveSmallIntegerField(_("maximum times during service"), null=True, blank=True)
+    min_service_months = models.PositiveSmallIntegerField(_("minimum service before use (months)"), default=0)
+    gender = models.CharField(_("for"), max_length=1, choices=GENDERS, blank=True, default=ANY)
+    needs_document = models.BooleanField(_("supporting document required"), default=False,
+                                         help_text=_("e.g. a medical certificate for sick leave."))
+    source = models.CharField(_("source (law article or internal policy)"), max_length=255, blank=True)
+    is_active = models.BooleanField(_("active"), default=True)
+    changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+                                   on_delete=models.SET_NULL)
+    verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("verified by"), null=True, blank=True,
+                                    editable=False, related_name="+", on_delete=models.SET_NULL)
+    verified_at = models.DateTimeField(_("verified at"), null=True, blank=True, editable=False)
+
+    class Meta:
+        verbose_name = _("leave type")
+        verbose_name_plural = _("leave types and rules")
+        ordering = ["code"]
+        permissions = [("verify_hr_rules", _("Can verify leave rules (labour-law specialist)"))]
+
+    @property
+    def is_verified(self):
+        return bool(self.verified_by_id and self.verified_at)
+
+    def balance_type(self):
+        return self.deduct_from or self
+
+    def clean(self):
+        if self.unit == self.HOURS and self.paid_percent is not None and self.paid_percent < 100:
+            raise ValidationError({"paid_percent": _("Hourly permissions must be paid; record unpaid time as a day leave.")})
+        if self.deduct_from_id and self.deduct_from_id == self.pk:
+            raise ValidationError({"deduct_from": _("A leave type cannot take from its own balance.")})
+        if self.deduct_from_id and self.deduct_from.unit != self.unit:
+            raise ValidationError({"deduct_from": _("Both leave types must be counted in the same unit.")})
+
+
+class LeaveEntitlement(models.Model):
+    """Yearly balance for a leave type, by length of service and/or age. The highest matching line applies."""
+
+    leave_type = models.ForeignKey(LeaveType, related_name="entitlements", on_delete=models.CASCADE)
+    min_service_months = models.PositiveSmallIntegerField(_("from service (months)"), default=0)
+    min_age = models.PositiveSmallIntegerField(_("and age at least (years)"), null=True, blank=True)
+    days_per_year = models.DecimalField(_("balance per year"), max_digits=6, decimal_places=2)
+
+    class Meta:
+        verbose_name = _("yearly balance rule")
+        verbose_name_plural = _("yearly balance rules")
+        ordering = ["min_service_months"]
+
+    def __str__(self):
+        return f"{self.leave_type}: {self.days_per_year}"
+
+
+class PublicHoliday(models.Model):
+    """Official holidays (not counted inside leave). Islamic holidays move every year: enter them yearly."""
+
+    date = models.DateField(_("date"), unique=True)
+    name_ar = models.CharField(_("name (Arabic)"), max_length=120)
+    name_en = models.CharField(_("name (English)"), max_length=120, blank=True)
+
+    class Meta:
+        verbose_name = _("official holiday")
+        verbose_name_plural = _("official holidays")
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.date} {self.name_ar}"
+
+
+class LeaveAdjustment(models.Model):
+    """Opening balance, carried-over days or a correction, entered by HR with a reason."""
+
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), related_name="leave_adjustments",
+                                 on_delete=models.PROTECT)
+    leave_type = models.ForeignKey(LeaveType, verbose_name=_("leave type"), on_delete=models.PROTECT)
+    year = models.PositiveSmallIntegerField(_("year"))
+    days = models.DecimalField(_("days (+ add / - remove)"), max_digits=6, decimal_places=2)
+    reason = models.CharField(_("reason"), max_length=255)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+                                   on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("leave balance adjustment")
+        verbose_name_plural = _("leave balance adjustments")
+        ordering = ["-year", "-created_at"]
+
+    def __str__(self):
+        return f"{self.employee} {self.leave_type} {self.year}: {self.days:+}"
+
+
+class LeaveRequestQuerySet(models.QuerySet):
+    def counting(self):
+        """Requests that use up balance or block the dates: waiting or approved."""
+        return self.filter(status__in=(LeaveRequest.PENDING, LeaveRequest.APPROVED))
+
+
+class LeaveRequest(models.Model):
+    DRAFT, PENDING, APPROVED, REJECTED, RETURNED, CANCELLED = (
+        "draft", "pending", "approved", "rejected", "returned", "cancelled")
+    STATUSES = [(DRAFT, _("Draft")), (PENDING, _("Awaiting approval")), (APPROVED, _("Approved")),
+                (REJECTED, _("Rejected")), (RETURNED, _("Returned for changes")), (CANCELLED, _("Cancelled"))]
+
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), related_name="leave_requests",
+                                 on_delete=models.PROTECT)
+    leave_type = models.ForeignKey(LeaveType, verbose_name=_("leave type"), on_delete=models.PROTECT)
+    start_date = models.DateField(_("from"))
+    end_date = models.DateField(_("to"))
+    hours = models.DecimalField(_("hours (permissions only)"), max_digits=4, decimal_places=2, null=True, blank=True)
+    amount = models.DecimalField(_("days / hours counted"), max_digits=6, decimal_places=2, default=0, editable=False)
+    reason = models.CharField(_("reason / notes"), max_length=255, blank=True)
+    status = models.CharField(_("status"), max_length=10, choices=STATUSES, default=DRAFT, editable=False)
+    requested_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, editable=False, related_name="+",
+                                     on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = LeaveRequestQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = _("leave request")
+        verbose_name_plural = _("leave requests")
+        ordering = ["-start_date"]
+
+    def __str__(self):
+        return f"{self.employee.name} — {self.leave_type} {self.start_date}"
+
+    def clean(self):
+        from . import leave
+        leave.validate(self)
+
+    def save(self, *args, **kwargs):
+        from . import leave
+        if self.leave_type_id and self.start_date and self.end_date:
+            self.amount = leave.count(self)
+        super().save(*args, **kwargs)
+
+    approval_doc_type = "hr.leave"
+
+    def approval_title(self):
+        return (f"{self.employee.name} — {self.leave_type} {self.start_date:%Y-%m-%d} → {self.end_date:%Y-%m-%d} "
+                f"({self.amount.normalize():f})")
+
+    def approval_amount(self):
+        return None
+
+    def approval_excluded_user_ids(self):
+        return [self.employee.user_id] if self.employee.user_id else []
+
+    def approval_step_user_ids(self, step):
+        """The 'line manager' step goes to this employee's own manager (HR manager if there is none)."""
+        if step.role.name != "line_manager":
+            return None
+        mgr = self.employee.manager
+        if mgr and mgr.user_id and mgr.user.is_active and mgr.user_id != self.employee.user_id:
+            return [mgr.user_id]
+        from django.contrib.auth import get_user_model
+        return list(get_user_model().objects.filter(is_active=True, groups__name="hr_manager")
+                    .exclude(pk=self.employee.user_id or 0).values_list("pk", flat=True))
+
+    def _set(self, status):
+        LeaveRequest.objects.filter(pk=self.pk).update(status=status)
+        self.status = status
+
+    def on_approval_submitted(self, request):
+        from . import leave
+        leave.validate(self, submitting=True)
+        self._set(self.PENDING)
+
+    def on_approval_approved(self, request):
+        self._set(self.APPROVED)
+
+    def on_approval_rejected(self, request):
+        self._set(self.REJECTED)
+
+    def on_approval_returned(self, request):
+        self._set(self.RETURNED)
+
+    def on_approval_cancelled(self, request):
+        self._set(self.CANCELLED)

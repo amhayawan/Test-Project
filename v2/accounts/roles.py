@@ -35,14 +35,22 @@ ROLES = {
     ]),
     "hr_manager": (_("HR manager"), [
         "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",
-        "core.change_attachment", "hr.*", "-hr.run_payroll", "accounts.view_user",
+        "core.change_attachment", "hr.*", "-hr.run_payroll", "-hr.verify_hr_rules", "accounts.view_user",
     ]),
     "hr_officer": (_("HR officer"), [
         "core.view_department", "core.view_project", "core.view_attachment", "core.add_attachment",
         "hr.view_employee", "hr.view_contract", "hr.view_grade", "hr.view_paycomponent", "hr.view_incentive",
         "hr.add_employee", "hr.change_employee", "hr.add_contract", "hr.change_contract",
         "hr.*_assignment", "hr.*_appraisal", "hr.*_position", "hr.add_incentive", "hr.change_incentive",
+        "hr.view_leavetype", "hr.view_leaveentitlement", "hr.view_publicholiday", "hr.*_leaverequest",
+        "hr.view_leaveadjustment", "hr.add_leaveadjustment",
     ]),
+    "labour_specialist": (_("Labour-law / payroll specialist (signs off rules)"), [
+        "hr.view_leavetype", "hr.view_leaveentitlement", "hr.view_publicholiday", "hr.view_insurancerule",
+        "hr.view_taxbracket", "hr.verify_hr_rules",
+    ]),
+    # Not a group people are put in: an approval step for this role goes to the employee's own manager.
+    "line_manager": (_("Line manager (of the employee)"), []),
     "payroll_officer": (_("Payroll officer"), [
         "core.view_department", "core.view_project", "hr.view_*", "hr.view_salary", "hr.run_payroll",
         "hr.*_payrollrun", "hr.*_employeepayitem", "hr.add_incentive", "hr.change_incentive",

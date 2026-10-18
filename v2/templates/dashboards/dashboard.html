@@ -118,7 +118,10 @@
     <div><h3>{% translate "Contracts ending soon" %}</h3>
       <table>{% for c in s.human_resources.ending %}<tr><td>{{ c.employee.name }}</td><td>{{ c.get_contract_type_display }}</td><td class="num">{{ c.end_date|date:"Y-m-d" }}</td></tr>
       {% empty %}<tr><td class="muted">{% translate "None in the next 60 days." %}</td></tr>{% endfor %}</table>
-      <a href="{% url 'hr_structure' %}">{% translate "Organisation structure" %} ←</a></div>
+      <a href="{% url 'hr_structure' %}">{% translate "Organisation structure" %} ←</a>
+      <h3>{% translate "Away today" %}</h3>
+      <table>{% for r in s.human_resources.away %}<tr><td>{{ r.employee.name }}</td><td>{% if s.human_resources.show_leave_type %}{{ r.leave_type }}{% endif %}</td><td class="num">{% translate "back after" %} {{ r.end_date|date:"Y-m-d" }}</td></tr>
+      {% empty %}<tr><td class="muted">{% translate "Nobody is on leave today." %}</td></tr>{% endfor %}</table></div>
   </div>
   {% if s.human_resources.payroll %}
   <h3>{% translate "Payroll" %}</h3>

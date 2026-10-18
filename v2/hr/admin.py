@@ -11,7 +11,8 @@ from core.admin import AttachmentInline, stamp_attachments
 
 from . import payroll
 from .models import (Appraisal, Assignment, Contract, Employee, EmployeePayItem, Grade, Incentive, InsuranceRule,
-                     PayComponent, PayrollRun, Payslip, Position, TaxBracket)
+                     LeaveAdjustment, LeaveEntitlement, LeaveRequest, LeaveType, PayComponent, PayrollRun, Payslip,
+                     Position, PublicHoliday, TaxBracket)
 
 
 def can_see_pay(request):
@@ -227,3 +228,89 @@ class AppraisalAdmin(admin.ModelAdmin):
     list_display = ("employee", "period_start", "period_end", "reviewer", "rating", "status")
     list_filter = ("status", "rating")
     autocomplete_fields = ("employee", "reviewer")
+
+
+# ---------------------------------------------------------------- leave
+
+class EntitlementInline(admin.TabularInline):
+    model = LeaveEntitlement
+    extra = 0
+
+
+@admin.register(LeaveType)
+class LeaveTypeAdmin(admin.ModelAdmin):
+    list_display = ("code", "name_ar", "unit", "nature", "paid_percent", "deduct_from", "is_active", "verified_mark",
+                    "verified_by", "verified_at")
+    list_filter = ("is_active", "nature")
+    readonly_fields = ("changed_by", "verified_by", "verified_at")
+    inlines = [EntitlementInline]
+    actions = ["mark_verified"]
+
+    @admin.display(description=_("signed off"), boolean=True)
+    def verified_mark(self, obj):
+        return obj.is_verified
+
+    def save_model(self, request, obj, form, change):
+        # any change to a rule removes the specialist's sign-off until it is checked again
+        obj.changed_by = request.user
+        obj.verified_by = None
+        obj.verified_at = None
+        super().save_model(request, obj, form, change)
+
+    @admin.action(description=_("Sign off the selected leave rules (labour-law specialist)"))
+    def mark_verified(self, request, queryset):
+        from django.utils import timezone
+        if not request.user.has_perm("hr.verify_hr_rules"):
+            self.message_user(request, _("Only the labour-law specialist can sign off leave rules."), messages.ERROR)
+            return
+        for lt in queryset:
+            if lt.changed_by_id == request.user.pk:
+                self.message_user(request, _("%(t)s: you made the last change, so someone else must sign it off.")
+                                  % {"t": lt}, messages.ERROR)
+                continue
+            LeaveType.objects.filter(pk=lt.pk).update(verified_by=request.user, verified_at=timezone.now())
+            from core.audit import log_event
+            log_event("rule_verified", lt)
+            self.message_user(request, f"{lt}: ✓", messages.SUCCESS)
+
+
+@admin.register(PublicHoliday)
+class PublicHolidayAdmin(admin.ModelAdmin):
+    list_display = ("date", "name_ar", "name_en")
+    date_hierarchy = "date"
+
+
+@admin.register(LeaveAdjustment)
+class LeaveAdjustmentAdmin(admin.ModelAdmin):
+    list_display = ("employee", "leave_type", "year", "days", "reason", "created_by", "created_at")
+    list_filter = ("year", "leave_type")
+    autocomplete_fields = ("employee",)
+    readonly_fields = ("created_by",)
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(LeaveRequest)
+class LeaveRequestAdmin(admin.ModelAdmin):
+    list_display = ("employee", "leave_type", "start_date", "end_date", "amount", "status", "requested_by")
+    list_filter = ("status", "leave_type", "start_date")
+    search_fields = ("employee__name_ar", "employee__employee_no")
+    autocomplete_fields = ("employee",)
+    readonly_fields = ("amount", "status", "requested_by")
+    inlines = [AttachmentInline]
+    actions = [send_for_approval]
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.requested_by = request.user
+        super().save_model(request, obj, form, change)
+
+    def save_formset(self, request, form, formset, change):
+        stamp_attachments(request, formset)
+
+    def has_change_permission(self, request, obj=None):
+        allowed = super().has_change_permission(request, obj)
+        return allowed and (obj is None or obj.status in (LeaveRequest.DRAFT, LeaveRequest.RETURNED))

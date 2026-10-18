@@ -128,6 +128,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = DATA_DIR / "staticfiles"
 MEDIA_ROOT = DATA_DIR / "media"
 MAX_UPLOAD_MB = 10
+
+# Weekly rest days for counting leave (Python weekday numbers: Monday=0 ... Friday=4, Saturday=5).
+WEEKEND_DAYS = tuple(int(d) for d in os.environ.get("HAZ_WEEKEND_DAYS", "4,5").split(",") if d.strip())
 DATA_UPLOAD_MAX_MEMORY_SIZE = FILE_UPLOAD_MAX_MEMORY_SIZE = (MAX_UPLOAD_MB + 2) * 1024 * 1024
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

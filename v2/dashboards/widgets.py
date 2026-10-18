@@ -292,6 +292,21 @@ def human_resources(user, f):
         "ending": ending.select_related("employee").order_by("end_date")[:8],
         "payroll": None,
     }
+    from hr.leave import on_leave, plain
+    from hr.models import LeaveRequest, LeaveType
+    away = on_leave(timezone.localdate()).filter(employee__in=staff)
+    taken = LeaveRequest.objects.filter(status=LeaveRequest.APPROVED, employee__in=staff,
+                                        leave_type__unit=LeaveType.DAYS, start_date__range=(f.start, f.end))
+    section["kpis"] += [
+        {"label": _("On leave today"), "value": away.count()},
+        {"label": _("Leave requests waiting"), "value": LeaveRequest.objects.filter(
+            status=LeaveRequest.PENDING, employee__in=staff).count()},
+        {"label": _("Leave days taken in period"), "value": plain(taken.aggregate(s=Sum("amount"))["s"])},
+        {"label": _("Leave types not signed off"), "value": LeaveType.objects.filter(is_active=True).filter(
+            Q(verified_at__isnull=True) | Q(verified_by__isnull=True)).count()},
+    ]
+    section["away"] = away.order_by("end_date")[:10]
+    section["show_leave_type"] = user.has_perm("hr.view_leaverequest")
     if user.has_perm("hr.view_salary"):
         runs = [r for r in PayrollRun.objects.filter(status__in=(PayrollRun.APPROVED, PayrollRun.PAID))
                 if f.start <= date(r.year, r.month, 1) <= f.end]

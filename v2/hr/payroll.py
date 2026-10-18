@@ -6,7 +6,8 @@ For each employee with a contract in the month:
   insurable wage = basic + insurable allowances, kept between the year's minimum and maximum
   insurance      = insurable wage × employee rate (deducted) / × employer rate (association cost)
   income tax     = (taxable gross − employee insurance) × 12 → annual brackets − exemption → ÷ 12
-  deductions     = insurance + tax + recurring deductions + approved penalties
+  unpaid leave   = basic ÷ days in month × leave days × unpaid share (approved leave only)
+  deductions     = insurance + tax + recurring deductions + approved penalties + unpaid leave
   net            = gross − deductions
   employer cost  = gross + employer insurance, split across assignments (rest → home department)
 
@@ -20,6 +21,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from core.audit import log_event
+
+from . import leave
 
 from .models import (Employee, EmployeePayItem, Incentive, InsuranceRule, Payslip, PayrollRun, PayComponent,
                      TaxBracket, annual_tax, money, month_bounds, overlaps)
@@ -86,6 +89,18 @@ def payslip_for(run, emp, rule):
             lines.append({"code": inc.kind.upper(), "name": inc.reason, "kind": "earning", "amount": str(value)})
             earnings += value
             taxable += value
+    unpaid_total = Decimal(0)
+    for line in leave.unpaid_lines(emp, start, end, contract.basic_salary, month_days):
+        value = min(Decimal(line["amount"]), basic - unpaid_total)
+        if value <= 0:
+            break
+        line["amount"] = str(value)
+        lines.append(line)
+        unpaid_total += value
+    # unpaid leave reduces what was earned, so it also lowers the insurable and taxable wage
+    extra_deductions += unpaid_total
+    taxable -= unpaid_total
+    insurable_extra -= unpaid_total
     gross = basic + earnings
     insurable = min(max(basic + insurable_extra, rule.min_insurable), rule.max_insurable)
     ins_emp = money(insurable * rule.employee_rate / 100)

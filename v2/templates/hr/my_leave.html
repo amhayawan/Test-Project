@@ -1,0 +1,58 @@
+{% extends "base.html" %}{% load i18n l10n humanize_lite %}
+{% block content %}
+<h1>{% translate "My leave" %}</h1>
+{% if not employee %}
+<div class="card muted">{% translate "Your login is not linked to an employee record." %}</div>
+{% else %}
+
+<section class="card">
+  <h2>{% blocktranslate %}Balances for {{ year }}{% endblocktranslate %}</h2>
+  {% if balances %}
+  <div class="table-wrap"><table>
+    <tr><th>{% translate "Leave type" %}</th><th>{% translate "Yearly balance" %}</th><th>{% translate "Adjustments" %}</th>
+        <th>{% translate "Taken" %}</th><th>{% translate "Waiting for approval" %}</th><th>{% translate "Available" %}</th></tr>
+    {% for b in balances %}
+    <tr><td>{{ b.type }}</td>{% localize off %}<td class="num">{{ b.entitled|plain }}</td><td class="num">{{ b.adjusted|plain }}</td>
+        <td class="num">{{ b.used|plain }}</td><td class="num">{{ b.pending|plain }}</td><td class="num"><b>{{ b.available|plain }}</b></td>{% endlocalize %}</tr>
+    {% endfor %}
+  </table></div>
+  {% else %}
+  <p class="muted">{% translate "Leave balances will appear once HR has entered the leave rules and the labour-law specialist has signed them off." %}</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>{% translate "New request" %}</h2>
+  {% if form.fields.leave_type.queryset.exists %}
+  <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% for e in form.non_field_errors %}<div class="flash error">{{ e }}</div>{% endfor %}
+    <div class="form">
+      {% for f in form %}
+      <label{% if f.name == "reason" %} class="wide"{% endif %}>{{ f.label }}{% if f.field.required %} <span class="req">*</span>{% endif %}
+        {{ f }}{% for e in f.errors %}<span class="err">{{ e }}</span>{% endfor %}
+        {% if f.name == "hours" %}<small class="muted">{% translate "Only for hourly permissions; use the same start and end date." %}</small>{% endif %}
+      </label>
+      {% endfor %}
+    </div>
+    <p><button class="btn primary">{% translate "Send to my manager" %}</button></p>
+  </form>
+  {% else %}
+  <p class="muted">{% translate "No leave type is available yet: the leave rules are waiting for sign-off." %}</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>{% translate "My requests" %}</h2>
+  <div class="table-wrap"><table>
+    <tr><th>{% translate "Leave type" %}</th><th>{% translate "From" %}</th><th>{% translate "To" %}</th>
+        <th>{% translate "Days / hours" %}</th><th>{% translate "Status" %}</th><th></th></tr>
+    {% for r in requests %}
+    <tr><td>{{ r.leave_type }}</td><td class="num">{{ r.start_date|date:"Y-m-d" }}</td><td class="num">{{ r.end_date|date:"Y-m-d" }}</td>
+        <td class="num">{% localize off %}{{ r.amount|plain }}{% endlocalize %}</td>
+        <td><span class="pill {{ r.status }}">{{ r.get_status_display }}</span>{% if r.decision_note %}<br><small class="muted">{{ r.decision_note }}</small>{% endif %}</td>
+        <td>{% if r.status == "pending" %}<form method="post" action="{% url 'cancel_leave' r.pk %}">{% csrf_token %}<button class="btn">{% translate "Cancel" %}</button></form>{% endif %}</td></tr>
+    {% empty %}<tr><td colspan="6" class="muted">{% translate "No requests yet." %}</td></tr>{% endfor %}
+  </table></div>
+</section>
+{% endif %}
+{% endblock %}
