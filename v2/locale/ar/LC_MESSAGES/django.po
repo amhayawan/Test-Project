@@ -20,11 +20,6 @@ msgstr ""
 msgid "% complete"
 msgstr "نسبة الإنجاز %"
 
-#: templates/projects/list.html
-#, python-format
-msgid "% spent"
-msgstr "نسبة الصرف %"
-
 #: supply/admin.py
 #, python-format
 msgid "%(i)s: a payment voucher already covers it."
@@ -2252,6 +2247,10 @@ msgstr "إرسال إلى مديري"
 #: supply/models.py
 msgid "Service / used at once (expense)"
 msgstr "خدمة / تُستهلك فوراً (مصروف)"
+
+#: templates/projects/list.html
+msgid "Share of budget spent"
+msgstr "نسبة الصرف من الموازنة"
 
 #: templates/dashboards/_chart.html
 msgid "Show as table"

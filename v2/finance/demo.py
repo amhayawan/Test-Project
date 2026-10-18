@@ -53,6 +53,8 @@ def run(ctx):
         if d.replace(day=15) > today:
             break
     pay(today - timedelta(days=40), "مكتب المراجعة القانونية", 25000, "5308", "FIN", "أتعاب مراجعة القوائم المالية")
+    # staff loan paid out; the instalments come back through payroll deductions
+    pay(date(today.year, 1, 5), u["storekeeper"].name_ar, 6000, "1110", "SUP", "سلفة عامل تُسدد على 12 قسطاً")
 
     # fixed assets and the last three months of depreciation
     items = [("VEH", "ميكروباص توزيع المساعدات", 650000, 36), ("IT", "أجهزة حاسب للمكتب (5)", 120000, 12),

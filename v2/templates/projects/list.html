@@ -3,7 +3,7 @@
 <h1>{% translate "Projects overview" %}</h1>
 <div class="card table-wrap"><table>
   <tr><th>{% translate "Project" %}</th><th>{% translate "Manager" %}</th><th>{% translate "Status" %}</th><th>{% translate "Approved budget" %}</th>
-      <th>{% translate "Spent" %}</th><th>{% translate "% spent" %}</th><th>{% translate "Progress" %}</th><th>{% translate "Flag" %}</th></tr>
+      <th>{% translate "Spent" %}</th><th>{% translate "Share of budget spent" %}</th><th>{% translate "Progress" %}</th><th>{% translate "Flag" %}</th></tr>
   {% for r in rows %}<tr><td><a href="{% url 'project_detail' r.project.pk %}">{{ r.project.code }} {{ r.project.name }}</a></td>
     <td>{{ r.project.manager.display_name|default:"—" }}</td><td>{{ r.project.get_status_display }}</td>
     <td class="num">{{ r.budget|money }}</td><td class="num">{{ r.actual|money }}</td>
