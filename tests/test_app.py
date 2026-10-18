@@ -37,7 +37,7 @@ def client(app):
 
 
 def csrf(client, path="/login"):
-    html = client.get(path).get_data(as_text=True)
+    html = client.get(path, follow_redirects=True).get_data(as_text=True)
     return re.search(r'name="_csrf" value="([^"]+)"', html).group(1)
 
 

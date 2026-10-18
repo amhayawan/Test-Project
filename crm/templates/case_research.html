@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+{% macro val(name) %}{{ (v.get(name) if v else (case[name] if case[name] is not none else '')) }}{% endmacro %}
+<h1>البحث الاجتماعي — {{ case.name }}</h1>
+<form method="post" class="card form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+  <label>تاريخ الزيارة الميدانية <span class="req">*</span>
+    <input type="date" name="visit_date" value="{{ val('visit_date') }}">
+    {% if errors.visit_date %}<span class="err">{{ errors.visit_date }}</span>{% endif %}</label>
+  <label>مستحق للزكاة؟ <span class="req">*</span>
+    <select name="zakat_eligible"><option value="">— لم يُحدد —</option>
+      {% for k, l in choices.yes_no.items() %}<option value="{{ k }}" {{ 'selected' if val('zakat_eligible') == k }}>{{ l }}</option>{% endfor %}</select>
+    {% if errors.zakat_eligible %}<span class="err">{{ errors.zakat_eligible }}</span>{% endif %}</label>
+  <label>نوع السكن
+    <select name="housing_type"><option value=""></option>
+      {% for k, l in choices.housing_type.items() %}<option value="{{ k }}" {{ 'selected' if val('housing_type') == k }}>{{ l }}</option>{% endfor %}</select></label>
+  <label>حالة السكن
+    <select name="housing_condition"><option value=""></option>
+      {% for k, l in choices.housing_condition.items() %}<option value="{{ k }}" {{ 'selected' if val('housing_condition') == k }}>{{ l }}</option>{% endfor %}</select></label>
+  <label>إجمالي الديون (ج.م)
+    <input name="debts" value="{{ val('debts') }}" inputmode="decimal" dir="ltr">
+    {% if errors.debts %}<span class="err">{{ errors.debts }}</span>{% endif %}</label>
+  <label class="wide">الحالة الصحية للأسرة (أمراض مزمنة، إعاقات، علاج مستمر)
+    <textarea name="health_summary" rows="2">{{ val('health_summary') }}</textarea></label>
+  <label class="wide">نتائج البحث الميداني <span class="req">*</span>
+    <textarea name="research_findings" rows="5" placeholder="ما الذي شاهدته في الزيارة؟ مصادر الدخل الفعلية، حالة المسكن، المستندات التي تم الاطلاع عليها، ما قاله الجيران…">{{ val('research_findings') }}</textarea></label>
+  <label class="wide">التوصية <span class="req">*</span>
+    <textarea name="recommendation" rows="3" placeholder="مثال: قبول الحالة — إعانة شهرية 700 ج.م + كفالة يتيمين + المساهمة في عملية الابن">{{ val('recommendation') }}</textarea></label>
+  <div class="wide actions">
+    <button class="btn primary">حفظ البحث</button>
+    <a class="btn" href="{{ url_for('case_view', case_id=case.id) }}">إلغاء</a>
+    <span class="muted">الحقول المعلّمة بـ * مطلوبة قبل الإرسال للاعتماد، ويمكنك الحفظ قبل اكتمالها.</span>
+  </div>
+</form>
+{% endblock %}

@@ -12,6 +12,9 @@ A Windows desktop CRM for the Hassan Abbas Zaki Association. Arabic, right-to-le
 | Aid disbursed | المساعدات المصروفة | Linked to each beneficiary, with their total aid received |
 | Volunteers | المتطوعون | Skills, availability, status |
 | General-assembly members | أعضاء الجمعية العمومية | Membership no., dues paid-until year, members behind on dues flagged on the dashboard |
+| Case management | إدارة الحالات | Researcher assignment, structured social research (visit, housing, health, debts, findings, recommendation, zakat eligibility), family members, needs with funding progress, document uploads (PDF/JPG/PNG), and a review workflow: under study → recommended → approved / rejected / returned |
+| Sponsorships | الكفالات | A donor's monthly commitment to a case, with payments, arrears, and "not paid this month" alerts |
+| Earmarking | تخصيص التبرعات | A donation can be tied to a case, a need, or a sponsorship. It is only allowed for approved cases, and zakat is blocked for cases not eligible for zakat |
 | Dashboard | لوحة التحكم | Donations this month and year, aid disbursed, monthly donations vs aid, totals by purpose |
 
 Guides (in `docs/`):
@@ -21,7 +24,11 @@ Guides (in `docs/`):
 
 Also included:
 - Search on every list, plus **Export to Excel** (CSV with Arabic encoding preserved).
-- Users with two roles. **Admin** can delete records, manage users, download backups, and view the audit log. **Staff** can add and edit records.
+- Four roles:
+  - **Admin**: everything.
+  - **Case manager**: assigns, approves, and rejects cases, and handles needs, sponsorships, and donations.
+  - **Researcher**: their own assigned cases only, with no access to donors or amounts.
+  - **Staff**: donors, donations, receipts, aid, and sponsorships; can register new cases but not approve them.
 - **Security features:** an audit log (سجل العمليات) of every login and every add, edit, or delete, with old and new values. Five failed logins lock the account for 15 minutes. Sessions time out after 30 minutes. Passwords need at least 8 characters.
 - **Automatic daily backups** (the last 30 are kept), plus a one-click backup download.
 - **Choice of database:** a local file (SQLite) or a cloud PostgreSQL database. → **[docs/DATABASE_AND_SECURITY.md](docs/DATABASE_AND_SECURITY.md)** explains which to choose and how to set up each.
@@ -58,7 +65,7 @@ HAZ-CRM.exe [--server] [--port 8080] [--data D:\HAZ-CRM-Data]
 - `--backup-dir`: where daily backups go. Point it at a USB drive or a synced folder.
 - `--database-url`: use a PostgreSQL database instead of the local file. You can also put this in `settings.ini`.
 - `--migrate-to`: copy all data into another, empty database, then exit.
-- `--load-demo`: fill an **empty** database with fictional sample data for demos and training (logins `admin` / `accountant` / `researcher`, password `demo1234`). Use it with a separate `--data` folder, never on real data.
+- `--load-demo`: fill an **empty** database with fictional sample data for demos and training (logins `admin` / `accountant` / `manager` / `researcher` / `researcher2`, password `demo1234`). Use it with a separate `--data` folder, never on real data.
 
 ## Building the .exe yourself
 

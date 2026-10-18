@@ -17,8 +17,8 @@ from sqlalchemy.exc import IntegrityError
 
 from .entities import CHOICES, ENTITIES
 from . import storage
-from .models import (ADDED_COLUMNS, Aid, AuditLog, Beneficiary, Donation, Donor,
-                     Member, User, Volunteer, db)
+from .models import (ADDED_COLUMNS, ROLES, Aid, AuditLog, Beneficiary, CaseNeed, Donation,
+                     Donor, Member, Sponsorship, User, Volunteer, db)
 
 APP_NAME = "جمعية حسن عباس زكي"
 PHONE_RE = re.compile(r"^\+?[0-9][0-9 \-]{5,19}$")
@@ -26,6 +26,27 @@ PER_PAGE = 25
 MIN_PASSWORD = 8
 MAX_FAILED_LOGINS = 5
 LOCKOUT = timedelta(minutes=15)
+MAX_UPLOAD_MB = 10
+ZAKAT_PURPOSES = ("zakat", "zakat_fitr")
+
+# Sidebar: (group title, [(label, icon, endpoint, kwargs, perm)])
+NAV = [
+    ("إدارة الحالات", [
+        ("لوحة إدارة الحالات", "◈", "cases_dashboard", {}, "cases"),
+        ("الحالات / المستفيدون", "⌂", "entity_list", {"entity_name": "beneficiaries"}, "beneficiaries"),
+        ("الاحتياجات", "◎", "entity_list", {"entity_name": "needs"}, "needs"),
+        ("الكفالات", "⚭", "entity_list", {"entity_name": "sponsorships"}, "sponsorships"),
+    ]),
+    ("التبرعات والصرف", [
+        ("المتبرعون", "♥", "entity_list", {"entity_name": "donors"}, "donors"),
+        ("التبرعات", "₤", "entity_list", {"entity_name": "donations"}, "donations"),
+        ("المساعدات المصروفة", "✚", "entity_list", {"entity_name": "aids"}, "aids"),
+    ]),
+    ("الجمعية", [
+        ("المتطوعون", "☺", "entity_list", {"entity_name": "volunteers"}, "volunteers"),
+        ("أعضاء الجمعية العمومية", "★", "entity_list", {"entity_name": "members"}, "members"),
+    ]),
+]
 
 
 def default_data_dir():
@@ -62,6 +83,8 @@ def create_app(config=None):
         SESSION_COOKIE_SECURE=behind_proxy,  # cookies only over HTTPS when served behind Caddy/nginx
         PERMANENT_SESSION_LIFETIME=timedelta(
             minutes=int(os.environ.get("HAZ_CRM_SESSION_MINUTES", "30"))),
+        UPLOAD_DIR=str(data_dir / "uploads"),
+        MAX_CONTENT_LENGTH=(MAX_UPLOAD_MB + 2) * 1024 * 1024,
     )
     if config:
         app.config.update({k: v for k, v in config.items() if k not in ("DATA_DIR", "DATABASE_URL")})
@@ -93,6 +116,97 @@ def admin_required(view):
             abort(403)
         return view(*args, **kwargs)
     return wrapper
+
+
+def perm_required(perm):
+    def decorator(view):
+        @wraps(view)
+        def wrapper(*args, **kwargs):
+            if not current_user.is_authenticated or not current_user.can(perm):
+                abort(403)
+            return view(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+def check_entity_perm(entity):
+    if not current_user.can(entity.get("perm", "")):
+        abort(403)
+
+
+def case_scope(query):
+    """Researchers only ever see the cases assigned to them."""
+    if not current_user.can("cases.all"):
+        query = query.filter(Beneficiary.researcher_id == current_user.id)
+    return query
+
+
+def can_view_case(case):
+    return current_user.can("cases.all") or (current_user.can("cases") and case.researcher_id == current_user.id)
+
+
+def can_edit_case(case):
+    """Research data, family members, needs and documents."""
+    if current_user.is_case_manager:
+        return True
+    return current_user.is_researcher and case.researcher_id == current_user.id and case.status == "under_study"
+
+
+def blocking_children(obj):
+    """Linked records that make deleting `obj` unsafe."""
+    if isinstance(obj, Donor):
+        return obj.donations.count() + Sponsorship.query.filter_by(donor_id=obj.id).count()
+    if isinstance(obj, Beneficiary):
+        return (obj.aids.count() + len(obj.needs) + len(obj.sponsorships)
+                + Donation.query.filter_by(beneficiary_id=obj.id).count())
+    if isinstance(obj, CaseNeed):
+        return Donation.query.filter_by(need_id=obj.id).count() + Sponsorship.query.filter_by(need_id=obj.id).count()
+    if isinstance(obj, Sponsorship):
+        return Donation.query.filter_by(sponsorship_id=obj.id).count()
+    return 0
+
+
+def validate_entity(entity_name, values, errors, obj=None):
+    """Business rules on top of field validation."""
+    if entity_name == "beneficiaries" and "status" in values:
+        current = obj.status if obj else "under_study"
+        if values["status"] != current and not current_user.can("cases.approve"):
+            errors["status"] = "تغيير حالة الملف من صلاحية مدير إدارة الحالات (من خلال الاعتماد)"
+
+    if entity_name == "donations":
+        need = db.session.get(CaseNeed, values["need_id"]) if values.get("need_id") else None
+        spons = db.session.get(Sponsorship, values["sponsorship_id"]) if values.get("sponsorship_id") else None
+        if spons:
+            if values.get("donor_id") and spons.donor_id != values["donor_id"]:
+                errors["sponsorship_id"] = "هذه الكفالة باسم متبرع آخر"
+            values["beneficiary_id"] = values.get("beneficiary_id") or spons.beneficiary_id
+            if values["beneficiary_id"] != spons.beneficiary_id:
+                errors["sponsorship_id"] = "الكفالة لا تخص الحالة المختارة"
+            if not need and spons.need_id:
+                need = spons.need
+                values["need_id"] = spons.need_id
+        if need:
+            values["beneficiary_id"] = values.get("beneficiary_id") or need.beneficiary_id
+            if values["beneficiary_id"] != need.beneficiary_id:
+                errors["need_id"] = "الاحتياج لا يخص الحالة المختارة"
+        if values.get("beneficiary_id"):
+            case = db.session.get(Beneficiary, values["beneficiary_id"])
+            if case.status != "approved" and (not obj or obj.beneficiary_id != case.id):
+                errors["beneficiary_id"] = "لا يمكن التخصيص إلا لحالة معتمدة"
+            elif values.get("purpose") in ZAKAT_PURPOSES and case.zakat_eligible != "yes":
+                errors["purpose"] = "هذه الحالة غير مستحقة للزكاة حسب البحث الاجتماعي — اختر غرضاً آخر أو حالة أخرى"
+
+    if entity_name in ("sponsorships", "needs") and values.get("beneficiary_id"):
+        case = db.session.get(Beneficiary, values["beneficiary_id"])
+        if entity_name == "sponsorships" and case.status != "approved" and (not obj or obj.beneficiary_id != case.id):
+            errors["beneficiary_id"] = "لا يمكن إنشاء كفالة إلا لحالة معتمدة"
+        if values.get("need_id"):
+            need = db.session.get(CaseNeed, values["need_id"])
+            if need.beneficiary_id != case.id:
+                errors["need_id"] = "الاحتياج لا يخص الحالة المختارة"
+        if entity_name == "sponsorships" and values.get("end_date") and values.get("start_date") \
+                and values["end_date"] < values["start_date"]:
+            errors["end_date"] = "تاريخ النهاية قبل تاريخ البداية"
 
 
 def audit(action, entity=None, record_id=None, summary=None, user=None):
@@ -144,7 +258,7 @@ def register_template_helpers(app):
             session["_csrf"] = secrets.token_hex(16)
         return dict(app_name=APP_NAME, entities=ENTITIES, choices=CHOICES,
                     csrf_token=session["_csrf"], display_value=display_value,
-                    today=date.today().isoformat())
+                    today=date.today().isoformat(), nav=NAV, roles=ROLES)
 
     app.jinja_env.filters["money"] = money
 
@@ -235,18 +349,40 @@ def parse_form(entity, form, obj=None):
     return values, errors
 
 
-def fk_options(entity):
+FK_FILTERS = {
+    # When choosing a case for money, only approved cases make sense.
+    ("donations", "beneficiary_id"): lambda q: q.filter(Beneficiary.status == "approved"),
+    ("sponsorships", "beneficiary_id"): lambda q: q.filter(Beneficiary.status == "approved"),
+    ("donations", "need_id"): lambda q: q.filter(CaseNeed.status == "open"),
+    ("sponsorships", "need_id"): lambda q: q.filter(CaseNeed.status == "open"),
+    ("donations", "sponsorship_id"): lambda q: q.filter(Sponsorship.status == "active"),
+}
+
+
+def fk_options(entity, entity_name=None, obj=None):
     options = {}
     for field in entity["fields"]:
         if field["type"].startswith("fk:"):
             target = ENTITIES[field["type"][3:]]
-            options[field["name"]] = target["model"].query.order_by(target["order"]).all()
+            query = target["model"].query
+            if target["model"] is Beneficiary:
+                query = case_scope(query)
+            flt = FK_FILTERS.get((entity_name, field["name"]))
+            rows = (flt(query) if flt else query).order_by(target["order"]).all()
+            current = getattr(obj, field["name"], None) if obj else None
+            if current and all(r.id != current for r in rows):
+                extra = db.session.get(target["model"], current)
+                if extra:
+                    rows.append(extra)
+            options[field["name"]] = rows
     return options
 
 
 def search_query(entity, q):
     model = entity["model"]
     query = model.query
+    if model is Beneficiary:
+        query = case_scope(query)
     if q:
         cols = [getattr(model, f["name"]) for f in entity["fields"] if f["search"]]
         query = query.filter(or_(*[c.ilike(f"%{q}%") for c in cols]))
@@ -326,6 +462,8 @@ def register_routes(app):
     @app.route("/")
     @login_required
     def dashboard():
+        if not current_user.can("dashboard"):
+            return redirect(url_for("cases_dashboard"))
         year = date.today().year
         month = date.today().month
 
@@ -369,6 +507,7 @@ def register_routes(app):
     @login_required
     def entity_list(entity_name):
         entity = get_entity(entity_name)
+        check_entity_perm(entity)
         q = request.args.get("q", "").strip()
         page = max(request.args.get("page", 1, type=int), 1)
         pagination = search_query(entity, q).paginate(page=page, per_page=PER_PAGE, error_out=False)
@@ -379,6 +518,7 @@ def register_routes(app):
     @login_required
     def entity_export(entity_name):
         entity = get_entity(entity_name)
+        check_entity_perm(entity)
         q = request.args.get("q", "").strip()
         buf = io.StringIO()
         buf.write("﻿")  # BOM so Excel shows Arabic correctly
@@ -393,13 +533,20 @@ def register_routes(app):
     @login_required
     def entity_new(entity_name):
         entity = get_entity(entity_name)
+        check_entity_perm(entity)
         errors, values = {}, dict(request.args.items())
         if request.method == "POST":
             values, errors = parse_form(entity, request.form)
             if not errors:
-                obj = entity["model"](**values)
+                validate_entity(entity_name, values, errors)
+            if not errors:
+                obj = entity["model"](**{k: v for k, v in values.items() if k in entity["model"].__table__.c})
                 if entity_name == "donations":
                     obj.receipt_no = Donation.next_receipt_no(obj.donation_date.year)
+                if entity_name == "beneficiaries" and current_user.is_researcher:
+                    obj.researcher_id = current_user.id
+                if entity_name == "needs":
+                    obj.created_by_id = current_user.id
                 if hasattr(obj, "recorded_by_id"):
                     obj.recorded_by_id = current_user.id
                 db.session.add(obj)
@@ -410,12 +557,15 @@ def register_routes(app):
                     return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj.id))
             values = request.form
         return render_template("form.html", entity=entity, entity_name=entity_name, obj=None,
-                               values=values, errors=errors, fk=fk_options(entity))
+                               values=values, errors=errors, fk=fk_options(entity, entity_name))
 
     @app.route("/<entity_name>/<int:obj_id>")
     @login_required
     def entity_detail(entity_name, obj_id):
         entity = get_entity(entity_name)
+        check_entity_perm(entity)
+        if entity_name == "beneficiaries":
+            return redirect(url_for("case_view", case_id=obj_id))
         obj = db.get_or_404(entity["model"], obj_id)
         related = None
         if entity_name == "donors":
@@ -428,11 +578,16 @@ def register_routes(app):
     @login_required
     def entity_edit(entity_name, obj_id):
         entity = get_entity(entity_name)
+        check_entity_perm(entity)
         obj = db.get_or_404(entity["model"], obj_id)
+        if isinstance(obj, Beneficiary) and not (can_edit_case(obj) or current_user.role == "staff"):
+            abort(403)
         errors = {}
         values = {f["name"]: raw_value(obj, f) for f in entity["fields"]}
         if request.method == "POST":
             new_values, errors = parse_form(entity, request.form, obj)
+            if not errors:
+                validate_entity(entity_name, new_values, errors, obj)
             if not errors:
                 changes = []
                 for k, v in new_values.items():
@@ -448,7 +603,7 @@ def register_routes(app):
                     return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj.id))
             values = request.form
         return render_template("form.html", entity=entity, entity_name=entity_name, obj=obj,
-                               values=values, errors=errors, fk=fk_options(entity))
+                               values=values, errors=errors, fk=fk_options(entity, entity_name, obj))
 
     @app.route("/<entity_name>/<int:obj_id>/delete", methods=["POST"])
     @login_required
@@ -456,9 +611,8 @@ def register_routes(app):
     def entity_delete(entity_name, obj_id):
         entity = get_entity(entity_name)
         obj = db.get_or_404(entity["model"], obj_id)
-        children = getattr(obj, "donations", None) or getattr(obj, "aids", None)
-        if children is not None and children.count():
-            flash("لا يمكن الحذف لوجود سجلات مرتبطة بهذا السجل", "error")
+        if blocking_children(obj):
+            flash("لا يمكن الحذف لوجود سجلات مرتبطة بهذا السجل (تبرعات، مساعدات، احتياجات أو كفالات)", "error")
             return redirect(url_for("entity_detail", entity_name=entity_name, obj_id=obj_id))
         audit("delete", entity_name, obj.id, describe(entity, obj))
         db.session.delete(obj)
@@ -469,6 +623,8 @@ def register_routes(app):
     @app.route("/donations/<int:obj_id>/receipt")
     @login_required
     def donation_receipt(obj_id):
+        if not current_user.can("donations"):
+            abort(403)
         donation = db.get_or_404(Donation, obj_id)
         return render_template("receipt.html", d=donation)
 
@@ -484,7 +640,7 @@ def register_routes(app):
             name = request.form.get("name", "").strip()
             password = request.form.get("password", "")
             role = request.form.get("role", "staff")
-            if not username or not name or len(password) < MIN_PASSWORD or role not in ("admin", "staff"):
+            if not username or not name or len(password) < MIN_PASSWORD or role not in ROLES:
                 error = f"أكمل البيانات (كلمة المرور {MIN_PASSWORD} أحرف على الأقل)"
             elif User.query.filter_by(username=username).first():
                 error = "اسم المستخدم مستخدم بالفعل"
@@ -498,6 +654,23 @@ def register_routes(app):
                 flash("تمت إضافة المستخدم", "success")
                 return redirect(url_for("users"))
         return render_template("users.html", users=User.query.order_by(User.username).all(), error=error)
+
+    @app.route("/users/<int:user_id>/role", methods=["POST"])
+    @login_required
+    @admin_required
+    def user_role(user_id):
+        user = db.get_or_404(User, user_id)
+        role = request.form.get("role", "")
+        if role not in ROLES:
+            abort(400)
+        if user.id == current_user.id and role != "admin":
+            flash("لا يمكنك إلغاء صلاحية المدير عن حسابك", "error")
+        elif role != user.role:
+            audit("user_role", "users", user.id, f"{user.username}: {ROLES.get(user.role)} ← {ROLES[role]}")
+            user.role = role
+            db.session.commit()
+            flash("تم تغيير الصلاحية", "success")
+        return redirect(url_for("users"))
 
     @app.route("/users/<int:user_id>/toggle", methods=["POST"])
     @login_required
@@ -576,7 +749,15 @@ def register_routes(app):
     @app.errorhandler(403)
     def forbidden(_):
         return render_template("message.html", title="غير مسموح",
-                               message="هذه الصفحة متاحة لمدير النظام فقط"), 403
+                               message="ليس لديك صلاحية لفتح هذه الصفحة"), 403
+
+    @app.errorhandler(413)
+    def too_large(_):
+        flash(f"حجم الملف أكبر من {MAX_UPLOAD_MB} ميجابايت", "error")
+        return redirect(request.referrer or url_for("dashboard"))
+
+    from .cases import register_case_routes
+    register_case_routes(app)
 
     @app.errorhandler(404)
     def not_found(_):
@@ -588,7 +769,12 @@ AUDIT_ACTIONS = {
     "setup": "إعداد أول", "login": "دخول", "logout": "خروج", "login_failed": "محاولة دخول فاشلة",
     "locked": "قفل حساب", "create": "إضافة", "update": "تعديل", "delete": "حذف", "backup": "نسخة احتياطية",
     "user_add": "إضافة مستخدم", "user_toggle": "تفعيل/إيقاف مستخدم", "password_reset": "تغيير كلمة مرور مستخدم",
-    "password_change": "تغيير كلمة المرور",
+    "password_change": "تغيير كلمة المرور", "user_role": "تغيير صلاحية مستخدم",
+    "assign": "إسناد حالة لباحث", "research": "تحديث البحث الاجتماعي", "recommend": "إرسال للاعتماد",
+    "approve": "اعتماد حالة", "reject": "رفض حالة", "return": "إعادة للبحث", "suspend": "إيقاف حالة",
+    "family_add": "إضافة فرد أسرة", "family_delete": "حذف فرد أسرة", "need_add": "إضافة احتياج",
+    "need_status": "تغيير حالة احتياج", "doc_upload": "رفع مستند", "doc_delete": "حذف مستند",
+    "doc_download": "تنزيل مستند",
 }
 
 

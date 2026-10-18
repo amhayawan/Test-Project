@@ -7,7 +7,14 @@
   {% for u in users %}
   <tr>
     <td dir="ltr">{{ u.username }}</td><td>{{ u.name }}</td>
-    <td>{{ 'مدير' if u.is_admin else 'موظف' }}</td><td>{{ 'نشط' if u.active else 'موقوف' }}</td>
+    <td>
+      <form method="post" action="{{ url_for('user_role', user_id=u.id) }}" class="inline">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <select name="role" onchange="this.form.submit()">
+          {% for key, label in roles.items() %}<option value="{{ key }}" {{ 'selected' if u.role == key }}>{{ label }}</option>{% endfor %}
+        </select>
+      </form>
+    </td><td>{{ 'نشط' if u.active else 'موقوف' }}</td>
     <td class="actions">
       <form method="post" action="{{ url_for('user_toggle', user_id=u.id) }}">
         <input type="hidden" name="_csrf" value="{{ csrf_token }}">
@@ -23,6 +30,13 @@
   {% endfor %}
 </table>
 </div>
+<div class="card small-print">
+  <b>الصلاحيات:</b>
+  <b>مدير النظام</b> كل شيء ·
+  <b>مدير إدارة الحالات</b> إسناد الحالات للباحثين، اعتمادها أو رفضها، الاحتياجات والكفالات والتبرعات ·
+  <b>باحث اجتماعي</b> حالاته المسندة إليه فقط: البحث، أفراد الأسرة، الاحتياجات، المستندات — بدون أي اطلاع على المتبرعين أو المبالغ ·
+  <b>موظف</b> المتبرعون والتبرعات والإيصالات والمساعدات والكفالات، وتسجيل حالات جديدة (بدون اعتماد).
+</div>
 <h2>إضافة مستخدم</h2>
 <form method="post" class="card form">
   <input type="hidden" name="_csrf" value="{{ csrf_token }}">
@@ -30,7 +44,7 @@
   <label>الاسم<input name="name" required></label>
   <label>اسم المستخدم<input name="username" required dir="ltr"></label>
   <label>كلمة المرور<input name="password" type="password" required minlength="8"></label>
-  <label>الصلاحية<select name="role"><option value="staff">موظف</option><option value="admin">مدير</option></select></label>
+  <label>الصلاحية<select name="role">{% for key, label in roles.items() %}<option value="{{ key }}" {{ 'selected' if key == 'staff' }}>{{ label }}</option>{% endfor %}</select></label>
   <div class="wide actions"><button class="btn primary">إضافة</button></div>
 </form>
 {% endblock %}

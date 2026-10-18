@@ -8,7 +8,8 @@ import random
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 
-from .models import Aid, Beneficiary, Donation, Donor, Member, User, Volunteer, db
+from .models import (Aid, Beneficiary, CaseNeed, Donation, Donor, FamilyMember, Member, Sponsorship, User,
+                     Volunteer, db)
 
 FIRST = ["محمد", "أحمد", "محمود", "مصطفى", "عمرو", "خالد", "طارق", "ياسر", "هشام", "إبراهيم",
          "يوسف", "عمر", "علي", "حسن", "سامح", "شريف", "كريم", "وليد", "عادل", "رامي"]
@@ -65,7 +66,9 @@ def load_demo_data(admin_password="demo1234", seed=7, today=None):
     users = {}
     for username, name, role in [("admin", "مدير النظام", "admin"),
                                  ("accountant", "نهى عبد الله — المحاسبة", "staff"),
-                                 ("researcher", "سامح فهمي — البحث الاجتماعي", "staff")]:
+                                 ("manager", "د. هالة منصور — مديرة إدارة الحالات", "case_manager"),
+                                 ("researcher", "سامح فهمي — باحث اجتماعي", "researcher"),
+                                 ("researcher2", "منى السيد — باحثة اجتماعية", "researcher")]:
         u = User.query.filter_by(username=username).first()
         if not u:
             u = User(username=username, name=name, role=role)
@@ -123,6 +126,64 @@ def load_demo_data(admin_password="demo1234", seed=7, today=None):
     db.session.add_all(beneficiaries)
     db.session.flush()
 
+    # ---- case management: researchers, social research, family, needs
+    researchers = [users["researcher"], users["researcher2"]]
+    relations_kids = ["son", "daughter"]
+    for i, b in enumerate(beneficiaries):
+        if b.status == "under_study" and i % 3 == 0:
+            continue  # left unassigned on purpose, waiting for the manager
+        b.researcher_id = researchers[i % 2].id
+        if b.status == "under_study" and i % 2:
+            continue  # assigned, research not started
+        b.visit_date = (b.created_at + timedelta(days=rng.randint(3, 15))).date()
+        b.zakat_eligible = "no" if b.monthly_income and b.monthly_income >= 2000 else "yes"
+        b.housing_type = rng.choice(["rent_old", "rent_new", "relatives", "owned"])
+        b.housing_condition = rng.choice(["fair", "poor", "poor", "unsafe", "good"])
+        b.health_summary = {"sick": "مرض مزمن يحتاج علاجاً شهرياً", "disabled": "إعاقة حركية لأحد الأبناء",
+                            "elderly": "ضغط وسكر"}.get(b.category)
+        b.debts = Decimal(rng.choice([0, 0, 1500, 3000, 6000]))
+        b.research_findings = rng.choice([
+            "تمت الزيارة الميدانية. المسكن غرفتان بالإيجار، الدخل غير ثابت من أعمال يومية. تم الاطلاع على البطاقات وشهادات الميلاد.",
+            "الأسرة تعيش مع الأقارب بعد وفاة العائل. الأبناء في مراحل التعليم المختلفة. تم التحقق من الدخل من الجيران.",
+            "الحالة الصحية تستهلك معظم الدخل. تم الاطلاع على التقارير الطبية وروشتات العلاج الشهري.",
+        ])
+        b.recommendation = rng.choice(["قبول — إعانة شهرية", "قبول — كفالة الأبناء + كرتونة شهرية",
+                                       "قبول — المساهمة في العلاج", "قبول — إعانة مؤقتة لمدة 6 أشهر"])
+        if b.status in ("approved", "rejected", "suspended"):
+            b.reviewed_by_id = users["manager"].id
+            b.reviewed_at = datetime.combine(b.visit_date + timedelta(days=rng.randint(1, 7)), datetime.min.time())
+            if b.status != "approved":
+                b.review_note = "الدخل يتجاوز حد الاستحقاق" if b.status == "rejected" else "تحسن دخل الأسرة"
+        elif b.status == "under_study" and i % 4 == 2:
+            b.status = "recommended"
+        # family members
+        b.family.append(FamilyMember(name=b.name.replace("أسرة ", ""), relation="head",
+                                     birth_year=rng.randint(1965, 1990), gender="m" if b.category != "widow" else "f",
+                                     education_work=rng.choice(["عامل يومية", "بدون عمل", "ربة منزل", "بائع متجول"]),
+                                     monthly_income=b.monthly_income))
+        for _ in range(max(0, (b.family_size or 1) - 1)):
+            rel = rng.choice(relations_kids)
+            age = rng.randint(2, 20)
+            b.family.append(FamilyMember(name=f"{rng.choice(FEMALE if rel == 'daughter' else FIRST)} {b.name.split()[-1]}",
+                                         relation=rel, birth_year=year - age, gender="f" if rel == "daughter" else "m",
+                                         education_work=("رياض أطفال" if age < 6 else "ابتدائي" if age < 12
+                                                         else "إعدادي / ثانوي" if age < 18 else "جامعة"),
+                                         health="إعاقة حركية" if b.category == "disabled" and rng.random() < .5 else None))
+        b.family_size = len(b.family)
+        # needs
+        if b.category in ("sick", "disabled"):
+            b.needs.append(CaseNeed(need_type="medical", description=rng.choice(
+                ["عملية جراحية عاجلة", "علاج شهري — أدوية مزمنة", "كرسي متحرك وجلسات علاج طبيعي"]),
+                amount_needed=Decimal(rng.choice([8000, 15000, 25000])), priority="urgent", frequency="once"))
+        if b.category in ("orphan", "widow", "poor_family"):
+            b.needs.append(CaseNeed(need_type="monthly", description="إعانة شهرية للأسرة",
+                                    amount_needed=Decimal(rng.choice([600, 800, 1000])), priority="high", frequency="monthly"))
+        if rng.random() < .35:
+            b.needs.append(CaseNeed(need_type=rng.choice(["education", "housing", "debt"]), description=rng.choice(
+                ["مصروفات مدرسية ومستلزمات", "ترميم سقف الغرفة", "سداد إيجار متأخر"]),
+                amount_needed=Decimal(rng.choice([1500, 3000, 5000])), priority=rng.choice(["normal", "high"]), frequency="once"))
+    db.session.flush()
+
     approved = [b for b in beneficiaries if b.status == "approved"]
     for month in range(1, today.month + 1):
         for b in rng.sample(approved, k=min(len(approved), int(9 * MONTH_WEIGHT.get(month, 1.0)))):
@@ -139,6 +200,35 @@ def load_demo_data(admin_password="demo1234", seed=7, today=None):
             db.session.add(Aid(beneficiary=b, aid_type=kind, value=Decimal(value),
                                aid_date=_day(rng, year, month, today), description=desc,
                                recorded_by=users["researcher"]))
+
+    # ---- sponsorships (monthly) and donations earmarked to needs
+    sponsors = [d for d in donors if d.donor_type == "individual"][:10]
+    sponsored = [b for b in approved if b.category in ("orphan", "widow", "poor_family")][:10]
+    for donor, case in zip(sponsors, sponsored):
+        need = next((n for n in case.needs if n.frequency == "monthly"), None)
+        start = date(year, rng.randint(1, 6), 1)
+        sp = Sponsorship(donor=donor, beneficiary=case, need=need, monthly_amount=Decimal(rng.choice([500, 750, 1000])),
+                         start_date=start, status="active")
+        db.session.add(sp)
+        db.session.flush()
+        last_paid = today.month - (1 if rng.random() < .4 else 0)
+        for month in range(start.month, last_paid + 1):
+            seq += 1
+            db.session.add(Donation(receipt_no=f"R-{year}-{seq:05d}", donor=donor, amount=sp.monthly_amount,
+                                    method=rng.choice(["cash", "instapay", "bank"]), purpose="orphans",
+                                    donation_date=_day(rng, year, month, today), beneficiary=case, need=need,
+                                    sponsorship_id=sp.id, recorded_by=users["accountant"]))
+    one_off = [n for b in approved for n in b.needs if n.frequency == "once"]
+    for need in one_off[: len(one_off) * 2 // 3]:
+        share = rng.choice([0.3, 0.5, 1.0, 1.0])
+        donor = rng.choice(donors)
+        seq += 1
+        db.session.add(Donation(receipt_no=f"R-{year}-{seq:05d}", donor=donor,
+                                amount=(need.amount_needed * Decimal(str(share))).quantize(Decimal("1")),
+                                method=rng.choice(["bank", "cash", "instapay"]),
+                                purpose="zakat" if need.beneficiary.zakat_eligible == "yes" else "medical",
+                                donation_date=_day(rng, year, rng.randint(max(1, today.month - 3), today.month), today),
+                                beneficiary=need.beneficiary, need=need, recorded_by=users["accountant"]))
 
     for i in range(14):
         db.session.add(Volunteer(
@@ -157,4 +247,5 @@ def load_demo_data(admin_password="demo1234", seed=7, today=None):
 
     db.session.commit()
     return {"donors": len(donors), "donations": seq, "beneficiaries": len(beneficiaries),
-            "aid": Aid.query.count(), "volunteers": 14, "members": 36}
+            "aid": Aid.query.count(), "needs": CaseNeed.query.count(), "sponsorships": Sponsorship.query.count(),
+            "volunteers": 14, "members": 36}

@@ -13,6 +13,7 @@ Which database is used (first match wins):
 """
 import argparse
 import os
+import shutil
 import socket
 import sys
 import threading
@@ -63,6 +64,9 @@ def start_auto_backups(app, backup_dir):
                 path = storage.auto_backup(app.config["DATABASE_URL"], backup_dir, db.metadata)
                 if path:
                     print(f"Backup written: {path}")
+                uploads = Path(app.config["UPLOAD_DIR"])
+                if uploads.exists():  # case documents live outside the database
+                    shutil.copytree(uploads, Path(backup_dir) / "uploads", dirs_exist_ok=True)
             except Exception as exc:  # never let a failed backup stop the app
                 print(f"WARNING: automatic backup failed: {exc}", file=sys.stderr)
             time.sleep(BACKUP_CHECK_SECONDS)
@@ -107,7 +111,7 @@ def main():
         with app.app_context():
             counts = load_demo_data()
         print("Fictional demo data loaded:", ", ".join(f"{k}: {v}" for k, v in counts.items()))
-        print("Logins (password demo1234): admin, accountant, researcher")
+        print("Logins (password demo1234): admin, accountant, manager, researcher, researcher2")
         return
 
     if args.migrate_to:

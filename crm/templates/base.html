@@ -12,20 +12,32 @@
   <aside class="sidebar">
     <div class="brand">{{ app_name }}<small>نظام إدارة العلاقات</small></div>
     <nav>
+      {% if current_user.can('dashboard') %}
       <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">◧ لوحة التحكم</a>
-      {% for key, e in entities.items() %}
-      <a href="{{ url_for('entity_list', entity_name=key) }}"
-         class="{{ 'active' if request.view_args and request.view_args.get('entity_name') == key }}">{{ e.icon }} {{ e.title }}</a>
+      {% endif %}
+      {% for title, items in nav %}
+        {% set ns = namespace(any=false) %}
+        {% for label, icon, endpoint, kw, perm in items %}{% if current_user.can(perm) %}{% set ns.any = true %}{% endif %}{% endfor %}
+        {% if ns.any %}
+        <div class="nav-group">{{ title }}</div>
+        {% for label, icon, endpoint, kw, perm in items %}
+          {% if current_user.can(perm) %}
+          {% set is_active = request.endpoint == endpoint and (not kw or (request.view_args and request.view_args.get('entity_name') == kw.get('entity_name'))) %}
+          {% set is_active = is_active or (endpoint == 'cases_dashboard' and request.endpoint in ('case_view', 'case_research')) %}
+          <a href="{{ url_for(endpoint, **kw) }}" class="{{ 'active' if is_active }}">{{ icon }} {{ label }}</a>
+          {% endif %}
+        {% endfor %}
+        {% endif %}
       {% endfor %}
       {% if current_user.is_admin %}
-      <hr>
-      <a href="{{ url_for('users') }}" class="{{ 'active' if request.endpoint == 'users' }}">⚙ المستخدمون</a>
+      <div class="nav-group">الإدارة</div>
+      <a href="{{ url_for('users') }}" class="{{ 'active' if request.endpoint == 'users' }}">⚙ المستخدمون والصلاحيات</a>
       <a href="{{ url_for('audit_log') }}" class="{{ 'active' if request.endpoint == 'audit_log' }}">☰ سجل العمليات</a>
       <a href="{{ url_for('backup') }}">⭳ نسخة احتياطية</a>
       {% endif %}
     </nav>
     <div class="me">
-      <div>{{ current_user.name }} <span class="badge">{{ 'مدير' if current_user.is_admin else 'موظف' }}</span></div>
+      <div>{{ current_user.name }} <span class="badge">{{ current_user.role_label }}</span></div>
       <a href="{{ url_for('change_password') }}">تغيير كلمة المرور</a>
       <form method="post" action="{{ url_for('logout') }}">
         <input type="hidden" name="_csrf" value="{{ csrf_token }}">

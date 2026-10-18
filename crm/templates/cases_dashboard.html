@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head">
+  <h1>{{ 'حالاتي' if current_user.is_researcher else 'لوحة إدارة الحالات' }}</h1>
+  <div class="actions">
+    <a class="btn primary" href="{{ url_for('entity_new', entity_name='beneficiaries') }}">+ تسجيل حالة جديدة</a>
+  </div>
+</div>
+
+{% set stage_labels = {'unassigned': 'غير مسندة لباحث', 'researching': 'قيد البحث', 'recommended': 'بانتظار الاعتماد', 'approved': 'معتمدة', 'closed': 'مرفوضة / موقوفة'} %}
+<div class="stages">
+  {% for key, label in stage_labels.items() %}
+  <a href="{{ url_for('cases_dashboard', stage=key) }}" class="{{ 'on' if stage == key }}"><b>{{ counts[key] }}</b><span>{{ label }}</span></a>
+  {% endfor %}
+</div>
+
+<div class="card table-wrap">
+  <table class="list">
+    <tr><th>الحالة</th><th>الفئة</th><th>المنطقة</th><th>الباحث</th><th>المرحلة</th><th>البحث</th><th>تاريخ التسجيل</th>
+      {% if stage == 'unassigned' and current_user.can('cases.assign') %}<th>إسناد</th>{% endif %}</tr>
+    {% for c in rows %}
+    <tr class="row" onclick="if(event.target.closest('form'))return; location.href='{{ url_for('case_view', case_id=c.id) }}'">
+      <td><b>{{ c.name }}</b></td>
+      <td>{{ choices.category.get(c.category, c.category) }}</td>
+      <td>{{ c.area or '' }}</td>
+      <td>{{ c.researcher.name if c.researcher else '—' }}</td>
+      <td><span class="pill {{ c.stage }}">{{ stage_labels.get(c.stage) or choices.beneficiary_status.get(c.status) }}</span></td>
+      <td>{{ '✓ مكتمل' if c.research_complete else 'غير مكتمل' }}</td>
+      <td class="num">{{ c.created_at.strftime('%Y-%m-%d') }}</td>
+      {% if stage == 'unassigned' and current_user.can('cases.assign') %}
+      <td>
+        <form method="post" action="{{ url_for('case_assign', case_id=c.id) }}" class="inline">
+          <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+          <input type="hidden" name="next" value="{{ url_for('cases_dashboard', stage='unassigned') }}">
+          <select name="researcher_id" onchange="this.form.submit()">
+            <option value="">— اختر باحثاً —</option>
+            {% for r in researchers %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
+          </select>
+        </form>
+      </td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="muted">لا توجد حالات في هذه المرحلة</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>احتياجات مفتوحة غير مكتملة التمويل <small class="muted">({{ needs_count }})</small></h2>
+    {% if current_user.can('cases.funding') %}
+    <p class="muted-box">المطلوب: <b>{{ totals.needed|money }}</b> ج.م · تم تمويل: <b>{{ totals.funded|money }}</b> ج.م · المتبقي: <b>{{ (totals.needed - totals.funded)|money }}</b> ج.م</p>
+    {% endif %}
+    <table>
+      {% for n in needs %}
+      <tr class="row" onclick="location.href='{{ url_for('case_view', case_id=n.beneficiary_id) }}#needs'">
+        <td><span class="pill {{ n.priority }}">{{ choices.priority[n.priority] }}</span></td>
+        <td>{{ n.beneficiary.name }}<br><small class="muted">{{ n.description }}</small></td>
+        <td class="num">{{ n.amount_needed|money }}</td>
+        <td style="width:90px"><div class="progress"><div style="width: {{ '%.0f'|format(n.funded_pct) }}%"></div></div></td>
+      </tr>
+      {% else %}<tr><td class="muted">لا توجد احتياجات مفتوحة</td></tr>{% endfor %}
+    </table>
+    {% if current_user.can('needs') %}<a href="{{ url_for('entity_list', entity_name='needs') }}">كل الاحتياجات ←</a>{% endif %}
+  </section>
+
+  {% if current_user.can('cases.funding') %}
+  <section class="card">
+    <h2>كفالات لم تُسدَّد هذا الشهر <small class="muted">({{ late_count }})</small></h2>
+    <table>
+      {% for s in late %}
+      <tr class="row" onclick="location.href='{{ url_for('entity_detail', entity_name='sponsorships', obj_id=s.id) }}'">
+        <td>{{ s.donor.name }}<br><small class="muted">يكفل: {{ s.beneficiary.name }}</small></td>
+        <td class="num">{{ s.monthly_amount|money }}/شهر</td>
+        <td class="num">متأخرات: {{ s.arrears|money }}</td>
+      </tr>
+      {% else %}<tr><td class="muted">كل الكفالات السارية مسددة هذا الشهر</td></tr>{% endfor %}
+    </table>
+    <a href="{{ url_for('entity_list', entity_name='sponsorships') }}">كل الكفالات ←</a>
+  </section>
+  {% else %}
+  <section class="card">
+    <h2>خطوات العمل</h2>
+    <ol class="small-print">
+      <li>افتح الحالة المسندة إليك.</li>
+      <li>سجّل نتيجة الزيارة الميدانية في <b>البحث الاجتماعي</b>.</li>
+      <li>أضف <b>أفراد الأسرة</b> و<b>الاحتياجات</b> و<b>المستندات</b>.</li>
+      <li>اضغط <b>إرسال للاعتماد</b>. لا يمكن التعديل بعدها إلا إذا أعادها المدير إليك.</li>
+    </ol>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

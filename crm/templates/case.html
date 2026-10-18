@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block content %}
+{% set stage_labels = {'unassigned': 'غير مسندة لباحث', 'researching': 'قيد البحث'} %}
+<div class="case-head">
+  <div>
+    <h1>{{ case.name }}</h1>
+    <div class="case-meta">
+      <span class="pill {{ case.stage }}">{{ stage_labels.get(case.stage) or choices.beneficiary_status.get(case.status) }}</span>
+      <span>{{ choices.category.get(case.category) }}</span>
+      {% if case.area %}<span>{{ case.area }}</span>{% endif %}
+      <span>الباحث: <b>{{ case.researcher.name if case.researcher else '—' }}</b></span>
+      <span>مستحق للزكاة: <b>{{ choices.yes_no.get(case.zakat_eligible) or 'لم يُحدد' }}</b></span>
+    </div>
+  </div>
+  <div class="actions">
+    {% if current_user.can('aids') and case.status == 'approved' %}<a class="btn primary" href="{{ url_for('entity_new', entity_name='aids', beneficiary_id=case.id) }}">+ صرف مساعدة</a>{% endif %}
+    {% if can_edit or current_user.role == 'staff' %}<a class="btn" href="{{ url_for('entity_edit', entity_name='beneficiaries', obj_id=case.id) }}">✎ البيانات الأساسية</a>{% endif %}
+    {% if current_user.is_admin %}
+    <form method="post" action="{{ url_for('entity_delete', entity_name='beneficiaries', obj_id=case.id) }}" onsubmit="return confirm('تأكيد الحذف؟')">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn danger">حذف</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{# ---------------- workflow box ---------------- #}
+<div class="card workflow">
+  {% if case.status == 'under_study' %}
+    {% if not case.researcher %}
+      <b>الخطوة التالية:</b> إسناد الحالة لباحث اجتماعي.
+    {% else %}
+      <b>الخطوة التالية:</b> يكمل {{ case.researcher.name }} البحث الاجتماعي ثم يرسل الحالة للاعتماد.
+      {% if not case.research_complete %}<span class="muted">(ينقص: {% if not case.visit_date %}تاريخ الزيارة، {% endif %}{% if not case.research_findings %}نتائج البحث، {% endif %}{% if not case.recommendation %}التوصية، {% endif %}{% if not case.zakat_eligible %}استحقاق الزكاة{% endif %})</span>{% endif %}
+    {% endif %}
+    {% if case.review_note %}<div class="flash error" style="margin:8px 0 0">ملاحظة المراجع عند الإعادة: {{ case.review_note }}</div>{% endif %}
+    {% if current_user.can('cases.assign') %}
+    <form method="post" action="{{ url_for('case_assign', case_id=case.id) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <label>{{ 'إعادة إسناد إلى' if case.researcher else 'إسناد إلى' }}
+        <select name="researcher_id">{% for r in researchers %}<option value="{{ r.id }}" {{ 'selected' if case.researcher_id == r.id }}>{{ r.name }}</option>{% endfor %}</select></label>
+      <button class="btn">إسناد</button>
+    </form>
+    {% endif %}
+    {% if can_edit %}
+    <form method="post" action="{{ url_for('case_submit', case_id=case.id) }}" onsubmit="return confirm('إرسال الحالة للاعتماد؟ لن تستطيع التعديل بعدها.')">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <button class="btn primary" {{ 'disabled' if not case.research_complete }}>إرسال للاعتماد ←</button>
+    </form>
+    {% endif %}
+  {% elif case.status == 'recommended' %}
+    <b>بانتظار الاعتماد.</b> أوصى الباحث {{ case.researcher.name if case.researcher else '' }}: <i>{{ case.recommendation }}</i>
+    {% if current_user.can('cases.approve') %}
+    <form method="post" action="{{ url_for('case_review', case_id=case.id) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <label style="flex:1">ملاحظة القرار (إلزامية عند الرفض أو الإعادة)<input name="review_note"></label>
+      <button class="btn primary" name="decision" value="approve">✓ اعتماد</button>
+      <button class="btn warn" name="decision" value="return">↺ إعادة للباحث</button>
+      <button class="btn danger" name="decision" value="reject">✗ رفض</button>
+    </form>
+    {% endif %}
+  {% elif case.status == 'approved' %}
+    <b>حالة معتمدة</b>{% if case.reviewed_by %} — اعتمدها {{ case.reviewed_by.name }} في {{ case.reviewed_at.strftime('%Y-%m-%d') }}{% endif %}. يمكن الصرف لها وربطها بكافل أو بتبرعات مخصصة.
+    {% if current_user.can('cases.approve') %}
+    <form method="post" action="{{ url_for('case_review', case_id=case.id) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <label style="flex:1">سبب الإيقاف<input name="review_note"></label>
+      <button class="btn danger" name="decision" value="suspend">إيقاف الحالة</button>
+    </form>
+    {% endif %}
+  {% elif case.status == 'suspended' %}
+    <b>حالة موقوفة.</b> {{ case.review_note or '' }}
+    {% if current_user.can('cases.approve') %}
+    <form method="post" action="{{ url_for('case_review', case_id=case.id) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn" name="decision" value="reactivate">إعادة التفعيل</button>
+    </form>
+    {% endif %}
+  {% else %}
+    <b>حالة مرفوضة.</b> {{ case.review_note or '' }}
+  {% endif %}
+</div>
+
+<div class="tabs">
+  <a href="#basic">البيانات الأساسية</a><a href="#research">البحث الاجتماعي</a><a href="#family">أفراد الأسرة ({{ case.family|length }})</a>
+  <a href="#needs">الاحتياجات ({{ case.needs|length }})</a><a href="#docs">المستندات ({{ case.documents|length }})</a>
+  {% if show_funding %}<a href="#funding">التمويل والكفالات</a>{% endif %}<a href="#aid">المساعدات المصروفة</a><a href="#history">سجل الحالة</a>
+</div>
+
+<div class="grid2" style="grid-template-columns: 1fr 1fr;">
+<div class="card" id="basic">
+  <h2>البيانات الأساسية</h2>
+  <dl class="details">
+    <dt>الرقم القومي</dt><dd class="num" style="text-align:right">{{ case.national_id or '—' }}</dd>
+    <dt>الهاتف</dt><dd>{{ case.phone or '—' }}</dd>
+    <dt>العنوان</dt><dd>{{ case.address or '—' }}</dd>
+    <dt>عدد أفراد الأسرة</dt><dd>{{ case.family_size or '—' }}</dd>
+    <dt>الدخل الشهري</dt><dd>{{ case.monthly_income|money or '—' }} ج.م</dd>
+    <dt>ملاحظات التسجيل</dt><dd>{{ case.notes or '—' }}</dd>
+    <dt>تاريخ التسجيل</dt><dd>{{ case.created_at.strftime('%Y-%m-%d') }}</dd>
+  </dl>
+</div>
+
+<div class="card" id="research">
+  <div class="head"><h2 style="margin:0">البحث الاجتماعي</h2>
+    {% if can_edit %}<a class="btn" href="{{ url_for('case_research', case_id=case.id) }}">✎ تحديث البحث</a>{% endif %}</div>
+  <dl class="details">
+    <dt>تاريخ الزيارة</dt><dd>{{ case.visit_date or '—' }}</dd>
+    <dt>السكن</dt><dd>{{ choices.housing_type.get(case.housing_type) or '—' }} · {{ choices.housing_condition.get(case.housing_condition) or '—' }}</dd>
+    <dt>الحالة الصحية</dt><dd>{{ case.health_summary or '—' }}</dd>
+    <dt>الديون</dt><dd>{{ (case.debts|money ~ ' ج.م') if case.debts else '—' }}</dd>
+    <dt>نتائج البحث</dt><dd style="white-space:pre-line">{{ case.research_findings or '—' }}</dd>
+    <dt>التوصية</dt><dd style="white-space:pre-line"><b>{{ case.recommendation or '—' }}</b></dd>
+    <dt>مستحق للزكاة</dt><dd>{{ choices.yes_no.get(case.zakat_eligible) or 'لم يُحدد' }}</dd>
+  </dl>
+</div>
+</div>
+
+{# ---------------- family ---------------- #}
+<div class="card" id="family">
+  <h2>أفراد الأسرة</h2>
+  <table class="list">
+    <tr><th>الاسم</th><th>الصلة</th><th>النوع</th><th>السن</th><th>التعليم / العمل</th><th>الحالة الصحية</th><th>الدخل</th>{% if can_edit %}<th></th>{% endif %}</tr>
+    {% for m in case.family %}
+    <tr><td>{{ m.name }}</td><td>{{ choices.relation.get(m.relation) }}</td><td>{{ choices.gender.get(m.gender) or '' }}</td>
+      <td>{{ m.age if m.age is not none else '' }}</td><td>{{ m.education_work or '' }}</td><td>{{ m.health or '' }}</td>
+      <td class="num">{{ m.monthly_income|money }}</td>
+      {% if can_edit %}<td><form method="post" action="{{ url_for('case_family_delete', case_id=case.id, member_id=m.id) }}" class="inline" onsubmit="return confirm('حذف؟')">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn link-danger">حذف</button></form></td>{% endif %}
+    </tr>
+    {% else %}<tr><td colspan="8" class="muted">لم يُسجَّل أفراد الأسرة بعد</td></tr>{% endfor %}
+  </table>
+  {% if can_edit %}
+  <form method="post" action="{{ url_for('case_family_add', case_id=case.id) }}" class="inline-form">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <label class="wide">الاسم<input name="name" required></label>
+    <label>الصلة<select name="relation">{% for k, l in choices.relation.items() %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></label>
+    <label>النوع<select name="gender"><option value=""></option>{% for k, l in choices.gender.items() %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></label>
+    <label>سنة الميلاد<input name="birth_year" inputmode="numeric" dir="ltr"></label>
+    <label>التعليم / العمل<input name="education_work"></label>
+    <label>الحالة الصحية<input name="health"></label>
+    <label>الدخل الشهري<input name="monthly_income" inputmode="decimal" dir="ltr"></label>
+    <div><button class="btn primary">+ إضافة فرد</button></div>
+  </form>
+  {% endif %}
+</div>
+
+{# ---------------- needs ---------------- #}
+<div class="card" id="needs">
+  <h2>الاحتياجات</h2>
+  <table class="list">
+    <tr><th>الأولوية</th><th>النوع</th><th>الوصف</th><th>المبلغ المطلوب</th><th>التكرار</th><th>التمويل</th><th>الحالة</th>{% if current_user.can('cases.approve') %}<th></th>{% endif %}</tr>
+    {% for n in case.needs %}
+    <tr>
+      <td><span class="pill {{ n.priority }}">{{ choices.priority[n.priority] }}</span></td>
+      <td>{{ choices.need_type.get(n.need_type) }}</td><td>{{ n.description }}</td>
+      <td class="num">{{ n.amount_needed|money }}</td><td>{{ choices.frequency.get(n.frequency) }}</td>
+      <td style="min-width:120px"><div class="progress"><div style="width: {{ '%.0f'|format(n.funded_pct) }}%"></div></div>
+        {% if show_funding %}<small class="muted">{{ n.funded|money }}{% if n.frequency == 'monthly' %} هذا الشهر{% endif %}</small>{% endif %}</td>
+      <td><span class="pill {{ n.funding_state }}">{{ choices.funding_state[n.funding_state] }}</span></td>
+      {% if current_user.can('cases.approve') %}<td><form method="post" action="{{ url_for('case_need_status', case_id=case.id, need_id=n.id) }}" class="inline">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn small">{{ 'إغلاق' if n.status == 'open' else 'إعادة فتح' }}</button></form></td>{% endif %}
+    </tr>
+    {% else %}<tr><td colspan="8" class="muted">لم تُسجَّل احتياجات بعد</td></tr>{% endfor %}
+  </table>
+  {% if can_edit %}
+  <form method="post" action="{{ url_for('case_need_add', case_id=case.id) }}" class="inline-form">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <label>النوع<select name="need_type">{% for k, l in choices.need_type.items() %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></label>
+    <label class="wide">الوصف<input name="description" required placeholder="مثال: عملية قلب مفتوح للابن"></label>
+    <label>المبلغ المطلوب (ج.م)<input name="amount_needed" required inputmode="decimal" dir="ltr"></label>
+    <label>التكرار<select name="frequency">{% for k, l in choices.frequency.items() %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></label>
+    <label>الأولوية<select name="priority">{% for k, l in choices.priority.items() %}<option value="{{ k }}" {{ 'selected' if k == 'normal' }}>{{ l }}</option>{% endfor %}</select></label>
+    <div><button class="btn primary">+ إضافة احتياج</button></div>
+  </form>
+  {% endif %}
+</div>
+
+{# ---------------- documents ---------------- #}
+<div class="card" id="docs">
+  <h2>المستندات</h2>
+  <table class="list">
+    <tr><th>المستند</th><th>الملف</th><th>الحجم</th><th>رفعه</th><th>التاريخ</th>{% if current_user.can('cases.approve') %}<th></th>{% endif %}</tr>
+    {% for d in case.documents %}
+    <tr><td><a href="{{ url_for('case_doc_download', case_id=case.id, doc_id=d.id) }}">{{ d.title }}</a></td>
+      <td dir="ltr" style="text-align:right">{{ d.original_name }}</td><td class="num">{{ '%.0f'|format((d.size or 0) / 1024) }} KB</td>
+      <td>{{ d.uploaded_by.name if d.uploaded_by else '' }}</td><td class="num">{{ d.created_at.strftime('%Y-%m-%d') }}</td>
+      {% if current_user.can('cases.approve') %}<td><form method="post" action="{{ url_for('case_doc_delete', case_id=case.id, doc_id=d.id) }}" class="inline" onsubmit="return confirm('حذف المستند نهائياً؟')">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn link-danger">حذف</button></form></td>{% endif %}
+    </tr>
+    {% else %}<tr><td colspan="6" class="muted">لا توجد مستندات (صورة البطاقة، استمارة البحث، تقارير طبية…)</td></tr>{% endfor %}
+  </table>
+  {% if can_edit %}
+  <form method="post" action="{{ url_for('case_doc_upload', case_id=case.id) }}" enctype="multipart/form-data" class="inline-form">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <label class="wide">اسم المستند<input name="title" placeholder="مثال: صورة البطاقة — وجه وظهر"></label>
+    <label class="wide">الملف (PDF أو صورة، حتى 10 ميجابايت)<input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required></label>
+    <div><button class="btn primary">⇪ رفع</button></div>
+  </form>
+  {% endif %}
+</div>
+
+{# ---------------- funding (not shown to researchers) ---------------- #}
+{% if show_funding %}
+<div class="card" id="funding">
+  <div class="head"><h2 style="margin:0">التمويل والكفالات</h2>
+    {% if case.status == 'approved' %}<div class="actions">
+      {% if current_user.can('sponsorships') %}<a class="btn" href="{{ url_for('entity_new', entity_name='sponsorships', beneficiary_id=case.id) }}">+ ربط بكافل</a>{% endif %}
+      {% if current_user.can('donations') %}<a class="btn" href="{{ url_for('entity_new', entity_name='donations', beneficiary_id=case.id) }}">+ تبرع مخصص للحالة</a>{% endif %}
+    </div>{% endif %}</div>
+  <h3>الكفالات</h3>
+  <table class="list">
+    <tr><th>الكافل</th><th>المبلغ الشهري</th><th>من</th><th>إلى</th><th>المدفوع</th><th>المتأخرات</th><th>الحالة</th></tr>
+    {% for s in case.sponsorships %}
+    <tr class="row" onclick="location.href='{{ url_for('entity_detail', entity_name='sponsorships', obj_id=s.id) }}'">
+      <td>{{ s.donor.name }}</td><td class="num">{{ s.monthly_amount|money }}</td><td class="num">{{ s.start_date }}</td><td class="num">{{ s.end_date or '—' }}</td>
+      <td class="num">{{ s.paid_total|money }}</td><td class="num">{{ s.arrears|money }}</td>
+      <td><span class="pill {{ s.status }}">{{ choices.sponsorship_status[s.status] }}</span></td></tr>
+    {% else %}<tr><td colspan="7" class="muted">لا يوجد كافل لهذه الحالة</td></tr>{% endfor %}
+  </table>
+  <h3>تبرعات مخصصة لهذه الحالة</h3>
+  <table class="list">
+    <tr><th>الإيصال</th><th>المتبرع</th><th>المبلغ</th><th>الغرض</th><th>الاحتياج</th><th>التاريخ</th></tr>
+    {% for d in donations %}
+    <tr class="row" onclick="location.href='{{ url_for('entity_detail', entity_name='donations', obj_id=d.id) }}'">
+      <td>{{ d.receipt_no }}</td><td>{{ d.donor.name }}</td><td class="num">{{ d.amount|money }}</td>
+      <td>{{ choices.purpose.get(d.purpose) }}</td><td>{{ d.need.description if d.need else '—' }}</td><td class="num">{{ d.donation_date }}</td></tr>
+    {% else %}<tr><td colspan="6" class="muted">لا توجد تبرعات مخصصة</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+
+<div class="card" id="aid">
+  <h2>المساعدات المصروفة <small class="muted">— الإجمالي: {{ case.total_aid|money }} ج.م</small></h2>
+  <table class="list">
+    <tr><th>النوع</th><th>القيمة</th><th>التاريخ</th><th>الوصف</th></tr>
+    {% for a in aids %}<tr><td>{{ choices.aid_type.get(a.aid_type) }}</td><td class="num">{{ a.value|money }}</td><td class="num">{{ a.aid_date }}</td><td>{{ a.description or '' }}</td></tr>
+    {% else %}<tr><td colspan="4" class="muted">لم يُصرف شيء بعد</td></tr>{% endfor %}
+  </table>
+</div>
+
+<div class="card" id="history">
+  <h2>سجل الحالة</h2>
+  <table class="list">
+    {% for h in history %}<tr><td class="num">{{ h.at.strftime('%Y-%m-%d %H:%M') }}</td><td>{{ h.username or '' }}</td><td>{{ actions.get(h.action, h.action) }}</td><td class="summary">{{ h.summary or '' }}</td></tr>
+    {% else %}<tr><td class="muted">لا يوجد</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}
