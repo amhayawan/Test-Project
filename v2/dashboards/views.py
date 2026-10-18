@@ -25,7 +25,7 @@ def dashboard(request):
         options["campaigns"] = Campaign.objects.order_by("-start_date")
     if sections["fundraising"] or sections["aid"]:
         options["funds"] = Fund.objects.filter(is_active=True)
-    if sections["case_management"] or sections["overview"]:
+    if sections["case_management"] or sections["overview"] or sections["human_resources"]:
         options["departments"] = Department.objects.filter(is_active=True)
         options["projects"] = Project.objects.exclude(status=Project.CLOSED)
     return render(request, "dashboards/dashboard.html", {

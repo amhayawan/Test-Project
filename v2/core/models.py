@@ -113,6 +113,8 @@ SEQUENCE_FORMATS = {
     "receipt": "R-{period}-{n:05d}",
     "case": "C-{period}-{n:05d}",
     "aid": "A-{period}-{n:05d}",
+    "employee": "E-{period}-{n:04d}",
+    "contract": "HR-{period}-{n:04d}",
 }
 
 

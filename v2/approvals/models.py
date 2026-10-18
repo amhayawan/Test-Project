@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 DOC_TYPES = [
     ("cases.case", _("Case acceptance")),
     ("cases.aid", _("Aid disbursement")),
+    ("hr.incentive", _("Incentive / bonus / penalty")),
+    ("hr.payroll", _("Monthly payroll")),
 ]
 
 

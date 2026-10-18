@@ -15,6 +15,9 @@ CONFLICTS = [
     ("admin", "case_manager", _("Controls user permissions and also approves cases and aid")),
     ("admin", "fundraising", _("Controls user permissions and also records donations")),
     ("admin", "executive", _("Controls user permissions and also gives final approvals")),
+    ("payroll_officer", "hr_manager", _("Prepares payroll and also approves it")),
+    ("payroll_officer", "executive", _("Prepares payroll and also gives final approval")),
+    ("admin", "payroll_officer", _("Controls user permissions and also prepares payroll")),
 ]
 
 

@@ -18,7 +18,11 @@ The new foundation for the association's integrated system: Django 5.2 LTS + Pos
 | Cases: research fields, family members, needs, case approval and **aid approval** through the engine (aid ≥ EGP 10,000 needs case manager **and** executive director) | ✅ models + back office |
 | **Import from v1**: one command copies all v1 data, keeps passwords, receipt numbers, documents, history, and pending approvals | ✅ |
 | Day-to-day screens (like v1's case workspace and forms) | ⏳ next step. For now, use the back office at `/backoffice/` |
-| Finance, HR / payroll, supply chain, projects modules | ⏳ later phases |
+| **HR**: employee file (personal, bank, insurance no., emergency contact), positions with job descriptions and approved headcount, grades with salary ranges, organisation structure page, contracts (overlap and grade-range checks), hiring documents as attachments, assignments to departments / projects (≤ 100%), appraisals | ✅ models + back office |
+| **Payroll**: pay components, recurring pay items, incentives / bonuses / penalties (approval: HR manager; ≥ EGP 5,000 also executive), monthly payroll run with pro-rating, social insurance, income tax, cost split by department / project, bank transfer file, payslips (employees see only their own, once approved). Preparer can never approve; run needs HR manager **and** executive | ✅ — **refuses to run until a payroll specialist enters that year's insurance rule and tax brackets. No rates are shipped** |
+| Salaries hidden from anyone without the "see salaries" permission (HR officer, by default) | ✅ |
+| Leave and attendance | ⏳ not built yet |
+| Finance, supply chain, projects modules | ⏳ later phases |
 | Field tablet app | ⏳ phase 3 |
 | Cloud deployment (Docker, Egypt-hosted) and Windows desktop client for v2 | ⏳ with the day-to-day screens |
 

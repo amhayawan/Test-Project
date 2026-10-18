@@ -109,6 +109,25 @@
 </section>
 {% endif %}
 
+{% if s.human_resources %}
+<section class="card">
+  <h2>{% translate "Human resources" %}</h2>
+  {% include "dashboards/_kpis.html" with kpis=s.human_resources.kpis %}
+  <div class="grid2">
+    <div><h3>{% translate "Employees by department" %}</h3>{% include "dashboards/_hbars.html" with rows=s.human_resources.by_department count=True %}</div>
+    <div><h3>{% translate "Contracts ending soon" %}</h3>
+      <table>{% for c in s.human_resources.ending %}<tr><td>{{ c.employee.name }}</td><td>{{ c.get_contract_type_display }}</td><td class="num">{{ c.end_date|date:"Y-m-d" }}</td></tr>
+      {% empty %}<tr><td class="muted">{% translate "None in the next 60 days." %}</td></tr>{% endfor %}</table>
+      <a href="{% url 'hr_structure' %}">{% translate "Organisation structure" %} ←</a></div>
+  </div>
+  {% if s.human_resources.payroll %}
+  <h3>{% translate "Payroll" %}</h3>
+  {% include "dashboards/_kpis.html" with kpis=s.human_resources.payroll.kpis %}
+  <h3>{% translate "Payroll cost by department / cost centre" %}</h3>{% include "dashboards/_hbars.html" with rows=s.human_resources.payroll.by_department %}
+  {% endif %}
+</section>
+{% endif %}
+
 {% if s.administration %}
 <section class="card">
   <h2>{% translate "Administration" %}</h2>

@@ -34,6 +34,10 @@ msgstr "تم تخطي %(n)s: غير معتمدة."
 msgid "A"
 msgstr "إ"
 
+#: hr/models.py
+msgid "A fixed-term contract needs an end date."
+msgstr "العقد محدد المدة يحتاج تاريخ نهاية."
+
 #: dashboards/widgets.py
 msgid "Accounts locked now"
 msgstr "حسابات مقفلة حالياً"
@@ -94,6 +98,10 @@ msgstr "المبلغ"
 msgid "Amount still needed:"
 msgstr "المبلغ المتبقي المطلوب:"
 
+#: hr/models.py
+msgid "An employee cannot manage themselves."
+msgstr "لا يمكن أن يكون الموظف مديراً لنفسه."
+
 #: templates/dashboards/dashboard.html
 msgid "Apply"
 msgstr "تطبيق"
@@ -130,6 +138,10 @@ msgstr "العربية"
 msgid "Arrears"
 msgstr "المتأخرات"
 
+#: hr/models.py
+msgid "Assignments for the same dates would exceed 100%."
+msgstr "التكليفات في نفس الفترة ستتجاوز 100%."
+
 #: accounts/admin.py
 msgid "Association"
 msgstr "الجمعية"
@@ -150,13 +162,25 @@ msgstr "بانتظار الاعتماد"
 msgid "Back office"
 msgstr "الإدارة الخلفية"
 
+#: templates/hr/payslip.html
+msgid "Bank"
+msgstr "البنك"
+
 #: crm/models.py
 msgid "Bank transfer"
 msgstr "تحويل بنكي"
 
+#: templates/hr/payslip.html
+msgid "Basic salary"
+msgstr "الراتب الأساسي"
+
 #: dashboards/widgets.py
 msgid "Being researched"
 msgstr "قيد البحث"
+
+#: hr/models.py
+msgid "Bonus"
+msgstr "مكافأة"
 
 #: templates/dashboards/dashboard.html
 msgid "By payment method"
@@ -169,6 +193,14 @@ msgstr "حسب الغرض"
 #: templates/accounts/access.html
 msgid "C"
 msgstr "ت"
+
+#: hr/admin.py
+msgid "Calculate payroll"
+msgstr "احتساب الرواتب"
+
+#: hr/models.py
+msgid "Calculate the payroll before sending it for approval."
+msgstr "احسب الرواتب قبل إرسالها للاعتماد."
 
 #: templates/dashboards/dashboard.html
 msgid "Campaign"
@@ -186,6 +218,10 @@ msgstr "يمكنه اعتماد الحالات أو رفضها أو إعادته
 msgid "Can assign cases to researchers"
 msgstr "يمكنه إسناد الحالات للباحثين"
 
+#: hr/models.py
+msgid "Can prepare payroll runs"
+msgstr "يمكنه إعداد مسيرات الرواتب"
+
 #: cases/models.py
 msgid "Can see all cases (not only assigned ones)"
 msgstr "يرى كل الحالات (وليس المسندة إليه فقط)"
@@ -193,6 +229,10 @@ msgstr "يرى كل الحالات (وليس المسندة إليه فقط)"
 #: cases/models.py
 msgid "Can see donors and amounts linked to cases"
 msgstr "يرى المتبرعين والمبالغ المرتبطة بالحالات"
+
+#: hr/models.py
+msgid "Can see salaries, pay items and payslips"
+msgstr "يرى الرواتب وبنود الأجر وقسائم الراتب"
 
 #: cases/models.py
 msgid "Can submit a case for approval"
@@ -287,6 +327,22 @@ msgstr "أكمل البحث أولاً: %(m)s"
 msgid "Conflicts found:"
 msgstr "تعارضات موجودة:"
 
+#: hr/models.py
+msgid "Consultant"
+msgstr "استشاري"
+
+#: core/context.py
+msgid "Contracts"
+msgstr "العقود"
+
+#: templates/dashboards/dashboard.html
+msgid "Contracts ending soon"
+msgstr "عقود تنتهي قريباً"
+
+#: dashboards/widgets.py
+msgid "Contracts ending within 60 days"
+msgstr "عقود تنتهي خلال 60 يوماً"
+
 #: accounts/sod.py
 msgid "Controls user permissions and also approves cases and aid"
 msgstr "يتحكم في صلاحيات المستخدمين ويعتمد الحالات والمساعدات أيضاً"
@@ -294,6 +350,10 @@ msgstr "يتحكم في صلاحيات المستخدمين ويعتمد الح�
 #: accounts/sod.py
 msgid "Controls user permissions and also gives final approvals"
 msgstr "يتحكم في صلاحيات المستخدمين ويعطي الاعتماد النهائي أيضاً"
+
+#: accounts/sod.py
+msgid "Controls user permissions and also prepares payroll"
+msgstr "يتحكم في الصلاحيات ويعد الرواتب أيضاً"
 
 #: accounts/sod.py
 msgid "Controls user permissions and also records donations"
@@ -323,6 +383,10 @@ msgstr "التاريخ"
 msgid "Daughter"
 msgstr "ابنة"
 
+#: templates/hr/payslip.html
+msgid "Days paid"
+msgstr "الأيام المدفوعة"
+
 #: cases/models.py
 msgid "Debt repayment"
 msgstr "سداد ديون"
@@ -334,6 +398,14 @@ msgstr "القرارات"
 #: templates/dashboards/dashboard.html
 msgid "Decisions I took in period"
 msgstr "قراراتي في الفترة"
+
+#: hr/models.py
+msgid "Deduction"
+msgstr "استقطاع"
+
+#: templates/hr/payslip.html
+msgid "Deductions"
+msgstr "الاستقطاعات"
 
 #: cases/models.py
 msgid "Delivered"
@@ -351,9 +423,21 @@ msgstr "الإدارة"
 msgid "Departments and projects"
 msgstr "الإدارات والمشروعات"
 
+#: hr/models.py
+msgid "Discussed with employee"
+msgstr "نوقش مع الموظف"
+
+#: hr/models.py
+msgid "Divorced"
+msgstr "مطلق"
+
 #: templates/approvals/inbox.html
 msgid "Document"
 msgstr "المستند"
+
+#: dashboards/widgets.py
+msgid "Documents expiring within 60 days"
+msgstr "مستندات تنتهي خلال 60 يوماً"
 
 #: core/context.py
 msgid "Donations"
@@ -383,6 +467,10 @@ msgstr "المتبرعون والتبرعات"
 msgid "Donors who gave"
 msgstr "متبرعون تبرعوا"
 
+#: hr/admin.py
+msgid "Download bank transfer file (approved runs)"
+msgstr "تنزيل ملف التحويل البنكي (للمسيرات المعتمدة)"
+
 #: templates/base.html
 msgid "Dr. Hassan Abbas Zaki Association"
 msgstr "جمعية د. حسن عباس زكي"
@@ -399,6 +487,14 @@ msgstr "ج.م"
 msgid "Each role sees only the modules and actions ticked below. Researchers additionally see only the cases assigned to them. Changes to roles are recorded in the audit trail."
 msgstr "كل دور يرى فقط الأقسام والإجراءات المعلَّمة أدناه. والباحث يرى فقط الحالات المسندة إليه. أي تغيير في الأدوار يُسجَّل في سجل العمليات."
 
+#: hr/models.py
+msgid "Earning / allowance"
+msgstr "استحقاق / بدل"
+
+#: templates/hr/payslip.html
+msgid "Earnings"
+msgstr "الاستحقاقات"
+
 #: cases/models.py
 msgid "Education"
 msgstr "تعليم"
@@ -407,6 +503,26 @@ msgstr "تعليم"
 msgid "Elderly"
 msgstr "مسن"
 
+#: templates/hr/payslip.html
+msgid "Employee"
+msgstr "الموظف"
+
+#: core/context.py
+msgid "Employees"
+msgstr "الموظفون"
+
+#: templates/dashboards/dashboard.html
+msgid "Employees by department"
+msgstr "الموظفون حسب الإدارة"
+
+#: hr/models.py
+msgid "Employees cannot appraise themselves."
+msgstr "لا يمكن للموظف تقييم نفسه."
+
+#: dashboards/widgets.py
+msgid "Employees now"
+msgstr "الموظفون حالياً"
+
 #: crm/models.py
 msgid "Ended"
 msgstr "منتهية"
@@ -414,6 +530,18 @@ msgstr "منتهية"
 #: haz/settings.py
 msgid "English"
 msgstr "English"
+
+#: hr/models.py
+msgid "Enter either a fixed amount or a percentage of basic, not both."
+msgstr "أدخل مبلغاً ثابتاً أو نسبة من الأساسي، وليس الاثنين."
+
+#: hr/models.py
+msgid "Enter the end-of-service date for someone who has left."
+msgstr "أدخل تاريخ نهاية الخدمة لمن ترك العمل."
+
+#: hr/models.py
+msgid "Exceeds expectations"
+msgstr "يفوق التوقعات"
 
 #: accounts/roles.py
 msgid "Executive director"
@@ -446,6 +574,18 @@ msgstr "أنثى"
 #: accounts/roles.py
 msgid "Field researcher"
 msgstr "باحث اجتماعي"
+
+#: templates/hr/structure.html
+msgid "Filled"
+msgstr "مشغول"
+
+#: hr/models.py
+msgid "Final"
+msgstr "نهائي"
+
+#: hr/models.py
+msgid "Fixed term"
+msgstr "محدد المدة"
 
 #: cases/models.py
 msgid "Food"
@@ -487,6 +627,14 @@ msgstr "تبرع عام"
 msgid "Good"
 msgstr "جيدة"
 
+#: templates/hr/structure.html
+msgid "Grade"
+msgstr "الدرجة"
+
+#: templates/hr/payslip.html
+msgid "Gross"
+msgstr "الإجمالي"
+
 #: haz/urls.py
 msgid "HAZ integrated management system"
 msgstr "النظام المتكامل لإدارة الجمعية"
@@ -494,6 +642,14 @@ msgstr "النظام المتكامل لإدارة الجمعية"
 #: haz/urls.py
 msgid "HAZ system"
 msgstr "نظام الجمعية"
+
+#: accounts/roles.py
+msgid "HR manager"
+msgstr "مدير الموارد البشرية"
+
+#: accounts/roles.py
+msgid "HR officer"
+msgstr "أخصائي الموارد البشرية"
 
 #: accounts/sod.py
 msgid "Has permissions given directly instead of through a role"
@@ -515,6 +671,10 @@ msgstr "شرفي"
 msgid "Housing / repairs"
 msgstr "سكن / ترميم"
 
+#: hr/apps.py
+msgid "Human resources"
+msgstr "الموارد البشرية"
+
 #: cases/models.py
 msgid "Husband"
 msgstr "زوج"
@@ -530,6 +690,22 @@ msgstr "في الفترة المختارة"
 #: crm/models.py
 msgid "Inactive"
 msgstr "غير نشط"
+
+#: hr/models.py
+msgid "Incentive"
+msgstr "حافز"
+
+#: approvals/models.py
+msgid "Incentive / bonus / penalty"
+msgstr "حافز / مكافأة / جزاء"
+
+#: core/context.py
+msgid "Incentives and penalties"
+msgstr "الحوافز والجزاءات"
+
+#: templates/hr/payslip.html
+msgid "Income tax"
+msgstr "ضريبة كسب العمل"
 
 #: crm/models.py
 msgid "Individual"
@@ -547,6 +723,10 @@ msgstr "إنستاباي"
 msgid "Integrated management system"
 msgstr "النظام المتكامل للإدارة"
 
+#: dashboards/widgets.py
+msgid "Joined in period"
+msgstr "التحقوا في الفترة"
+
 #: dashboards/filters.py
 msgid "Last 30 days"
 msgstr "آخر 30 يوماً"
@@ -563,17 +743,37 @@ msgstr "الشهر الماضي"
 msgid "Last year"
 msgstr "العام الماضي"
 
+#: hr/models.py
+msgid "Left"
+msgstr "ترك العمل"
+
+#: dashboards/widgets.py
+msgid "Left in period"
+msgstr "تركوا في الفترة"
+
 #: cases/models.py
 msgid "Male"
 msgstr "ذكر"
+
+#: templates/hr/structure.html
+msgid "Manager"
+msgstr "المدير"
 
 #: cases/admin.py
 msgid "Mark as delivered (approved aid only)"
 msgstr "تسجيل التسليم (للمساعدات المعتمدة فقط)"
 
+#: hr/admin.py
+msgid "Mark as paid"
+msgstr "تسجيل كمدفوع"
+
 #: cases/models.py
 msgid "Marriage preparation"
 msgstr "تجهيز زواج"
+
+#: hr/models.py
+msgid "Married"
+msgstr "متزوج"
 
 #: cases/models.py
 msgid "Medical"
@@ -583,6 +783,10 @@ msgstr "علاج"
 msgid "Medical / surgery"
 msgstr "علاج / عملية"
 
+#: hr/models.py
+msgid "Meets expectations"
+msgstr "يلبي التوقعات"
+
 #: crm/models.py
 msgid "Mobile wallet"
 msgstr "محفظة إلكترونية"
@@ -590,6 +794,10 @@ msgstr "محفظة إلكترونية"
 #: cases/models.py
 msgid "Monthly"
 msgstr "شهري"
+
+#: approvals/models.py
+msgid "Monthly payroll"
+msgstr "مسير الرواتب الشهري"
 
 #: cases/models.py
 msgid "Monthly support"
@@ -607,9 +815,25 @@ msgstr "حالاتي"
 msgid "My cases being researched"
 msgstr "حالاتي قيد البحث"
 
+#: templates/base.html
+msgid "My payslips"
+msgstr "قسائم راتبي"
+
 #: templates/dashboards/dashboard.html
 msgid "My requests still pending"
 msgstr "طلباتي التي لم يُبت فيها"
+
+#: hr/models.py
+msgid "Needs improvement"
+msgstr "يحتاج تحسيناً"
+
+#: templates/hr/payslip.html
+msgid "Net pay"
+msgstr "صافي الراتب"
+
+#: dashboards/widgets.py
+msgid "Net salaries paid"
+msgstr "صافي الرواتب المدفوعة"
 
 #: templates/dashboards/dashboard.html
 msgid "New cases by category"
@@ -635,6 +859,10 @@ msgstr "لا"
 msgid "No approval policy is configured for this document. Ask the administrator."
 msgstr "لا توجد سياسة اعتماد لهذا النوع من المستندات. راجع مدير النظام."
 
+#: templates/hr/my_payslips.html
+msgid "No approved payslips yet."
+msgstr "لا توجد قسائم راتب معتمدة بعد."
+
 #: templates/dashboards/dashboard.html
 msgid "No campaigns in this period."
 msgstr "لا توجد حملات في هذه الفترة."
@@ -642,6 +870,10 @@ msgstr "لا توجد حملات في هذه الفترة."
 #: templates/dashboards/_hbars.html
 msgid "No data for this period."
 msgstr "لا توجد بيانات لهذه الفترة."
+
+#: templates/hr/structure.html
+msgid "No departments yet."
+msgstr "لا توجد إدارات بعد."
 
 #: templates/dashboards/dashboard.html
 msgid "No open cases."
@@ -654,6 +886,10 @@ msgstr "لا توجد كفالات متأخرة."
 #: templates/dashboards/dashboard.html
 msgid "No user holds a conflicting combination of roles."
 msgstr "لا يوجد مستخدم يجمع بين أدوار متعارضة."
+
+#: templates/dashboards/dashboard.html
+msgid "None in the next 60 days."
+msgstr "لا يوجد خلال 60 يوماً القادمة."
 
 #: cases/models.py
 msgid "Normal"
@@ -679,12 +915,28 @@ msgstr "عدد التبرعات"
 msgid "Old rent"
 msgstr "إيجار قديم"
 
+#: hr/models.py
+msgid "On long leave"
+msgstr "في إجازة طويلة"
+
 #: cases/models.py
 msgid "One-off"
 msgstr "مرة واحدة"
 
+#: hr/admin.py
+msgid "Only approved payroll can be paid."
+msgstr "لا يُصرف إلا مسير رواتب معتمد."
+
+#: hr/models.py
+msgid "Open-ended"
+msgstr "غير محدد المدة"
+
 #: core/apps.py
 msgid "Organisation"
+msgstr "الهيكل التنظيمي"
+
+#: core/context.py
+msgid "Organisation structure"
 msgstr "الهيكل التنظيمي"
 
 #: cases/models.py
@@ -699,9 +951,25 @@ msgstr "كفالة أيتام"
 msgid "Other"
 msgstr "أخرى"
 
+#: hr/models.py
+msgid "Outstanding"
+msgstr "ممتاز"
+
+#: hr/models.py
+msgid "Overtime"
+msgstr "عمل إضافي"
+
 #: cases/models.py
 msgid "Owned"
 msgstr "تمليك"
+
+#: hr/models.py
+msgid "Paid"
+msgstr "مدفوع"
+
+#: hr/models.py
+msgid "Part time"
+msgstr "دوام جزئي"
 
 #: templates/registration/login.html
 msgid "Password"
@@ -715,9 +983,45 @@ msgstr "مريض"
 msgid "Paused"
 msgstr "متوقفة مؤقتاً"
 
+#: hr/models.py
+msgid "Payroll"
+msgstr "الرواتب"
+
+#: templates/dashboards/dashboard.html
+msgid "Payroll cost by department / cost centre"
+msgstr "تكلفة الرواتب حسب الإدارة / مركز التكلفة"
+
+#: dashboards/widgets.py
+msgid "Payroll cost in period"
+msgstr "تكلفة الرواتب في الفترة"
+
+#: hr/models.py
+msgid "Payroll for that month is already approved. Choose a later month."
+msgstr "رواتب هذا الشهر معتمدة بالفعل. اختر شهراً لاحقاً."
+
+#: dashboards/widgets.py
+msgid "Payroll months approved"
+msgstr "أشهر رواتب معتمدة"
+
+#: accounts/roles.py
+msgid "Payroll officer"
+msgstr "مسؤول الرواتب"
+
+#: hr/admin.py
+msgid "Payslip"
+msgstr "قسيمة الراتب"
+
+#: hr/models.py
+msgid "Penalty deduction"
+msgstr "خصم جزاء"
+
 #: approvals/models.py
 msgid "Pending"
 msgstr "قيد الاعتماد"
+
+#: templates/hr/structure.html
+msgid "People"
+msgstr "الموظفون"
 
 #: templates/dashboards/_chart.html
 msgid "Period"
@@ -738,6 +1042,26 @@ msgstr "مخطط"
 #: cases/models.py
 msgid "Poor"
 msgstr "سيئة"
+
+#: templates/hr/payslip.html
+msgid "Position"
+msgstr "الوظيفة"
+
+#: core/context.py
+msgid "Positions and job descriptions"
+msgstr "الوظائف والأوصاف الوظيفية"
+
+#: accounts/sod.py
+msgid "Prepares payroll and also approves it"
+msgstr "يعد الرواتب ويعتمدها أيضاً"
+
+#: accounts/sod.py
+msgid "Prepares payroll and also gives final approval"
+msgstr "يعد الرواتب ويعطي الاعتماد النهائي أيضاً"
+
+#: templates/hr/payslip.html
+msgid "Print"
+msgstr "طباعة"
 
 #: templates/dashboards/dashboard.html
 msgid "Project"
@@ -762,6 +1086,10 @@ msgstr "مرفوض"
 #: dashboards/widgets.py
 msgid "Rejected / suspended"
 msgstr "مرفوضة / موقوفة"
+
+#: templates/hr/structure.html
+msgid "Reports to"
+msgstr "يتبع"
 
 #: templates/dashboards/dashboard.html
 msgid "Researcher"
@@ -843,9 +1171,17 @@ msgstr "تسجيل الخروج"
 msgid "Sign-ins"
 msgstr "مرات الدخول"
 
+#: hr/models.py
+msgid "Single"
+msgstr "أعزب"
+
 #: cases/models.py
 msgid "Small business"
 msgstr "مشروع صغير"
+
+#: templates/hr/payslip.html
+msgid "Social insurance (employee share)"
+msgstr "التأمينات الاجتماعية (حصة الموظف)"
 
 #: cases/models.py
 msgid "Son"
@@ -911,6 +1247,10 @@ msgstr "المبلغ يجب أن يكون أكبر من صفر."
 msgid "The end date is before the start date."
 msgstr "تاريخ النهاية قبل تاريخ البداية."
 
+#: hr/models.py
+msgid "The end of service is before the hire date."
+msgstr "تاريخ نهاية الخدمة قبل تاريخ التعيين."
+
 #: core/models.py
 msgid "The file content does not match its type."
 msgstr "محتوى الملف لا يطابق نوعه."
@@ -931,6 +1271,18 @@ msgstr "الاحتياج لا يخص الحالة المختارة."
 #: cases/models.py
 msgid "The need does not belong to this case."
 msgstr "الاحتياج لا يخص هذه الحالة."
+
+#: hr/models.py
+msgid "The project belongs to another department."
+msgstr "المشروع يتبع إدارة أخرى."
+
+#: hr/models.py
+msgid "The salary is outside the range of the employee's grade."
+msgstr "الراتب خارج نطاق درجة الموظف."
+
+#: hr/models.py
+msgid "The salary must be greater than zero."
+msgstr "الراتب يجب أن يكون أكبر من صفر."
 
 #: crm/models.py
 msgid "The sponsorship is not for the selected case."
@@ -953,6 +1305,11 @@ msgstr "هذه الحالة غير مستحقة للزكاة حسب البحث �
 msgid "This case is not eligible for zakat."
 msgstr "هذه الحالة غير مستحقة للزكاة."
 
+#: hr/models.py
+#, python-format
+msgid "This contract overlaps another active contract (%(no)s)."
+msgstr "هذا العقد يتداخل مع عقد ساري آخر (%(no)s)."
+
 #: approvals/services.py
 msgid "This document is already waiting for approval."
 msgstr "هذا المستند بانتظار الاعتماد بالفعل."
@@ -960,6 +1317,10 @@ msgstr "هذا المستند بانتظار الاعتماد بالفعل."
 #: dashboards/filters.py
 msgid "This month"
 msgstr "هذا الشهر"
+
+#: hr/payroll.py
+msgid "This payroll is awaiting approval or already approved and cannot be recalculated."
+msgstr "مسير الرواتب بانتظار الاعتماد أو معتمد ولا يمكن إعادة احتسابه."
 
 #: dashboards/filters.py
 msgid "This quarter"
@@ -985,6 +1346,14 @@ msgstr "أكبر المتبرعين في الفترة"
 msgid "Total arrears now"
 msgstr "إجمالي المتأخرات حالياً"
 
+#: templates/hr/payslip.html
+msgid "Total deductions"
+msgstr "إجمالي الاستقطاعات"
+
+#: hr/models.py
+msgid "Trainee"
+msgstr "متدرب"
+
 #: templates/approvals/inbox.html
 msgid "Type"
 msgstr "النوع"
@@ -1005,6 +1374,10 @@ msgstr "غير مقيد"
 msgid "Unsafe"
 msgstr "غير آمنة"
 
+#: hr/models.py
+msgid "Unsatisfactory"
+msgstr "غير مرضٍ"
+
 #: cases/models.py
 msgid "Urgent"
 msgstr "عاجل"
@@ -1024,6 +1397,14 @@ msgstr "المستخدمون والصلاحيات"
 #: templates/accounts/access.html
 msgid "V"
 msgstr "ع"
+
+#: templates/hr/structure.html
+msgid "Vacant"
+msgstr "شاغر"
+
+#: dashboards/widgets.py
+msgid "Vacant posts"
+msgstr "وظائف شاغرة"
 
 #: templates/core/dashboard.html
 msgid "Version 2 is being built step by step. Day-to-day screens for cases and donations come next; until then, use the back office."
@@ -1049,6 +1430,10 @@ msgstr "من يستطيع ماذا"
 msgid "Widow / divorcee"
 msgstr "أرملة / مطلقة"
 
+#: hr/models.py
+msgid "Widowed"
+msgstr "أرمل"
+
 #: cases/models.py
 msgid "Wife"
 msgstr "زوجة"
@@ -1056,6 +1441,10 @@ msgstr "زوجة"
 #: cases/models.py
 msgid "With relatives"
 msgstr "مع الأقارب"
+
+#: templates/hr/structure.html
+msgid "Without a position"
+msgstr "بدون وظيفة"
 
 #: approvals/services.py
 msgid "Write the reason for this decision."
@@ -1073,9 +1462,17 @@ msgstr "نعم"
 msgid "You are not allowed to act on this request at this step."
 msgstr "ليس لديك صلاحية التصرف في هذا الطلب في هذه المرحلة."
 
+#: hr/admin.py
+msgid "You are not allowed to prepare payroll."
+msgstr "ليس لديك صلاحية إعداد الرواتب."
+
 #: approvals/services.py
 msgid "You cannot approve a request you submitted yourself."
 msgstr "لا يمكنك اعتماد طلب قدمته بنفسك."
+
+#: templates/hr/my_payslips.html
+msgid "Your login is not linked to an employee record."
+msgstr "حسابك غير مرتبط بسجل موظف."
 
 #: core/models.py
 msgid "Zakat"
@@ -1121,6 +1518,14 @@ msgstr "المبلغ (ج.م)"
 msgid "amount needed (EGP)"
 msgstr "المبلغ المطلوب (ج.م)"
 
+#: hr/models.py
+msgid "annual income from"
+msgstr "الدخل السنوي من"
+
+#: hr/models.py
+msgid "annual income to (empty = no limit)"
+msgstr "الدخل السنوي إلى (فارغ = بلا حد)"
+
 #: approvals/models.py
 msgid "approval policies"
 msgstr "سياسات الاعتماد"
@@ -1145,6 +1550,14 @@ msgstr "مرحلة اعتماد"
 msgid "approval steps"
 msgstr "مراحل الاعتماد"
 
+#: hr/models.py
+msgid "approved headcount"
+msgstr "العدد المعتمد"
+
+#: templates/hr/structure.html
+msgid "approved posts"
+msgstr "الوظائف المعتمدة"
+
 #: approvals/models.py
 msgid "approver role"
 msgstr "صلاحية المعتمِد"
@@ -1152,6 +1565,18 @@ msgstr "صلاحية المعتمِد"
 #: cases/models.py
 msgid "area"
 msgstr "المنطقة"
+
+#: hr/models.py
+msgid "areas to develop"
+msgstr "مجالات التطوير"
+
+#: hr/models.py
+msgid "assignment"
+msgstr "تكليف"
+
+#: hr/models.py
+msgid "assignments"
+msgstr "التكليفات"
 
 #: core/models.py
 msgid "attachment"
@@ -1172,6 +1597,22 @@ msgstr "سجل العمليات"
 #: crm/models.py
 msgid "availability"
 msgstr "أوقات التفرغ"
+
+#: hr/models.py
+msgid "bank"
+msgstr "البنك"
+
+#: hr/models.py
+msgid "bank account / IBAN"
+msgstr "رقم الحساب / IBAN"
+
+#: hr/models.py
+msgid "basic monthly salary (EGP)"
+msgstr "الراتب الأساسي الشهري (ج.م)"
+
+#: hr/models.py
+msgid "birth date"
+msgstr "تاريخ الميلاد"
 
 #: cases/models.py
 msgid "birth year"
@@ -1221,9 +1662,29 @@ msgstr "تعديل"
 msgid "code"
 msgstr "الكود"
 
+#: hr/models.py
+msgid "component"
+msgstr "البند"
+
+#: hr/models.py
+msgid "contract"
+msgstr "عقد"
+
+#: hr/models.py
+msgid "contract no."
+msgstr "رقم العقد"
+
+#: hr/models.py
+msgid "contracts"
+msgstr "العقود"
+
 #: core/models.py
 msgid "cost centre code"
 msgstr "كود مركز التكلفة"
+
+#: hr/models.py
+msgid "counts for social insurance"
+msgstr "يدخل في الأجر التأميني"
 
 #: crm/models.py
 msgid "date"
@@ -1305,9 +1766,49 @@ msgstr "مستحق للزكاة"
 msgid "email"
 msgstr "البريد الإلكتروني"
 
+#: hr/models.py
+msgid "emergency contact (name and phone)"
+msgstr "جهة اتصال للطوارئ (الاسم والهاتف)"
+
+#: hr/models.py
+msgid "employee"
+msgstr "الموظف"
+
+#: hr/models.py
+msgid "employee no."
+msgstr "الرقم الوظيفي"
+
+#: hr/models.py
+msgid "employee pay item"
+msgstr "بند أجر موظف"
+
+#: hr/models.py
+msgid "employee pay items"
+msgstr "بنود أجر الموظفين"
+
+#: hr/models.py
+msgid "employee share (%)"
+msgstr "حصة الموظف (%)"
+
+#: hr/models.py
+msgid "employees"
+msgstr "الموظفون"
+
+#: hr/models.py
+msgid "employer share (%)"
+msgstr "حصة صاحب العمل (%)"
+
 #: crm/models.py
 msgid "end date"
 msgstr "تاريخ النهاية"
+
+#: hr/models.py
+msgid "end of probation"
+msgstr "نهاية فترة الاختبار"
+
+#: hr/models.py
+msgid "end of service"
+msgstr "نهاية الخدمة"
 
 #: core/models.py
 msgid "expires on"
@@ -1337,9 +1838,17 @@ msgstr "تاريخ الزيارة الميدانية"
 msgid "file"
 msgstr "الملف"
 
+#: hr/models.py
+msgid "fixed amount (EGP)"
+msgstr "مبلغ ثابت (ج.م)"
+
 #: cases/models.py
 msgid "frequency"
 msgstr "التكرار"
+
+#: hr/models.py
+msgid "from"
+msgstr "من"
 
 #: approvals/models.py
 msgid "from amount"
@@ -1365,9 +1874,29 @@ msgstr "عضو جمعية عمومية"
 msgid "general-assembly members"
 msgstr "أعضاء الجمعية العمومية"
 
+#: hr/models.py
+msgid "grade"
+msgstr "الدرجة"
+
+#: hr/models.py
+msgid "grades"
+msgstr "الدرجات الوظيفية"
+
 #: cases/models.py
 msgid "health"
 msgstr "الحالة الصحية"
+
+#: hr/models.py
+msgid "highest qualification"
+msgstr "أعلى مؤهل"
+
+#: hr/models.py
+msgid "hire date"
+msgstr "تاريخ التعيين"
+
+#: hr/models.py
+msgid "home department"
+msgstr "الإدارة الأساسية"
 
 #: cases/models.py
 msgid "housing condition"
@@ -1377,9 +1906,29 @@ msgstr "حالة السكن"
 msgid "housing type"
 msgstr "نوع السكن"
 
+#: hr/models.py
+msgid "incentive / bonus / penalty"
+msgstr "حافز / مكافأة / جزاء"
+
+#: hr/models.py
+msgid "incentives / bonuses / penalties"
+msgstr "الحوافز / المكافآت / الجزاءات"
+
+#: hr/models.py
+msgid "income tax bracket"
+msgstr "شريحة ضريبية"
+
+#: hr/models.py
+msgid "income tax brackets"
+msgstr "شرائح ضريبة كسب العمل"
+
 #: cases/models.py
 msgid "intake notes"
 msgstr "ملاحظات التسجيل"
+
+#: hr/models.py
+msgid "job purpose"
+msgstr "الغرض من الوظيفة"
 
 #: crm/models.py
 msgid "join date"
@@ -1389,9 +1938,29 @@ msgstr "تاريخ الانضمام"
 msgid "language"
 msgstr "اللغة"
 
+#: hr/models.py
+msgid "level"
+msgstr "المستوى"
+
+#: hr/models.py
+msgid "line manager"
+msgstr "المدير المباشر"
+
 #: core/models.py
 msgid "manager"
 msgstr "المدير"
+
+#: hr/models.py
+msgid "marital status"
+msgstr "الحالة الاجتماعية"
+
+#: hr/models.py
+msgid "maximum basic salary"
+msgstr "الحد الأقصى للراتب الأساسي"
+
+#: hr/models.py
+msgid "maximum insurable wage (monthly)"
+msgstr "الحد الأقصى للأجر التأميني (شهري)"
 
 #: crm/models.py
 msgid "membership no."
@@ -1400,6 +1969,22 @@ msgstr "رقم العضوية"
 #: crm/models.py
 msgid "membership type"
 msgstr "نوع العضوية"
+
+#: hr/models.py
+msgid "military service status"
+msgstr "موقف التجنيد"
+
+#: hr/models.py
+msgid "minimum basic salary"
+msgstr "الحد الأدنى للراتب الأساسي"
+
+#: hr/models.py
+msgid "minimum insurable wage (monthly)"
+msgstr "الحد الأدنى للأجر التأميني (شهري)"
+
+#: hr/models.py
+msgid "month"
+msgstr "الشهر"
 
 #: crm/models.py
 msgid "monthly amount (EGP)"
@@ -1453,13 +2038,26 @@ msgstr "تسلسل ترقيم"
 msgid "number sequences"
 msgstr "تسلسلات الترقيم"
 
+#: hr/models.py
+msgid "objectives and results"
+msgstr "الأهداف والنتائج"
+
 #: cases/models.py
 msgid "open"
 msgstr "مفتوح"
 
+#: hr/models.py
+#, python-format
+msgid "or % of basic"
+msgstr "أو نسبة من الأساسي"
+
 #: approvals/models.py
 msgid "order"
 msgstr "الترتيب"
+
+#: hr/models.py
+msgid "overall rating"
+msgstr "التقييم العام"
 
 #: cases/models.py
 msgid "paid from fund"
@@ -1469,17 +2067,81 @@ msgstr "يُصرف من صندوق"
 msgid "parent department"
 msgstr "الإدارة الأم"
 
+#: hr/models.py
+msgid "pay component"
+msgstr "بند أجر"
+
+#: hr/models.py
+msgid "pay components"
+msgstr "بنود الأجر"
+
+#: hr/models.py
+msgid "pay month"
+msgstr "شهر الصرف"
+
+#: hr/models.py
+msgid "pay year"
+msgstr "سنة الصرف"
+
 #: crm/models.py
 msgid "payment method"
 msgstr "طريقة الدفع"
+
+#: hr/models.py
+msgid "payroll run"
+msgstr "مسير رواتب"
+
+#: hr/models.py
+msgid "payroll runs"
+msgstr "مسيرات الرواتب"
+
+#: hr/models.py
+msgid "payslip"
+msgstr "قسيمة راتب"
+
+#: hr/models.py
+msgid "payslips"
+msgstr "قسائم الرواتب"
+
+#: hr/models.py
+msgid "performance appraisal"
+msgstr "تقييم أداء"
+
+#: hr/models.py
+msgid "performance appraisals"
+msgstr "تقييمات الأداء"
+
+#: hr/models.py
+msgid "period from"
+msgstr "الفترة من"
+
+#: hr/models.py
+msgid "period to"
+msgstr "الفترة إلى"
 
 #: core/models.py
 msgid "permitted uses"
 msgstr "أوجه الصرف المسموحة"
 
+#: hr/models.py
+msgid "personal annual exemption (enter on the first bracket)"
+msgstr "الإعفاء الشخصي السنوي (يُدخل في الشريحة الأولى)"
+
 #: cases/models.py
 msgid "phone"
 msgstr "الهاتف"
+
+#: hr/models.py
+msgid "position"
+msgstr "الوظيفة"
+
+#: hr/models.py
+msgid "position / job description"
+msgstr "وظيفة / وصف وظيفي"
+
+#: hr/models.py
+msgid "positions / job descriptions"
+msgstr "الوظائف / الأوصاف الوظيفية"
 
 #: cases/models.py
 msgid "priority"
@@ -1501,6 +2163,22 @@ msgstr "المشروعات"
 msgid "purpose"
 msgstr "الغرض"
 
+#: hr/models.py
+msgid "qualifications and experience"
+msgstr "المؤهلات والخبرات"
+
+#: hr/models.py
+msgid "rate (%)"
+msgstr "النسبة (%)"
+
+#: hr/models.py
+msgid "reason"
+msgstr "السبب"
+
+#: hr/models.py
+msgid "reason for leaving"
+msgstr "سبب ترك العمل"
+
 #: crm/models.py
 msgid "receipt no."
 msgstr "رقم الإيصال"
@@ -1513,6 +2191,10 @@ msgstr "التوصية"
 msgid "relation"
 msgstr "الصلة"
 
+#: hr/models.py
+msgid "reports to"
+msgstr "يتبع"
+
 #: cases/models.py
 msgid "research findings"
 msgstr "نتائج البحث"
@@ -1521,9 +2203,41 @@ msgstr "نتائج البحث"
 msgid "researcher"
 msgstr "الباحث"
 
+#: hr/models.py
+msgid "responsibilities"
+msgstr "المسؤوليات"
+
+#: hr/models.py
+msgid "reviewer"
+msgstr "المقيِّم"
+
+#: hr/models.py
+msgid "share of time (%)"
+msgstr "نسبة الوقت (%)"
+
 #: crm/models.py
 msgid "skills"
 msgstr "المهارات"
+
+#: hr/models.py
+msgid "social insurance no."
+msgstr "الرقم التأميني"
+
+#: hr/models.py
+msgid "social insurance rule"
+msgstr "قاعدة التأمينات الاجتماعية"
+
+#: hr/models.py
+msgid "social insurance rules"
+msgstr "قواعد التأمينات الاجتماعية"
+
+#: hr/models.py
+msgid "source / decree reference"
+msgstr "المصدر / مرجع القرار"
+
+#: hr/models.py
+msgid "source / law reference"
+msgstr "المصدر / مرجع القانون"
 
 #: templates/accounts/access.html
 msgid "special right"
@@ -1558,6 +2272,18 @@ msgstr "الحالة"
 msgid "step %(n)s"
 msgstr "المرحلة %(n)s"
 
+#: hr/models.py
+msgid "strengths"
+msgstr "نقاط القوة"
+
+#: hr/models.py
+msgid "subject to income tax"
+msgstr "خاضع لضريبة كسب العمل"
+
+#: hr/models.py
+msgid "system login"
+msgstr "حساب الدخول للنظام"
+
 #: crm/models.py
 msgid "target (EGP)"
 msgstr "المستهدف (ج.م)"
@@ -1565,6 +2291,22 @@ msgstr "المستهدف (ج.م)"
 #: core/models.py
 msgid "title"
 msgstr "العنوان"
+
+#: hr/models.py
+msgid "to"
+msgstr "إلى"
+
+#: hr/models.py
+msgid "total cost to the association"
+msgstr "إجمالي التكلفة على الجمعية"
+
+#: hr/models.py
+msgid "total gross"
+msgstr "إجمالي الاستحقاقات"
+
+#: hr/models.py
+msgid "total net"
+msgstr "إجمالي الصافي"
 
 #: cases/models.py
 msgid "type"
@@ -1582,6 +2324,10 @@ msgstr "المستخدمون"
 msgid "value (EGP)"
 msgstr "القيمة (ج.م)"
 
+#: hr/models.py
+msgid "verified by (payroll specialist)"
+msgstr "تم التحقق بواسطة (أخصائي الرواتب)"
+
 #: templates/accounts/access.html
 msgid "view"
 msgstr "عرض"
@@ -1597,6 +2343,14 @@ msgstr "المتطوعون"
 #: templates/dashboards/_kpis.html
 msgid "vs previous period"
 msgstr "مقارنة بالفترة السابقة"
+
+#: hr/models.py
+msgid "weekly hours"
+msgstr "ساعات العمل الأسبوعية"
+
+#: hr/models.py
+msgid "year"
+msgstr "السنة"
 
 #: cases/models.py
 msgid "zakat eligibility"

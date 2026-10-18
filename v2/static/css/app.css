@@ -163,3 +163,5 @@ td .picker { min-width: 220px; }
 .perm { display: inline-block; min-width: 16px; margin: 0 1px; border-radius: 3px; font-size: .75rem; padding: 0 3px; }
 .perm-view { background: #e8f0fb; color: #1d4f91; } .perm-add { background: #dff3ea; color: #0d5a43; }
 .perm-change { background: #fff1d6; color: #8a5300; } .perm-delete { background: #fde4e2; color: #a32620; }
+.payslip table { margin: 10px 0; } .payslip tr.total td { font-weight: 700; border-top: 2px solid var(--line); }
+.payslip .net { font-size: 1.2rem; margin-top: 14px; }

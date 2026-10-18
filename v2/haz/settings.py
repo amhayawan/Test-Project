@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "crm",
     "cases",
     "dashboards",
+    "hr",
 ]
 
 MIDDLEWARE = [

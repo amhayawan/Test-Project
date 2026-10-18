@@ -1,7 +1,7 @@
 """Dashboard sections. Each section checks the permission it needs and returns None when the
 user's role may not see it, so every role gets its own dashboard from the same page.
 """
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
@@ -262,11 +262,60 @@ def administration(user, f):
     }
 
 
+def human_resources(user, f):
+    if not user.has_perm("hr.view_employee"):
+        return None
+    from hr.models import Contract, Employee, PayrollRun, Position
+    from hr.payroll import cost_by
+    from core.models import Attachment
+    from django.contrib.contenttypes.models import ContentType
+    staff = Employee.objects.current()
+    if f.department:
+        staff = staff.filter(department_id=f.department)
+    soon = timezone.localdate() + timedelta(days=60)
+    ending = Contract.objects.filter(status=Contract.ACTIVE, end_date__isnull=False,
+                                     end_date__range=(timezone.localdate(), soon), employee__in=staff)
+    docs = Attachment.objects.filter(content_type__in=ContentType.objects.get_for_models(Employee, Contract).values(),
+                                     expires_on__isnull=False, expires_on__lte=soon)
+    vacancies = sum(max(p.headcount - p.filled, 0) for p in Position.objects.filter(is_active=True))
+    by_dept = staff.values_list("department__code").annotate(n=Count("id")).order_by("-n")
+    section = {
+        "kpis": [
+            {"label": _("Employees now"), "value": staff.count()},
+            {"label": _("Joined in period"), "value": Employee.objects.filter(hire_date__range=(f.start, f.end)).count()},
+            {"label": _("Left in period"), "value": Employee.objects.filter(end_date__range=(f.start, f.end)).count()},
+            {"label": _("Vacant posts"), "value": vacancies},
+            {"label": _("Contracts ending within 60 days"), "value": ending.count()},
+            {"label": _("Documents expiring within 60 days"), "value": docs.count()},
+        ],
+        "by_department": bar_rows(by_dept),
+        "ending": ending.select_related("employee").order_by("end_date")[:8],
+        "payroll": None,
+    }
+    if user.has_perm("hr.view_salary"):
+        runs = [r for r in PayrollRun.objects.filter(status__in=(PayrollRun.APPROVED, PayrollRun.PAID))
+                if f.start <= date(r.year, r.month, 1) <= f.end]
+        per_dept = {}
+        for r in runs:
+            for k, v in cost_by(r, "department").items():
+                per_dept[k] = per_dept.get(k, ZERO) + v
+        section["payroll"] = {
+            "kpis": [
+                {"label": _("Payroll cost in period"), "value": sum((r.total_cost for r in runs), ZERO), "money": True},
+                {"label": _("Net salaries paid"), "value": sum((r.total_net for r in runs), ZERO), "money": True},
+                {"label": _("Payroll months approved"), "value": len(runs)},
+            ],
+            "by_department": bar_rows(sorted(per_dept.items(), key=lambda kv: -kv[1])),
+        }
+    return section
+
+
 SECTIONS = ["overview", "approvals", "my_cases", "case_management", "fundraising", "sponsorships", "aid",
-            "administration"]
+            "human_resources", "administration"]
 
 
 def build(user, f):
     funcs = {"overview": overview, "approvals": approvals, "my_cases": my_cases, "case_management": case_management,
-             "fundraising": fundraising, "sponsorships": sponsorships, "aid": aid, "administration": administration}
+             "fundraising": fundraising, "sponsorships": sponsorships, "aid": aid,
+             "human_resources": human_resources, "administration": administration}
     return {name: funcs[name](user, f) for name in SECTIONS}

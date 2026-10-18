@@ -6,7 +6,7 @@
 * reject and return require a written reason;
 * the document is told the outcome through on_approval_* hooks.
 
-Documents that need approval implement:
+Documents that need approval implement (approval_excluded_user_ids() is optional):
     approval_doc_type: str          e.g. "cases.case"
     approval_title() -> str
     approval_amount() -> Decimal | None
@@ -70,6 +70,9 @@ def can_act(req, user):
         return False
     if req.actions.filter(actor=user).exists():
         return False
+    document = req.document
+    if document is not None and user.pk in getattr(document, "approval_excluded_user_ids", lambda: [])():
+        return False      # e.g. whoever prepared a payroll may not approve it
     step = req.step
     return bool(step and (user.is_superuser or user.groups.filter(pk=step.role_id).exists()))
 

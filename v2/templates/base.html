@@ -15,6 +15,7 @@
       <a href="{% url 'dashboard' %}">{% translate "Dashboard" %}</a>
       <a href="{% url 'approvals_inbox' %}">{% translate "Approvals" %}{% if approvals_waiting %} <span class="count">{{ approvals_waiting }}</span>{% endif %}</a>
       {% for label, url in nav_modules %}<a href="{{ url }}">{{ label }}</a>{% endfor %}
+      {% if has_employee_record %}<a href="{% url 'my_payslips' %}">{% translate "My payslips" %}</a>{% endif %}
       {% if perms.accounts.view_user %}<a href="{% url 'access_matrix' %}">{% translate "Who can do what" %}</a>{% endif %}
       {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Back office" %}</a>{% endif %}
     </nav>

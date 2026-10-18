@@ -1,0 +1,31 @@
+{% load i18n humanize_lite %}{% get_current_language_bidi as RTL %}{% get_current_language as LANG %}<!doctype html>
+<html lang="{{ LANG }}" dir="{{ RTL|yesno:'rtl,ltr' }}"><head><meta charset="utf-8">
+<title>{% translate "Payslip" %} {{ s.run }} — {{ s.employee.name }}</title>
+{% load static %}<link rel="stylesheet" href="{% static 'css/app.css' %}"></head>
+<body class="receipt-page">
+<div class="receipt payslip">
+  <h1>{% translate "Dr. Hassan Abbas Zaki Association" %}</h1>
+  <h2>{% translate "Payslip" %} — {{ s.run }}</h2>
+  <table>
+    <tr><th>{% translate "Employee" %}</th><td>{{ s.employee.employee_no }} — {{ s.employee.name }}</td>
+        <th>{% translate "Department" %}</th><td>{{ s.employee.department.name }}</td></tr>
+    <tr><th>{% translate "Position" %}</th><td>{{ s.employee.position|default:"—" }}</td>
+        <th>{% translate "Days paid" %}</th><td class="num">{{ s.days_paid }}</td></tr>
+  </table>
+  <div class="grid2">
+    <table><tr><th colspan="2">{% translate "Earnings" %}</th></tr>
+      <tr><td>{% translate "Basic salary" %}</td><td class="num">{{ s.basic|money }}</td></tr>
+      {% for l in earnings %}<tr><td>{{ l.name }}</td><td class="num">{{ l.amount|money }}</td></tr>{% endfor %}
+      <tr class="total"><td>{% translate "Gross" %}</td><td class="num">{{ s.gross|money }}</td></tr></table>
+    <table><tr><th colspan="2">{% translate "Deductions" %}</th></tr>
+      <tr><td>{% translate "Social insurance (employee share)" %}</td><td class="num">{{ s.insurance_employee|money }}</td></tr>
+      <tr><td>{% translate "Income tax" %}</td><td class="num">{{ s.income_tax|money }}</td></tr>
+      {% for l in deductions %}<tr><td>{{ l.name }}</td><td class="num">{{ l.amount|money }}</td></tr>{% endfor %}
+      <tr class="total"><td>{% translate "Total deductions" %}</td><td class="num">{{ s.total_deductions|money }}</td></tr></table>
+  </div>
+  <p class="net">{% translate "Net pay" %}: <b>{{ s.net|money }}</b> {% translate "EGP" %}</p>
+  <p class="muted">{% translate "Bank" %}: {{ s.bank_name|default:"—" }} {{ s.bank_account }}</p>
+</div>
+<div class="no-print actions"><button class="btn primary" id="print">{% translate "Print" %}</button></div>
+<script src="{% static 'js/print.js' %}" defer></script>
+</body></html>

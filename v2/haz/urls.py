@@ -6,6 +6,7 @@ from accounts import views as account_views
 from approvals import views as approval_views
 from core import views as core_views
 from dashboards import views as dashboard_views
+from hr import views as hr_views
 
 admin.site.site_header = _("HAZ integrated management system")
 admin.site.site_title = _("HAZ system")
@@ -20,5 +21,8 @@ urlpatterns = [
     path("approvals/", approval_views.inbox_view, name="approvals_inbox"),
     path("approvals/<int:pk>/", approval_views.request_view, name="approval_request"),
     path("attachments/<int:pk>/", core_views.attachment_download, name="attachment_download"),
+    path("hr/structure/", hr_views.structure, name="hr_structure"),
+    path("hr/payslips/<int:pk>/", hr_views.payslip, name="payslip"),
+    path("hr/my-payslips/", hr_views.my_payslips, name="my_payslips"),
     path("backoffice/", admin.site.urls),
 ]

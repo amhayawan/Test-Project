@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load i18n %}
+{% block content %}
+<h1>{% translate "Organisation structure" %}</h1>
+{% for r in rows %}
+<section class="card">
+  <div class="head"><h2>{{ r.dept.code }} — {{ r.dept.name }}</h2>
+    <span class="muted">{% translate "Filled" %} {{ r.filled }} / {% translate "approved posts" %} {{ r.headcount }}{% if r.dept.manager %} · {% translate "Manager" %}: {{ r.dept.manager.display_name }}{% endif %}</span></div>
+  <table>
+    <tr><th>{% translate "Position" %}</th><th>{% translate "Grade" %}</th><th>{% translate "Reports to" %}</th><th>{% translate "People" %}</th><th>{% translate "Vacant" %}</th></tr>
+    {% for p in r.positions %}
+    <tr><td><b>{{ p.pos.name }}</b>{% if p.pos.purpose %}<br><small class="muted">{{ p.pos.purpose|truncatechars:120 }}</small>{% endif %}</td>
+      <td>{{ p.pos.grade|default:"—" }}</td><td>{{ p.pos.reports_to|default:"—" }}</td>
+      <td>{% for e in p.people %}{{ e.name }}{% if not forloop.last %}، {% endif %}{% empty %}—{% endfor %}</td>
+      <td class="num">{% if p.vacant %}<span class="pill recommended">{{ p.vacant }}</span>{% else %}0{% endif %}</td></tr>
+    {% endfor %}
+    {% if r.unplaced %}<tr><td class="muted">{% translate "Without a position" %}</td><td></td><td></td><td>{% for e in r.unplaced %}{{ e.name }}{% if not forloop.last %}، {% endif %}{% endfor %}</td><td></td></tr>{% endif %}
+  </table>
+</section>
+{% empty %}<p class="muted">{% translate "No departments yet." %}</p>{% endfor %}
+{% endblock %}
