@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head">
+  <h1>{{ entity.title }} <small class="muted">({{ pagination.total }})</small></h1>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('entity_export', entity_name=entity_name, q=q) }}">⭳ تصدير Excel</a>
+    <a class="btn primary" href="{{ url_for('entity_new', entity_name=entity_name) }}">+ إضافة {{ entity.singular }}</a>
+  </div>
+</div>
+<form class="search" method="get">
+  <input name="q" value="{{ q }}" placeholder="بحث…">
+  <button class="btn">بحث</button>
+  {% if q %}<a href="{{ url_for('entity_list', entity_name=entity_name) }}">مسح</a>{% endif %}
+</form>
+<div class="card table-wrap">
+<table class="list">
+  <tr>{% for f in entity.fields if f.list %}<th>{{ f.label }}</th>{% endfor %}</tr>
+  {% for obj in pagination.items %}
+  <tr class="row" onclick="location.href='{{ url_for('entity_detail', entity_name=entity_name, obj_id=obj.id) }}'">
+    {% for f in entity.fields if f.list %}
+    <td class="{{ 'num' if f.type == 'money' }}">{{ display_value(obj, f) }}</td>
+    {% endfor %}
+  </tr>
+  {% else %}
+  <tr><td colspan="20" class="muted">لا توجد سجلات</td></tr>
+  {% endfor %}
+</table>
+</div>
+{% if pagination.pages > 1 %}
+<div class="pager">
+  {% if pagination.has_prev %}<a href="{{ url_for('entity_list', entity_name=entity_name, q=q, page=pagination.prev_num) }}">السابق</a>{% endif %}
+  <span>صفحة {{ pagination.page }} من {{ pagination.pages }}</span>
+  {% if pagination.has_next %}<a href="{{ url_for('entity_list', entity_name=entity_name, q=q, page=pagination.next_num) }}">التالي</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

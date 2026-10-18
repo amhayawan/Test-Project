@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>المستخدمون</h1>
+<div class="card table-wrap">
+<table class="list">
+  <tr><th>اسم المستخدم</th><th>الاسم</th><th>الصلاحية</th><th>الحالة</th><th></th></tr>
+  {% for u in users %}
+  <tr>
+    <td dir="ltr">{{ u.username }}</td><td>{{ u.name }}</td>
+    <td>{{ 'مدير' if u.is_admin else 'موظف' }}</td><td>{{ 'نشط' if u.active else 'موقوف' }}</td>
+    <td class="actions">
+      <form method="post" action="{{ url_for('user_toggle', user_id=u.id) }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <button class="btn small">{{ 'إيقاف' if u.active else 'تفعيل' }}</button>
+      </form>
+      <form method="post" action="{{ url_for('user_reset', user_id=u.id) }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <input name="password" type="password" placeholder="كلمة مرور جديدة" minlength="6" required>
+        <button class="btn small">تغيير</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+<h2>إضافة مستخدم</h2>
+<form method="post" class="card form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+  {% if error %}<div class="flash error wide">{{ error }}</div>{% endif %}
+  <label>الاسم<input name="name" required></label>
+  <label>اسم المستخدم<input name="username" required dir="ltr"></label>
+  <label>كلمة المرور<input name="password" type="password" required minlength="6"></label>
+  <label>الصلاحية<select name="role"><option value="staff">موظف</option><option value="admin">مدير</option></select></label>
+  <div class="wide actions"><button class="btn primary">إضافة</button></div>
+</form>
+{% endblock %}

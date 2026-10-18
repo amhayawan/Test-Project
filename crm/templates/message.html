@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}<div class="card"><h1>{{ title }}</h1><p>{{ message }}</p>
+<a class="btn" href="{{ url_for('dashboard') }}">العودة للرئيسية</a></div>{% endblock %}
+{% block auth %}<div class="card auth-card"><h1>{{ title }}</h1><p>{{ message }}</p>
+<a class="btn" href="{{ url_for('login') }}">تسجيل الدخول</a></div>{% endblock %}

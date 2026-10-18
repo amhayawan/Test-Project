@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block auth %}
+<form method="post" class="card auth-card">
+  <h1>{{ app_name }}</h1>
+  <p class="muted">أول تشغيل للبرنامج: أنشئ حساب مدير النظام</p>
+  {% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+  <label>الاسم بالكامل<input name="name" required></label>
+  <label>اسم المستخدم<input name="username" required dir="ltr"></label>
+  <label>كلمة المرور<input name="password" type="password" required minlength="6"></label>
+  <label>تأكيد كلمة المرور<input name="password2" type="password" required minlength="6"></label>
+  <button class="btn primary">إنشاء الحساب</button>
+</form>
+{% endblock %}

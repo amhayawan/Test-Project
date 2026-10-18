@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head">
+  <h1>{{ entity.singular }}: {{ obj }}</h1>
+  <div class="actions">
+    {% if entity_name == 'donations' %}<a class="btn" href="{{ url_for('donation_receipt', obj_id=obj.id) }}">🖶 طباعة الإيصال</a>{% endif %}
+    {% if entity_name == 'donors' %}<a class="btn primary" href="{{ url_for('entity_new', entity_name='donations', donor_id=obj.id) }}">+ تسجيل تبرع</a>{% endif %}
+    {% if entity_name == 'beneficiaries' %}<a class="btn primary" href="{{ url_for('entity_new', entity_name='aids', beneficiary_id=obj.id) }}">+ صرف مساعدة</a>{% endif %}
+    <a class="btn" href="{{ url_for('entity_edit', entity_name=entity_name, obj_id=obj.id) }}">✎ تعديل</a>
+    {% if current_user.is_admin %}
+    <form method="post" action="{{ url_for('entity_delete', entity_name=entity_name, obj_id=obj.id) }}" onsubmit="return confirm('تأكيد الحذف؟')">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <button class="btn danger">حذف</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+<div class="card">
+  <dl class="details">
+    {% for f in entity.fields %}
+    <dt>{{ f.label }}</dt><dd>{% if f.type.startswith('fk:') and display_value(obj, f) %}<a href="{{ url_for('entity_detail', entity_name=f.type[3:], obj_id=obj[f.name]) }}">{{ display_value(obj, f) }}</a>{% else %}{{ display_value(obj, f) or '—' }}{% endif %}</dd>
+    {% endfor %}
+    {% if obj.recorded_by %}<dt>سجّله</dt><dd>{{ obj.recorded_by.name }}</dd>{% endif %}
+    {% if entity_name == 'members' %}<dt>موقف الاشتراك</dt><dd>{{ 'مسدد' if obj.dues_current else 'متأخر' }}</dd>{% endif %}
+    <dt>تاريخ الإدخال</dt><dd>{{ obj.created_at.strftime('%Y-%m-%d') }}</dd>
+  </dl>
+</div>
+{% if related %}
+{% set rname, rows, rtotal = related %}
+{% set rentity = entities[rname] %}
+<div class="card">
+  <h2>{{ rentity.title }} <small class="muted">— الإجمالي: {{ rtotal|money }} ج.م ({{ rows|length }})</small></h2>
+  <table class="list">
+    <tr>{% for f in rentity.fields if f.list and not f.type.startswith('fk:') %}<th>{{ f.label }}</th>{% endfor %}</tr>
+    {% for r in rows %}
+    <tr class="row" onclick="location.href='{{ url_for('entity_detail', entity_name=rname, obj_id=r.id) }}'">
+      {% for f in rentity.fields if f.list and not f.type.startswith('fk:') %}<td class="{{ 'num' if f.type == 'money' }}">{{ display_value(r, f) }}</td>{% endfor %}
+    </tr>
+    {% else %}<tr><td colspan="20" class="muted">لا توجد سجلات</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><title>إيصال {{ d.receipt_no }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body class="receipt-page">
+<div class="receipt">
+  <h1>{{ app_name }}</h1>
+  <h2>إيصال استلام تبرع</h2>
+  <table>
+    <tr><th>رقم الإيصال</th><td>{{ d.receipt_no }}</td><th>التاريخ</th><td>{{ d.donation_date }}</td></tr>
+    <tr><th>استلمنا من</th><td colspan="3">{{ d.donor.name }}</td></tr>
+    <tr><th>مبلغ وقدره</th><td colspan="3"><b>{{ d.amount|money }} جنيه مصري</b></td></tr>
+    <tr><th>طريقة الدفع</th><td>{{ choices.method.get(d.method) }}</td><th>وذلك قيمة</th><td>{{ choices.purpose.get(d.purpose) }}</td></tr>
+    {% if d.notes %}<tr><th>ملاحظات</th><td colspan="3">{{ d.notes }}</td></tr>{% endif %}
+  </table>
+  <div class="sign"><div>المستلم: {{ d.recorded_by.name if d.recorded_by else '' }}</div><div>التوقيع / الختم</div></div>
+  <p class="muted">جزاكم الله خيراً</p>
+</div>
+<div class="no-print actions"><button class="btn primary" onclick="window.print()">طباعة</button>
+<a class="btn" href="{{ url_for('entity_detail', entity_name='donations', obj_id=d.id) }}">رجوع</a></div>
+</body></html>

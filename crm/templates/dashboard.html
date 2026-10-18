@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>لوحة التحكم <small class="muted">— {{ year }}</small></h1>
+<div class="stats">
+  <div class="stat"><span>تبرعات هذا الشهر</span><b>{{ stats.donations_month|money }}</b><em>ج.م</em></div>
+  <div class="stat"><span>تبرعات هذا العام</span><b>{{ stats.donations_year|money }}</b><em>ج.م</em></div>
+  <div class="stat"><span>مساعدات مصروفة هذا العام</span><b>{{ stats.aid_year|money }}</b><em>ج.م</em></div>
+  <div class="stat"><span>المتبرعون</span><b>{{ stats.donors }}</b></div>
+  <div class="stat"><span>حالات مقبولة</span><b>{{ stats.beneficiaries }}</b><em>{{ stats.under_study }} تحت الدراسة</em></div>
+  <div class="stat"><span>متطوعون نشطون</span><b>{{ stats.volunteers }}</b></div>
+  <div class="stat"><span>أعضاء الجمعية</span><b>{{ stats.members }}</b><em>{{ stats.members_unpaid }} لم يسدد اشتراك {{ year }}</em></div>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>التبرعات والمساعدات شهرياً</h2>
+    <table class="bars">
+      <tr><th>الشهر</th><th>تبرعات</th><th>مساعدات</th></tr>
+      {% for r in monthly %}
+      <tr><td>{{ r.month }}</td>
+        <td><div class="bar in" style="width: {{ '%.1f'|format(r.d_pct) }}%"></div><small>{{ r.donations|money }}</small></td>
+        <td><div class="bar out" style="width: {{ '%.1f'|format(r.a_pct) }}%"></div><small>{{ r.aid|money }}</small></td></tr>
+      {% endfor %}
+    </table>
+  </section>
+  <section class="card">
+    <h2>التبرعات حسب الغرض ({{ year }})</h2>
+    <table>
+      {% for purpose, amount in by_purpose %}
+      <tr><td>{{ choices.purpose.get(purpose, purpose) }}</td><td class="num">{{ amount|money }}</td></tr>
+      {% else %}<tr><td class="muted">لا توجد تبرعات بعد</td></tr>{% endfor %}
+    </table>
+    <h2>أحدث التبرعات</h2>
+    <table>
+      {% for d in recent %}
+      <tr><td><a href="{{ url_for('entity_detail', entity_name='donations', obj_id=d.id) }}">{{ d.receipt_no }}</a></td>
+        <td>{{ d.donor.name }}</td><td class="num">{{ d.amount|money }}</td></tr>
+      {% else %}<tr><td class="muted">لا توجد تبرعات بعد</td></tr>{% endfor %}
+    </table>
+  </section>
+</div>
+{% endblock %}

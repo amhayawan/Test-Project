@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ ('تعديل ' if obj else 'إضافة ') ~ entity.singular }}</h1>
+<form method="post" class="card form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+  {% if errors._ %}<div class="flash error">{{ errors._ }}</div>{% endif %}
+  {% for f in entity.fields %}
+    {% set v = values.get(f.name, '') if values else '' %}
+    {% if f.type == 'readonly' %}
+      {% if obj %}<label>{{ f.label }}<input value="{{ display_value(obj, f) }}" disabled></label>{% endif %}
+    {% else %}
+    <label class="{{ 'wide' if f.type == 'textarea' }}">{{ f.label }}{% if f.required %} <span class="req">*</span>{% endif %}
+      {% if f.type == 'textarea' %}
+        <textarea name="{{ f.name }}" rows="3">{{ v }}</textarea>
+      {% elif f.type == 'select' %}
+        <select name="{{ f.name }}">
+          {% for key, label in choices[f.choices].items() %}
+          <option value="{{ key }}" {{ 'selected' if v == key }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      {% elif f.type.startswith('fk:') %}
+        <select name="{{ f.name }}">
+          <option value="">— اختر —</option>
+          {% for o in fk[f.name] %}
+          <option value="{{ o.id }}" {{ 'selected' if v|string == o.id|string }}>{{ o }}{% if o.national_id %} — {{ o.national_id }}{% endif %}{% if o.phone %} — {{ o.phone }}{% endif %}</option>
+          {% endfor %}
+        </select>
+      {% elif f.type == 'date' %}
+        <input type="date" name="{{ f.name }}" value="{{ v or (today if f.required else '') }}">
+      {% elif f.type in ('money', 'int', 'year') %}
+        <input name="{{ f.name }}" value="{{ v }}" inputmode="decimal" dir="ltr">
+      {% elif f.type in ('phone', 'email', 'nid') %}
+        <input name="{{ f.name }}" value="{{ v }}" dir="ltr" {{ 'maxlength=14' if f.type == 'nid' }}>
+      {% else %}
+        <input name="{{ f.name }}" value="{{ v }}">
+      {% endif %}
+      {% if errors[f.name] %}<span class="err">{{ errors[f.name] }}</span>{% endif %}
+    </label>
+    {% endif %}
+  {% endfor %}
+  <div class="wide actions">
+    <button class="btn primary">حفظ</button>
+    <a class="btn" href="{{ url_for('entity_detail', entity_name=entity_name, obj_id=obj.id) if obj else url_for('entity_list', entity_name=entity_name) }}">إلغاء</a>
+  </div>
+</form>
+{% endblock %}

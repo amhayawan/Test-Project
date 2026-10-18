@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block auth %}
+<form method="post" class="card auth-card">
+  <h1>{{ app_name }}</h1>
+  <p class="muted">تسجيل الدخول</p>
+  {% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+  <label>اسم المستخدم<input name="username" required autofocus dir="ltr"></label>
+  <label>كلمة المرور<input name="password" type="password" required></label>
+  <button class="btn primary">دخول</button>
+</form>
+{% endblock %}
