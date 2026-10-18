@@ -55,6 +55,17 @@ def trial_balance(start, end, **dims):
         rows.append(row)
         for k in totals:
             totals[k] += row[k]
+    # Until a year-end closing entry exists, earlier years' income − expenses belong to the funds:
+    # show them as one line so the trial balance still balances across years.
+    prior = posted(**dims).filter(entry__date__lt=year_start, account__kind__in=(Account.INCOME, Account.EXPENSE)) \
+        .aggregate(d=Sum("debit"), c=Sum("credit"))
+    prior_net = (prior["d"] or ZERO) - (prior["c"] or ZERO)       # debit-minus-credit
+    if prior_net:
+        row = {"account": None, "od": max(prior_net, ZERO), "oc": max(-prior_net, ZERO), "d": ZERO, "c": ZERO,
+               "cd": max(prior_net, ZERO), "cc": max(-prior_net, ZERO)}
+        rows.insert(0, row)
+        for k in totals:
+            totals[k] += row[k]
     return rows, totals
 
 

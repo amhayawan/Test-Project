@@ -10,3 +10,4 @@ secret.key
 .env
 backups/
 v2/data/
+.claude/worktrees/

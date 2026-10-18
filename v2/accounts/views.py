@@ -85,3 +85,53 @@ def access_matrix(request):
         "roles": roles, "sections": sections, "conflicts": conflicts(),
         "rules": [(role_label(a), role_label(b), why) for a, b, why in CONFLICTS],
     })
+
+
+def setup(request):
+    """First start only: create the administrator, or load fictional demo data to try the system."""
+    from django import forms
+    from django.contrib import messages
+    from django.contrib.auth import get_user_model, login
+    from django.contrib.auth.models import Group
+    from django.contrib.auth.password_validation import validate_password
+    from django.core.exceptions import ValidationError
+    from django.core.management import call_command
+    from django.http import Http404
+    from django.shortcuts import render
+    from django.utils.translation import gettext as _
+
+    User = get_user_model()
+    if User.objects.exists():
+        raise Http404
+
+    class AdminForm(forms.Form):
+        name = forms.CharField(label=_("Your name"), max_length=150)
+        username = forms.CharField(label=_("Username"), max_length=150)
+        password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+
+        def clean_password(self):
+            pw = self.cleaned_data["password"]
+            validate_password(pw)
+            return pw
+
+    form = AdminForm(request.POST if request.POST.get("action") == "admin" else None)
+    if request.method == "POST" and request.POST.get("action") == "demo":
+        call_command("load_demo")
+        from .middleware import FirstRunMiddleware
+        FirstRunMiddleware.checked = True
+        messages.success(request, _("Demo data loaded. Sign in with any demo login below (password: Demo@2026)."))
+        return redirect("login")
+    if form.is_valid():
+        try:
+            user = User.objects.create_user(form.cleaned_data["username"], "", form.cleaned_data["password"],
+                                            name_ar=form.cleaned_data["name"], is_staff=True, is_superuser=True)
+        except ValidationError as exc:
+            form.add_error(None, exc)
+        else:
+            user.groups.add(Group.objects.get(name="admin"))
+            from .middleware import FirstRunMiddleware
+            FirstRunMiddleware.checked = True
+            login(request, user)
+            log_event("setup_admin_created", obj=user, request=request)
+            return redirect("dashboard")
+    return render(request, "registration/setup.html", {"form": form})

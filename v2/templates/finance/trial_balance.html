@@ -5,7 +5,7 @@
 <div class="card table-wrap"><table class="report">
   <tr><th rowspan="2">{% translate "Account" %}</th><th colspan="2">{% translate "Opening" %}</th><th colspan="2">{% translate "Movements in period" %}</th><th colspan="2">{% translate "Closing" %}</th></tr>
   <tr><th>{% translate "Debit" %}</th><th>{% translate "Credit" %}</th><th>{% translate "Debit" %}</th><th>{% translate "Credit" %}</th><th>{% translate "Debit" %}</th><th>{% translate "Credit" %}</th></tr>
-  {% for r in rows %}<tr><td><a href="{% url 'finance_ledger' %}?account={{ r.account.pk }}&period=custom&from={{ f.start|date:'Y-m-d' }}&to={{ f.end|date:'Y-m-d' }}">{{ r.account }}</a></td>
+  {% for r in rows %}<tr><td>{% if r.account %}<a href="{% url 'finance_ledger' %}?account={{ r.account.pk }}&period=custom&from={{ f.start|date:'Y-m-d' }}&to={{ f.end|date:'Y-m-d' }}">{{ r.account }}</a>{% else %}<i>{% translate "Surplus / (deficit) of previous years, not yet closed" %}</i>{% endif %}</td>
     <td class="num">{{ r.od|money }}</td><td class="num">{{ r.oc|money }}</td><td class="num">{{ r.d|money }}</td><td class="num">{{ r.c|money }}</td><td class="num">{{ r.cd|money }}</td><td class="num">{{ r.cc|money }}</td></tr>
   {% empty %}<tr><td colspan="7" class="muted">{% translate "No posted entries in this period." %}</td></tr>{% endfor %}
   <tr class="total"><td>{% translate "Total" %}</td><td class="num">{{ t.od|money }}</td><td class="num">{{ t.oc|money }}</td><td class="num">{{ t.d|money }}</td><td class="num">{{ t.c|money }}</td><td class="num">{{ t.cd|money }}</td><td class="num">{{ t.cc|money }}</td></tr>

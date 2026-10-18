@@ -1,5 +1,7 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.conf import settings
+from django.urls import include, path, re_path
+from django.views.static import serve as serve_file
 from django.utils.translation import gettext_lazy as _
 
 from accounts import views as account_views
@@ -15,6 +17,7 @@ admin.site.index_title = _("Back office")
 urlpatterns = [
     path("", dashboard_views.dashboard, name="dashboard"),
     path("access/", account_views.access_matrix, name="access_matrix"),
+    path("setup/", account_views.setup, name="setup"),
     path("login/", account_views.LoginView.as_view(), name="login"),
     path("logout/", account_views.LogoutView.as_view(), name="logout"),
     path("language/", account_views.set_language, name="set_language"),
@@ -31,3 +34,6 @@ urlpatterns = [
     path("projects/", include("projects.urls")),
     path("backoffice/", admin.site.urls),
 ]
+
+if settings.SERVE_STATIC:   # desktop / office installs without a separate web server
+    urlpatterns.append(re_path(r"^static/(?P<path>.*)$", serve_file, {"document_root": settings.STATIC_ROOT}))

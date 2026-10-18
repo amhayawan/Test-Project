@@ -73,6 +73,7 @@ tr.row { cursor: pointer; } tr.row:hover td { background: #f1f8f5; }
 .details dt, .details dd { padding: 8px 0; border-bottom: 1px solid var(--line); margin: 0; }
 .details dt { color: var(--muted); }
 .auth { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.wide-card { width: min(600px, 100%) !important; }
 .auth-card { width: 380px; display: flex; flex-direction: column; gap: 12px; }
 .auth-card h1 { margin: 0; color: var(--brand-dark); }
 .receipt-page { background: #fff; padding: 30px; }
@@ -95,6 +96,11 @@ form.inline { display: inline; margin: 0; } form.inline select { margin: 0; widt
 .pill.rejected, .pill.suspended, .pill.urgent, .pill.ended { background: #fde4e2; color: #a32620; }
 .pill.partial, .pill.high, .pill.paused { background: #fff1d6; color: #8a5300; }
 .pill.open, .pill.normal, .pill.closed { background: #eef2f0; color: #33443f; }
+.pill.rag-red, .pill.blocked { background: #fde4e2; color: #a32620; } .pill.rag-amber, .pill.doing { background: #fff1d6; color: #8a5300; }
+.pill.rag-green, .pill.done { background: #dff3ea; color: #0d5a43; }
+td.over { color: var(--danger); font-weight: 600; }
+.progress.inline { display: inline-block; width: 90px; height: 8px; vertical-align: middle; background: #eef2f0; border-radius: 4px; overflow: hidden; }
+.progress.inline > span { display: block; height: 100%; background: var(--brand); }
 .stages { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
 .stages a { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; color: var(--ink); }
 .stages a b { display: block; font-size: 1.6rem; }

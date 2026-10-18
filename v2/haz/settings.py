@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "accounts.middleware.FirstRunMiddleware",
     "core.middleware.RequestContextMiddleware",
     "core.middleware.SecurityHeadersMiddleware",
 ]
@@ -129,6 +130,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = DATA_DIR / "staticfiles"
+SERVE_STATIC = DEBUG or os.environ.get("HAZ_SERVE_STATIC") == "1"
 MEDIA_ROOT = DATA_DIR / "media"
 MAX_UPLOAD_MB = 10
 
