@@ -1,0 +1,22 @@
+{% load i18n static %}{% get_current_language as LANG %}
+  <aside class="sidebar">
+    <div class="brand">{% translate "Dr. Hassan Abbas Zaki Association" %}<small>{% translate "Integrated management system" %}</small></div>
+    <nav>
+      <a href="{% url 'dashboard' %}">{% translate "Dashboard" %}</a>
+      <a href="{% url 'approvals_inbox' %}">{% translate "Approvals" %}{% if approvals_waiting %} <span class="count">{{ approvals_waiting }}</span>{% endif %}</a>
+      {% for group, links, open in nav_groups %}<details class="navgroup"{% if open %} open{% endif %}><summary>{{ group }}</summary>
+        {% for label, url in links %}<a href="{{ url }}"{% if request.path == url %} class="active"{% endif %}>{{ label }}</a>{% endfor %}</details>{% endfor %}
+      {% if has_employee_record %}<a href="{% url 'my_leave' %}">{% translate "My leave" %}</a> <a href="{% url 'my_payslips' %}">{% translate "My payslips" %}</a>{% endif %}
+      {% if perms.accounts.view_user %}<a href="{% url 'access_matrix' %}">{% translate "Who can do what" %}</a>{% endif %}
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Back office" %}</a>{% endif %}
+    </nav>
+    <div class="me">
+      <div>{{ user.display_name }}</div>
+      <form method="post" action="{% url 'set_language' %}" class="lang">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% if LANG == 'ar' %}<button name="language" value="en" class="link">English</button>{% else %}<button name="language" value="ar" class="link">العربية</button>{% endif %}
+      </form>
+      {% if user.is_staff %}<a href="{% url 'admin:password_change' %}">{% translate "Change password" %}</a>{% endif %}
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">{% translate "Sign out" %}</button></form>
+    </div>
+  </aside>

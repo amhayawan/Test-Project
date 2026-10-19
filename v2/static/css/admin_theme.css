@@ -18,12 +18,6 @@
   --font-family-primary: "Segoe UI", Tahoma, "Noto Kufi Arabic", Arial, sans-serif;
 }
 body { background: #f4f6f5; font-size: 15px; }
-#header { background: var(--header-bg); padding: 12px 28px; }
-#site-name a { color: #fff; font-weight: 700; font-size: 1.05rem; display: flex; flex-direction: column; }
-#site-name small { color: #9fc7b7; font-weight: 400; font-size: .8rem; }
-#user-tools { color: #dfeee8; display: flex; gap: 14px; align-items: center; font-size: .9rem; }
-#user-tools a, #logout-form button { color: #dfeee8; border: 0; background: none; font: inherit; cursor: pointer; text-transform: none; }
-#user-tools a.to-dashboard { background: #13795b; color: #fff; padding: 6px 12px; border-radius: 7px; }
 div.breadcrumbs { background: var(--breadcrumbs-bg); }
 #content { background: #fff; border: 1px solid #e1e7e4; border-radius: 10px; margin: 18px 24px; padding: 20px 24px; }
 .module h2, .module caption, .inline-group h2, fieldset.module h2 { background: #13795b; color: #fff; }
@@ -35,3 +29,14 @@ div.breadcrumbs { background: var(--breadcrumbs-bg); }
 #nav-sidebar .current-app caption a { background: #0d5a43; color: #fff; }
 #nav-sidebar .current-app caption { background: #0d5a43; }
 #result_list tbody th, #result_list td.field-date, #result_list td.nowrap { white-space: nowrap; }
+
+/* the platform side menu, fixed beside the back-office pages */
+body { background: var(--bg, #f4f6f5); }
+.sidebar { position: fixed; top: 0; bottom: 0; inset-inline-start: 0; height: 100vh; z-index: 50; }
+.sidebar button.link { color: #a9d8c6; background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+.sidebar details summary { list-style: none; }
+#container { padding-inline-start: 240px; min-width: 0; box-sizing: border-box; }
+div.breadcrumbs { background: #fff; color: #6b7a75; border-bottom: 1px solid #e1e7e4; padding: 14px 28px; }
+div.breadcrumbs a { color: #13795b; }
+#content h1 { font-size: 1.5rem; color: #1d2b27; font-weight: 700; }
+@media (max-width: 900px) { #container { padding-inline-start: 190px; } }

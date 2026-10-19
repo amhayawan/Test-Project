@@ -13,6 +13,17 @@ from hr import views as hr_views
 admin.site.site_header = _("HAZ integrated management system")
 admin.site.site_title = _("HAZ system")
 admin.site.index_title = _("Back office")
+admin.site.enable_nav_sidebar = False          # the platform's own side menu is shown instead
+
+
+def _login_page(request, extra_context=None):
+    """One sign-in page for the whole platform."""
+    from django.shortcuts import redirect
+    from django.utils.http import urlencode
+    return redirect(f"/login/?{urlencode({'next': request.get_full_path()})}")
+
+
+admin.site.login = _login_page
 
 urlpatterns = [
     path("", dashboard_views.dashboard, name="dashboard"),

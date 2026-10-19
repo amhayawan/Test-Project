@@ -1,19 +1,7 @@
 {% extends "admin/base.html" %}{% load i18n static %}
 {% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
-{# one look across the platform: no automatic dark mode, the platform's own colours #}
+{# The back office uses the platform shell: same side menu, colours and fonts as every other page; never dark. #}
 {% block dark-mode-vars %}{% endblock %}
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/admin_theme.css' %}">{% endblock %}
-{% block branding %}
-<div id="site-name"><a href="{% url 'dashboard' %}">{% translate "Dr. Hassan Abbas Zaki Association" %}<small>{% translate "Integrated management system" %}</small></a></div>
-{% endblock %}
-{% block usertools %}
-{% if has_permission %}
-<div id="user-tools">
-  <a href="{% url 'dashboard' %}" class="to-dashboard">← {% translate "Dashboard" %}</a>
-  <strong>{% firstof user.display_name user.get_username %}</strong>
-  <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a>
-  <form id="logout-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">{% translate 'Sign out' %}</button></form>
-</div>
-{% endif %}
-{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/shell.css' %}"><link rel="stylesheet" href="{% static 'css/admin_theme.css' %}">{% endblock %}
+{% block header %}{% if user.is_authenticated %}{% include "_sidebar.html" %}{% endif %}{% endblock %}
 {% block nav-global %}{% endblock %}

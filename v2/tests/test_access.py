@@ -107,3 +107,15 @@ def test_first_start_is_arabic_with_the_demo_button_even_on_english_windows(db):
     html = r.content.decode()
     assert r.redirect_chain[-1][0].endswith("/setup/")
     assert "تحميل البيانات التجريبية" in html and 'dir="rtl"' in html
+
+
+def test_back_office_uses_the_platform_shell(demo):
+    from accounts.models import User
+    c = Client()
+    r = c.get("/backoffice/", follow=True)
+    assert r.redirect_chain[-1][0].startswith("/login/")              # one sign-in page for everything
+    for username in ("accountant", "hrofficer", "researcher1", "admin"):
+        c.force_login(User.objects.get(username=username))
+        html = c.get("/backoffice/").content.decode()
+        assert 'class="sidebar"' in html and "css/shell.css" in html     # same side menu, colours and fonts
+        assert "dark_mode.css" not in html and 'id="header"' not in html

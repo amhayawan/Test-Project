@@ -1,7 +1,7 @@
 {% load i18n humanize_lite %}{% get_current_language_bidi as RTL %}{% get_current_language as LANG %}<!doctype html>
 <html lang="{{ LANG }}" dir="{{ RTL|yesno:'rtl,ltr' }}"><head><meta charset="utf-8">
 <title>{% translate "Payslip" %} {{ s.run }} — {{ s.employee.name }}</title>
-{% load static %}<link rel="stylesheet" href="{% static 'css/app.css' %}"></head>
+{% load static %}<link rel="stylesheet" href="{% static 'css/shell.css' %}"><link rel="stylesheet" href="{% static 'css/app.css' %}"></head>
 <body class="receipt-page">
 <div class="receipt payslip">
   <h1>{% translate "Dr. Hassan Abbas Zaki Association" %}</h1>
