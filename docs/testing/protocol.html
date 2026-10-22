@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>HAZ-v2 User Testing Protocol</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Noto+Kufi+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout: sticky tester bar, department tabs, one column of test-case sheets with step-by-step result buttons. */
+:root{
+  --bg:#f5f7f5; --panel:#ffffff; --ink:#17231e; --muted:#5b6b63; --line:#dde5e0;
+  --green:#13795b; --deep:#0f3d31; --tint:#e6f2ec;
+  --pass:#1a7f4b; --pass-bg:#e3f4ea; --fail:#b42318; --fail-bg:#fdecea; --hard:#a15c07; --hard-bg:#fdf3e1;
+  --skip:#5b6b63; --skip-bg:#eef1ef;
+  --sans:"IBM Plex Sans","Noto Kufi Arabic",system-ui,sans-serif;
+  --ar:"Noto Kufi Arabic","IBM Plex Sans",Tahoma,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1714; --panel:#15211c; --ink:#e5eee9; --muted:#9aaba2; --line:#26352e;
+  --green:#4cc39a; --deep:#0b2a21; --tint:#173029;
+  --pass:#5fd39a; --pass-bg:#173a29; --fail:#ff8a80; --fail-bg:#3d1c1a; --hard:#f2b45a; --hard-bg:#3a2a12;
+  --skip:#9aaba2; --skip-bg:#1f2b26; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1714; --panel:#15211c; --ink:#e5eee9; --muted:#9aaba2; --line:#26352e;
+  --green:#4cc39a; --deep:#0b2a21; --tint:#173029;
+  --pass:#5fd39a; --pass-bg:#173a29; --fail:#ff8a80; --fail-bg:#3d1c1a; --hard:#f2b45a; --hard-bg:#3a2a12;
+  --skip:#9aaba2; --skip-bg:#1f2b26; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--deep)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--deep);color:#fff}
+header.top .wrap{padding-block:22px 18px;display:flex;flex-direction:column;gap:6px}
+header.top .eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9fd8c2}
+header.top h1{margin:0;font-size:26px;line-height:1.2;text-wrap:balance}
+header.top p{margin:0;color:#cfe5db;max-width:70ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:10px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.bar label{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.bar input{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:15em}
+.sync{font-size:12.5px;color:var(--muted);margin-inline-start:auto}
+.sync b{color:var(--green);font-weight:600}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding-block:12px 0;scrollbar-width:thin}
+nav.tabs button{font:inherit;font-size:14px;white-space:nowrap;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;display:flex;gap:6px;align-items:center}
+nav.tabs button[aria-selected="true"]{background:var(--green);border-color:var(--green);color:#fff}
+nav.tabs .n{font:500 11.5px var(--mono);opacity:.75}
+main{padding-block:18px 60px;display:flex;flex-direction:column;gap:18px}
+h2{font-size:21px;margin:6px 0 0;text-wrap:balance}
+h3{font-size:16px;margin:0}
+.lead{color:var(--muted);margin:0;max-width:72ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate;background:var(--tint);padding:0 5px;border-radius:4px;font-size:.93em;white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.login{font:500 12.5px var(--mono);background:var(--skip-bg);border:1px solid var(--line);padding:1px 7px;border-radius:5px;white-space:nowrap}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:start;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.num,th.num{text-align:end;font-variant-numeric:tabular-nums}
+ul.tight,ol.tight{margin:6px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+.sev{display:inline-block;font:600 11.5px var(--mono);padding:1px 6px;border-radius:4px}
+.s1{background:var(--fail-bg);color:var(--fail)}.s2{background:var(--hard-bg);color:var(--hard)}.s3{background:var(--skip-bg);color:var(--skip)}
+
+/* test case sheet */
+.case{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.case>summary{list-style:none;cursor:pointer;padding:14px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:start}
+.case>summary::-webkit-details-marker{display:none}
+.cid{font:600 13px var(--mono);color:var(--green);padding-top:2px}
+.ctitle{font-weight:600;font-size:16px}
+.cmeta{grid-column:2;display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--muted);align-items:center}
+.cstat{grid-row:1/3;grid-column:3;font-size:12.5px;text-align:end;white-space:nowrap}
+.chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.chip.todo{background:var(--skip-bg);color:var(--skip)}
+.chip.pass{background:var(--pass-bg);color:var(--pass)}
+.chip.fail{background:var(--fail-bg);color:var(--fail)}
+.chip.hard{background:var(--hard-bg);color:var(--hard)}
+.chip.inprog{background:var(--tint);color:var(--green)}
+.cbody{border-top:1px solid var(--line);padding:14px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.why{margin:0;color:var(--muted)}
+.pre{font-size:14px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:8px 12px}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) auto;gap:6px 14px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:600 12px var(--mono);color:var(--muted);padding-top:3px}
+.do{min-width:0}
+.ex{min-width:0;color:var(--muted);font-size:14px}
+.ex::before{content:"Expect: ";font-weight:600;color:var(--ink)}
+.rb{display:flex;gap:4px}
+.rb button{font:600 12px var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:5px 8px;border-radius:6px;cursor:pointer;min-width:44px}
+.rb button[data-v="pass"][aria-pressed="true"]{background:var(--pass-bg);color:var(--pass);border-color:var(--pass)}
+.rb button[data-v="hard"][aria-pressed="true"]{background:var(--hard-bg);color:var(--hard);border-color:var(--hard)}
+.rb button[data-v="fail"][aria-pressed="true"]{background:var(--fail-bg);color:var(--fail);border-color:var(--fail)}
+.rb button:focus-visible,nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 14px;background:var(--bg);border-radius:8px;padding:12px}
+.score label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);font-weight:600}
+.score select,.score input,.score textarea{font:inherit;font-size:14px;font-weight:400;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);width:100%}
+.score .wide{grid-column:1/-1}
+.score textarea{min-height:58px;resize:vertical}
+.ask{font-size:14px;border-inline-start:3px solid var(--green);padding:4px 12px;background:var(--tint);border-radius:0 6px 6px 0}
+.btn{font:600 14px var(--sans);border:1px solid var(--green);background:var(--green);color:#fff;padding:8px 14px;border-radius:7px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--green)}
+.note{font-size:13px;color:var(--muted)}
+.warn{background:var(--hard-bg);color:var(--ink);border:1px solid var(--hard);border-radius:8px;padding:10px 14px;font-size:14px}
+.prog{height:8px;background:var(--skip-bg);border-radius:4px;overflow:hidden;display:flex;min-width:80px}
+.prog i{display:block;height:100%}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+.flow span{font:600 12px var(--mono);background:var(--tint);color:var(--green);padding:2px 7px;border-radius:5px}
+.flow em{color:var(--muted);font-style:normal}
+@media (max-width:720px){
+  ol.steps li{grid-template-columns:24px minmax(0,1fr)}
+  .ex,.rb{grid-column:2}
+  .case>summary{grid-template-columns:auto 1fr}
+  .cstat{grid-row:auto;grid-column:2;text-align:start}
+  .sync{margin-inline-start:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Dr. Hassan Abbas Zaki Association · HAZ-v2</div>
+  <h1>User testing protocol</h1>
+  <p>Step-by-step test cases for every department and every login. Each step asks two things: does it work, and could this employee do it without help? Record the result as you go.</p>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <label for="tester">Tester name <input id="tester" placeholder="e.g. Mona – Research" autocomplete="off"></label>
+  <label for="observer">Observer <input id="observer" placeholder="who is watching" autocomplete="off"></label>
+  <span class="sync" id="sync">Loading…</span>
+</div>
+<div class="wrap"><nav class="tabs" id="tabs" role="tablist"></nav></div>
+</div>
+
+<main class="wrap" id="main"></main>
+
+<script>
+const PW = "Demo@2026";
+const A = s => `<span class="ar">${s}</span>`;
+const L = s => `<span class="login">${s}</span>`;
+
+/* ---------------------------------------------------------------- test cases */
+const DEPTS = [
+ {id:"all", name:"All staff", logins:["any"], intro:"Every employee runs these first. They test the parts everyone shares: signing in, the dashboard and its period filters, the approvals inbox, leave and payslips.",
+  cases:[
+  {id:"EV-01", t:"Sign in and find your way", who:["any login"], min:5,
+   why:"Can a first-time user get in, understand the menu and read their dashboard for the period they choose?",
+   steps:[
+    [`Open HAZ-v2. Enter your demo username and the password <code>${PW}</code>.`, "The dashboard opens in Arabic with your name in the side menu."],
+    [`Read the side menu and write down every group you see.`, "Only your department's groups appear. Compare with the Access checks tab."],
+    [`On the dashboard set ${A("الفترة")} to ${A("هذا الشهر")}, then ${A("هذا العام")}, then ${A("فترة مخصصة")} with your own dates, and press ${A("تطبيق")}.`, "Figures and charts change with each period, and the comparison with the previous period updates."],
+    [`Under any chart press ${A("عرض كجدول")}.`, "The same numbers appear as a table."],
+    [`Switch the language to English, then back to Arabic.`, "Every label changes, with nothing left half-translated."],
+    [`Press ${A("تسجيل الخروج")}.`, "You are back on the sign-in page."]]},
+  {id:"EV-02", t:"Request leave and see the balance", who:["researcher1","casemanager"], min:8,
+   why:"Self-service leave is the feature every employee will touch. It must be obvious without training.",
+   pre:"Leave types in the demo are SAMPLE rules, not legal values. You are testing the steps, not the number of days.",
+   steps:[
+    [`As ${L("researcher1")} open ${A("إجازاتي")}.`, `Balances per leave type: ${A("الرصيد السنوي")}, ${A("المستخدم")}, ${A("المتاح")}.`],
+    [`Under ${A("طلب جديد")} choose annual leave for 3 working days next week, write a reason and press ${A("إرسال إلى مديري")}.`, `The request appears under ${A("طلباتي")} as ${A("بانتظار الاعتماد")}.`],
+    [`Request more annual days than ${A("المتاح")} shows.`, "Refused with a message saying why."],
+    [`Request a 2-hour permission (same start and end date, hours filled in).`, "Accepted and counted in hours."],
+    [`Sign out. Sign in as ${L("casemanager")} (researcher1's line manager). Open ${A("الاعتمادات")} → ${A("بانتظار قراري")}.`, "Both of researcher1's requests are waiting."],
+    [`Open the annual leave request and press ${A("اعتماد")}.`, "Status changes to approved."],
+    [`Sign in as ${L("researcher1")} again and open ${A("إجازاتي")}.`, `${A("المستخدم")} went up and ${A("المتاح")} went down by working days only (weekends and official holidays not counted).`],
+    [`Cancel the 2-hour permission with ${A("إلغاء")}.`, "Cancelled; nothing deducted."]]},
+  {id:"EV-03", t:"Open my payslip", who:["accountant"], min:3,
+   why:"Employees should answer their own salary questions instead of asking HR.",
+   steps:[
+    [`Open ${A("قسائم راتبي")}.`, "A list of paid months."],
+    [`Open the latest month.`, "Gross pay, each deduction and net pay are listed and readable."],
+    [`Look for any other employee's payslip.`, "There is no way to reach anyone else's."]]},
+  {id:"EV-04", t:"Change my password", who:["any login"], min:3,
+   why:"Real users must replace the demo password on day one.",
+   steps:[
+    [`Open ${A("تغيير كلمة المرور")}, enter the old and a new password, save.`, "Confirmation shown."],
+    [`Sign out and sign in with the new password.`, "Works; the old one no longer does."],
+    [`Change it back to <code>${PW}</code> so the next tester can use this login.`, "Done."]]}
+ ]},
+
+ {id:"res", name:"Social Research", logins:["researcher1","researcher2","casemanager"], intro:"Field researchers register families from the paper research form; the Research Department manager reviews every case before it is referred to the Projects Department.",
+  cases:[
+  {id:"RS-01", t:"Register a case from a filled paper research form", who:["researcher1"], min:20,
+   why:"The main daily task of a researcher. If this takes much longer than the paper form, researchers will keep using paper.",
+   pre:"Bring one real filled research form with the names and ID number changed. Time the whole entry.",
+   steps:[
+    [`${A("إدارة الحالات")} → ${A("الحالات")} → add a new case.`, "The screen sections follow the same order as the paper form."],
+    [`Fill the head of household, address, marital status and ID.`, "Fields match the paper form; nothing you need is missing."],
+    [`Add every family member in the family table.`, "Each member saved with age, relation, education and work."],
+    [`Enter all income and expense lines (food per day).`, `${A("إجمالي الدخل")}, total monthly expenses and ${A("العجز الشهري (المصروفات − الدخل)")} are calculated for you; food is multiplied by 30. Check against your hand calculation.`],
+    [`Fill housing, the household items checklist and medical conditions.`, "The household items list is already there to tick."],
+    [`Save.`, "The case gets a unique case code, status under study, and you as the researcher."]],
+   ask:"Feasibility: is any field on the paper form missing on screen, or is there anything on screen the team never fills in? List them in the notes."},
+  {id:"RS-02", t:"Try to send an incomplete case", who:["researcher1"], min:5,
+   why:"The system should stop half-finished research reaching the manager, and say exactly what is missing.",
+   steps:[
+    [`In the case list tick your new case, choose the action ${A("إرسال للاعتماد")} and run it.`, `Refused: ${A("أكمل البحث أولاً")} followed by the missing items (visit date, findings, recommendation, zakat eligibility, researcher's assessment).`],
+    [`Fill the missing items, save and send again.`, "Message: 1 sent for approval. Status changes to recommended."]]},
+  {id:"RS-03", t:"Print the research form", who:["researcher1"], min:4,
+   why:"The printed form must still be usable for the file and for signatures.",
+   steps:[
+    [`In the case list press ${A("استمارة البحث")} on your case.`, "A paper-style form in Arabic with every field filled in."],
+    [`Put it next to the paper original.`, "Same sections, same order, same totals."],
+    [`From the side menu open ${A("استمارة بحث فارغة (للطباعة)")}.`, "A blank form ready to print for a field visit."]]},
+  {id:"RS-04", t:"What a researcher must not see", who:["researcher2"], min:5, neg:true,
+   why:"Beneficiary privacy between researchers, and donor confidentiality.",
+   steps:[
+    [`As ${L("researcher2")} open ${A("الحالات")}.`, "Only researcher2's own cases. The case researcher1 created in RS-01 is not listed."],
+    [`Open one of your approved cases and look at the needs table.`, `The ${A("تم التجميع؟")} column shows only collected / partly collected / not collected yet. No donor names and no amounts given.`],
+    [`Look through the whole side menu.`, `No ${A("إدارة المتبرعين")} and no ${A("الشؤون المالية")}.`]]},
+  {id:"RS-05", t:"Research manager returns, then approves a case", who:["casemanager","researcher1"], min:10,
+   why:"The manager review is the control point before any money is spent on a family.",
+   steps:[
+    [`As ${L("casemanager")} open ${A("الاعتمادات")} → ${A("بانتظار قراري")}.`, "researcher1's case from RS-02 is waiting."],
+    [`Open it and press ${A("إعادة للتعديل")} without a comment.`, "Refused: a comment is required to return or reject."],
+    [`Write a comment ("add the landlord's phone") and return it.`, "Status: returned."],
+    [`As ${L("researcher1")} open the case.`, "The manager's comment is visible. Fix it, save, send again."],
+    [`As ${L("casemanager")} open it again and press ${A("اعتماد")}.`, `Approved. The case now appears in ${A("الحالات المحالة لقسم المشروعات")} with a referral date.`],
+    [`Open ${A("الحالات")}.`, "The manager sees every researcher's cases."]]},
+  {id:"RS-06", t:"Nobody approves their own case", who:["casemanager"], min:5, neg:true,
+   why:"Maker-checker: the person who prepares a case cannot approve it.",
+   steps:[
+    [`As ${L("casemanager")} create a complete case yourself and send it for approval.`, "Sent."],
+    [`Open ${A("الاعتمادات")}.`, `Your own case is under ${A("مقدمة مني")}, not under ${A("بانتظار قراري")}.`],
+    [`Write down who would approve it.`, "With only one research manager there is nobody else. This is expected in the demo; it is a staffing finding for the association (two people per approving role)."]]}
+ ]},
+
+ {id:"prj", name:"Projects Department", logins:["projects","pm"], intro:"The Projects Department receives referred cases, decides the assistance, runs project budgets, milestones and tasks, and records delivery.",
+  cases:[
+  {id:"PJ-01", t:"Pick up a referred case and propose aid", who:["projects"], min:10,
+   why:"The hand-over from Research to Projects is where cases used to get lost.",
+   steps:[
+    [`As ${L("projects")} open ${A("الحالات المحالة لقسم المشروعات")}.`, "The case approved in RS-05 is there with its referral date."],
+    [`Open it and add a need: type, amount, once or monthly.`, `Saved. It now shows on ${A("الحالات المتاحة للمتبرعين (بالكود)")} by code only.`],
+    [`${A("المساعدات")} → add an aid of 3,000 EGP: the case, aid type, project (orphans), paid by cash.`, "Saved as draft."],
+    [`Add a second aid of 15,000 EGP for the same case.`, "Saved as draft."],
+    [`Add a third aid paid by stock (food parcels) for SC-04.`, "Saved as draft."],
+    [`Tick all three and run ${A("إرسال للاعتماد")}.`, "3 sent for approval."]]},
+  {id:"PJ-02", t:"Projects Department manager approves aid", who:["pm","director"], min:6,
+   why:"Approval limits: the manager decides small aid, the executive director also signs large aid. Limits in the demo are placeholders.",
+   steps:[
+    [`As ${L("pm")} open ${A("الاعتمادات")}.`, "All three aids are waiting."],
+    [`Approve the 3,000 and the stock aid.`, "Both approved."],
+    [`Approve the 15,000.`, "It moves to step 2 (executive director) instead of being approved."],
+    [`As ${L("director")} approve it.`, "Approved. The history shows both decisions."]]},
+  {id:"PJ-03", t:"Record cash aid as delivered", who:["projects","accountant"], min:5,
+   why:"Delivery is the moment money leaves; Finance must see it without re-typing.",
+   steps:[
+    [`As ${L("projects")} in ${A("المساعدات")} tick the approved 3,000 aid and run ${A("تسجيل التسليم (للمساعدات المعتمدة فقط)")}.`, "Delivered with today's date."],
+    [`Try the same action on an aid that is not approved.`, "Refused."],
+    [`As ${L("accountant")} open ${A("قيود اليومية")}.`, "A new entry for the aid: aid expense debited, cash credited, no typing by Finance."]]},
+  {id:"PJ-04", t:"Read the projects overview", who:["pm"], min:6,
+   why:"The manager should know which project is in trouble in under a minute.",
+   steps:[
+    [`Open ${A("نظرة عامة على المشروعات")}.`, "Each project: approved budget, spent, share of budget spent, progress, flag."],
+    [`Pick a project flagged at risk and explain why from the screen alone.`, "The reason is clear without help (spending ahead of progress, or past its end date)."],
+    [`${A("المهام")} → mark one task done. ${A("المراحل")} → update one milestone's progress.`, "Saved."],
+    [`Return to the overview.`, "Progress has changed."]]},
+  {id:"PJ-05", t:"Prepare and approve a project budget", who:["pm","finmanager"], min:10,
+   why:"Budgets connect Projects with Finance approval.",
+   steps:[
+    [`${A("موازنات المشروعات")} → open a project and add budget lines. Save.`, "Lines total shown."],
+    [`Tick the project and run ${A("إرسال الموازنة للاعتماد")}.`, "Sent."],
+    [`As ${L("finmanager")} approve it in ${A("الاعتمادات")}.`, "Approved budget appears on the overview."],
+    [`As ${L("pm")} run ${A("إعادة فتح الموازنة المعتمدة للتعديل")}.`, "Budget is open for change and will need approval again."]]}
+ ]},
+
+ {id:"fr", name:"Fundraising", logins:["fundraiser"], intro:"Fundraising offers cases to donors by code only, records donations and sponsorships against that code, and runs campaigns.",
+  cases:[
+  {id:"FR-01", t:"Find a case to offer a donor", who:["fundraiser"], min:4,
+   why:"Donors choose by case code; beneficiary identity must stay with the research team.",
+   steps:[
+    [`Open ${A("الحالات المتاحة للمتبرعين (بالكود)")}.`, "Case code, category, family size, need, amount needed, still needed."],
+    [`Look for a name, ID number, address or phone anywhere on the page.`, "None shown."],
+    [`Filter by category and press ${A("تطبيق")}.`, "Only that category."]]},
+  {id:"FR-02", t:"Record a donor and a designated donation by case code", who:["fundraiser","researcher1"], min:8,
+   why:"This is the link between donor money and a specific family.",
+   steps:[
+    [`${A("المتبرعون")} → add a new donor.`, "Saved."],
+    [`${A("التبرعات")} → add a donation for half of what the RS-05 case still needs, entering its code in ${A("كود الحالة")}.`, "Saved and linked to the case need."],
+    [`Try a code that does not exist.`, "Refused with a clear message."],
+    [`Open the available cases page again.`, "Still needed has gone down."],
+    [`As ${L("researcher1")} open that case.`, `${A("تم التجميع؟")} shows partly collected, with no donor or amount.`],
+    [`As ${L("fundraiser")} record the rest; check again as researcher1.`, "Shows fully collected."]]},
+  {id:"FR-03", t:"Start a monthly sponsorship by code", who:["fundraiser"], min:6,
+   why:"Sponsorships are recurring; arrears must be visible without a spreadsheet.",
+   steps:[
+    [`${A("الكفالات")} → add: donor, case code, monthly amount, start date.`, "Saved."],
+    [`Open the dashboard and find the sponsorship arrears section.`, "Sponsors who are behind are listed, or a clear 'none in arrears'."]]},
+  {id:"FR-04", t:"Campaign and fundraising figures by period", who:["fundraiser"], min:6,
+   why:"Fundraising should report results without asking Finance.",
+   steps:[
+    [`${A("الحملات")} → add a campaign with a target; record one donation under it.`, "Saved."],
+    [`On the dashboard compare ${A("هذا الشهر")} with ${A("الشهر الماضي")}.`, "Totals raised, donors who gave and campaign progress change with the period."]]},
+  {id:"FR-05", t:"What Fundraising must not see", who:["fundraiser"], min:3, neg:true,
+   why:"Fundraising sees codes, never the family file; never the books.",
+   steps:[
+    [`Look through the side menu.`, `No ${A("الحالات")} list, no research form, no ${A("الشؤون المالية")}.`]]}
+ ]},
+
+ {id:"sup", name:"Supply chain", logins:["procurement","storekeeper"], intro:"Procurement buys against approved requests; the storekeeper receives and issues goods, including in-kind aid to families.",
+  cases:[
+  {id:"SC-01", t:"Raise a purchase request", who:["procurement","finmanager"], min:6,
+   why:"Buying starts with an approved need.",
+   steps:[
+    [`${A("طلبات الشراء")} → add: project, items, quantities, estimated prices.`, "Estimated total shown."],
+    [`Run ${A("إرسال للاعتماد")}.`, "Sent."],
+    [`As ${L("finmanager")} approve it.`, "Approved (above 50,000 EGP it also goes to the director)."]]},
+  {id:"SC-02", t:"Issue a purchase order", who:["procurement","finmanager"], min:6,
+   why:"Orders must stay within what was approved.",
+   steps:[
+    [`${A("أوامر الشراء")} → add from the approved request, choose a supplier, enter prices.`, "Saved."],
+    [`Order more of an item than the request allows.`, "Refused: only the remaining quantity can be ordered."],
+    [`Correct it, send for approval; approve as ${L("finmanager")}.`, "Approved."]]},
+  {id:"SC-03", t:"Receive the goods into the store", who:["storekeeper"], min:5,
+   why:"Stock and its cost are recorded once, at the door.",
+   steps:[
+    [`${A("أذونات الاستلام")} → add against the approved order, quantities, store.`, "Saved."],
+    [`Run ${A("تأكيد الاستلام (يضيف للمخزون ويقيّده)")}.`, "Confirmed."],
+    [`Open ${A("رصيد المخزون")}.`, "Quantity and value went up at average cost."],
+    [`Try receiving against an order that is not approved.`, "Refused."]]},
+  {id:"SC-04", t:"Issue food parcels for an approved aid", who:["storekeeper"], min:6,
+   why:"In-kind aid leaves the store only against an approved aid, and the aid is marked delivered automatically.",
+   pre:"Needs the stock-paid aid approved in PJ-02.",
+   steps:[
+    [`${A("أذونات الصرف المخزني")} → add, purpose aid, choose the aid, add lines.`, "Saved."],
+    [`Run ${A("تأكيد الصرف (يخرج السلع من المخزون ويقيّد تكلفتها)")}.`, "Stock goes down; the aid shows delivered."],
+    [`Try to issue more than is on hand.`, "Refused. If it is accepted, record it as S1."]]},
+  {id:"SC-05", t:"Check stock on hand", who:["storekeeper","procurement"], min:3,
+   why:"Reorder decisions without counting shelves.",
+   steps:[
+    [`${A("رصيد المخزون")} → filter by store and category.`, "Quantity, average cost, value, and items at reorder level flagged."]]}
+ ]},
+
+ {id:"fin", name:"Finance", logins:["accountant","finmanager"], intro:"Finance owns all money data. Most entries arrive automatically from the other departments; Finance checks, pays, closes months and reports.",
+  cases:[
+  {id:"FN-01", t:"Supplier invoice to payment", who:["accountant","finmanager"], min:10,
+   why:"Pay only for what was ordered and received, with two people involved.",
+   steps:[
+    [`${A("فواتير الموردين")} → add against the approved order from SC-02; send for approval.`, "Sent."],
+    [`As ${L("finmanager")} approve it.`, "Approved."],
+    [`As ${L("accountant")} run ${A("إنشاء إذن صرف بالمتبقي المستحق")}.`, `A payment voucher is created in ${A("أذونات الصرف")}.`],
+    [`Send the voucher for approval; approve as ${L("finmanager")}.`, "Approved."],
+    [`Run ${A("تسجيل كمدفوع (خرجت الأموال: يُرحَّل القيد)")}.`, "Entry posted; the invoice shows nothing still to pay."]]},
+  {id:"FN-02", t:"Manual journal, approval and reversal", who:["accountant","finmanager"], min:8,
+   why:"Posted entries cannot be edited; mistakes are corrected by reversal.",
+   steps:[
+    [`${A("قيود اليومية")} → add an entry where debit ≠ credit. Save.`, "Refused: the entry does not balance."],
+    [`Balance it, save, send for approval; approve as ${L("finmanager")}.`, "Posted."],
+    [`Try to edit the posted entry.`, "Not possible."],
+    [`Run ${A("عكس القيد (يُنشئ قيداً عكسياً للاعتماد)")}.`, "A reversing entry waits for approval."]]},
+  {id:"FN-03", t:"Donations reach the books", who:["accountant"], min:4,
+   why:"Fundraising records once; Finance does not re-type.",
+   steps:[
+    [`${A("قيود اليومية")} → find the entry for the FR-02 donation.`, "Bank or cash debited, donation income credited, against the right fund."],
+    [`Look for the donor list.`, "The accountant sees donations but not the donor master list."]]},
+  {id:"FN-04", t:"Financial reports by period", who:["accountant","finmanager"], min:10,
+   why:"Reports come straight from the books, for any period.",
+   steps:[
+    [`${A("التقارير المالية")} → ${A("ميزان المراجعة")}.`, "Total debit equals total credit."],
+    [`Open ${A("قائمة الإيرادات والمصروفات")}, ${A("قائمة المركز المالي")}, ${A("أرصدة الصناديق")}, ${A("دفتر الأستاذ العام")}.`, "Each opens and balances."],
+    [`Change the period on each.`, "Figures follow the period."],
+    [`Compare donations on the dashboard with donation income in the income statement for the same period.`, "Same total, or the difference is explainable."]]},
+  {id:"FN-05", t:"Monthly depreciation", who:["accountant","finmanager"], min:5,
+   why:"Month-end routine in one action.",
+   steps:[
+    [`${A("الإهلاك")} → add a run for last month; run ${A("احتساب وإنشاء القيد (ثم إرساله للاعتماد)")}.`, "Journal created and sent."],
+    [`Approve as ${L("finmanager")}.`, "Posted."]]},
+  {id:"FN-06", t:"Month-end lock and posting problems", who:["finmanager","projects"], min:8,
+   why:"Closed months stay closed; nothing is silently lost.",
+   steps:[
+    [`${A("السنوات المالية وإقفال الشهر")} → lock up to the end of last month.`, "Saved."],
+    [`As ${L("projects")} record an aid as delivered with a date in the locked month.`, "The aid is saved."],
+    [`As ${L("finmanager")} open ${A("مشكلات الترحيل")}.`, "The entry is waiting there, with the reason (locked month)."],
+    [`Unlock, then run ${A("إعادة المحاولة (بعد إصلاح قاعدة الترحيل أو الشهر المقفل)")}. Lock again.`, "Posted; the problem list is empty."]]},
+  {id:"FN-07", t:"Payroll in the books, without salaries", who:["finmanager"], min:3, neg:true,
+   why:"Finance books payroll totals but does not see individual salaries.",
+   steps:[
+    [`After HR-04, open ${A("قيود اليومية")}.`, "A payroll journal with totals by department."],
+    [`Look for ${A("الرواتب")} in the menu.`, "Not there."]]}
+ ]},
+
+ {id:"hr", name:"HR & payroll", logins:["hrofficer","hrmanager","payroll","sara"], intro:"HR keeps employees, contracts and leave; the payroll officer runs salaries; Sara (labour-law specialist) signs off every rule before it is used.",
+  cases:[
+  {id:"HR-01", t:"Hire an employee", who:["hrofficer"], min:10,
+   why:"The employee record feeds leave, payroll and the organisation chart.",
+   steps:[
+    [`${A("الموظفون")} → add: name, department, position, line manager, bank details.`, "Saved."],
+    [`${A("العقود")} → add a contract with an end date.`, "Saved."],
+    [`Open ${A("الهيكل التنظيمي")}.`, "The new employee sits under the right manager."]]},
+  {id:"HR-02", t:"Leave rules need Sara's sign-off", who:["hrmanager","sara","researcher1"], min:8,
+   why:"No leave rule reaches employees until the labour-law specialist confirms it.",
+   steps:[
+    [`As ${L("hrmanager")} ${A("أنواع الإجازات وقواعدها")} → change the days of one leave type. Save.`, "Saved; the sign-off is removed."],
+    [`As ${L("researcher1")} open ${A("إجازاتي")}.`, "That leave type can no longer be requested."],
+    [`As ${L("sara")} tick it and run ${A("اعتماد قواعد الإجازات المحددة (أخصائي قانون العمل)")}.`, "Signed off by Sara with the date."],
+    [`As ${L("researcher1")} check again.`, "Available again."],
+    [`As ${L("hrmanager")} check ${A("العطلات الرسمية")}.`, "This year's official holidays are listed (SAMPLE until confirmed)."]]},
+  {id:"HR-03", t:"Incentive or penalty", who:["hrofficer","hrmanager"], min:5,
+   why:"Pay changes go through the HR manager.",
+   steps:[
+    [`${A("الحوافز والجزاءات")} → add a 1,000 EGP incentive; send for approval.`, "Sent."],
+    [`As ${L("hrmanager")} approve.`, "Approved; it will appear in the next payroll (above 5,000 EGP it also goes to the director)."]]},
+  {id:"HR-04", t:"Run monthly payroll", who:["payroll","hrmanager","director"], min:15,
+   why:"The most sensitive monthly process. Rates in the demo are SAMPLE values, not Egyptian tax or insurance law.",
+   steps:[
+    [`As ${L("payroll")} ${A("الرواتب")} → add a run for this month; run ${A("احتساب الرواتب")}.`, "One payslip per employee."],
+    [`Check one employee by hand: basic, allowances, the HR-03 incentive, unpaid leave deduction, insurance, tax.`, "Every line explainable from the screen."],
+    [`Try ${A("تنزيل ملف التحويل البنكي (للمسيرات المعتمدة)")} now.`, "Refused: the run is not approved."],
+    [`Send for approval. As ${L("hrmanager")} approve.`, "Moves to step 2 (executive director)."],
+    [`As ${L("director")} approve.`, "Approved."],
+    [`As ${L("payroll")} download the bank file, then run ${A("تسجيل كمدفوع")}.`, "File downloaded; run marked paid; Finance receives the journal (FN-07)."]]},
+  {id:"HR-05", t:"HR manager's overview", who:["hrmanager"], min:5,
+   why:"Who is away, whose contract ends, headcount, without a report request.",
+   steps:[
+    [`Open the dashboard.`, `${A("غائبون اليوم")}, contracts ending soon, employees by department.`],
+    [`${A("طلبات الإجازات")} → filter by status.`, "All requests across the organisation."]]},
+  {id:"HR-06", t:"HR separation of duties", who:["payroll","hrofficer"], min:4, neg:true,
+   why:"The person who calculates salaries cannot approve them; HR does not see the books.",
+   steps:[
+    [`As ${L("payroll")} open ${A("الاعتمادات")} after sending a run.`, `The run is under ${A("مقدمة مني")} only.`],
+    [`As ${L("hrofficer")} look through the menu.`, `No ${A("الشؤون المالية")}, no donors, no cases.`]]}
+ ]},
+
+ {id:"mgt", name:"Management", logins:["director","admin"], intro:"The executive director sees every module and gives the second approval on large items. The administrator manages users and access.",
+  cases:[
+  {id:"MG-01", t:"Whole-organisation dashboard", who:["director"], min:10,
+   why:"Management decisions from one screen, for any period.",
+   steps:[
+    [`Open the dashboard.`, "Sections for fundraising, cases, aid, projects, supply, HR, payroll and finance."],
+    [`Try every period preset and one custom range.`, "All sections follow the period."],
+    [`Check three figures against the departments: donations vs FN-04, aid delivered vs ${A("المساعدات")}, payroll cost vs HR-04.`, "They agree."],
+    [`Write down one decision you could take from this screen today.`, "If you cannot name one, note what is missing."]]},
+  {id:"MG-02", t:"Second-step approvals", who:["director"], min:5,
+   why:"The director sees what the first approver decided before signing.",
+   steps:[
+    [`Open ${A("الاعتمادات")}.`, "Only items above your limits, or payroll."],
+    [`Open one item.`, "The first approver's decision and comment are shown in the history."]]},
+  {id:"MG-03", t:"Users and access", who:["admin"], min:8,
+   why:"Adding a real employee must not need a developer.",
+   steps:[
+    [`Open ${A("من يستطيع ماذا")}.`, "A readable matrix of roles and what each may do."],
+    [`${A("الإدارة الخلفية")} → users → add a user with the researcher role.`, "Saved."],
+    [`Sign in as the new user.`, "Sees exactly what researcher1 sees."],
+    [`As admin deactivate the user; try signing in again.`, "Refused."]]},
+  {id:"MG-04", t:"Sign-in activity", who:["admin"], min:3,
+   why:"Basic security monitoring.",
+   steps:[
+    [`Sign in once with a wrong password, then correctly as ${L("admin")}.`, "Done."],
+    [`On the dashboard find sign-ins and failed sign-ins for this month.`, "The failed attempt is counted."]]}
+ ]},
+
+ {id:"e2e", name:"End-to-end", logins:["several"], intro:"Run these as a group after each department has finished its own cases. One person per login, in the same room, passing the work along. They prove the departments are connected.",
+  cases:[
+  {id:"E2E-1", t:"From a family's research to delivered aid", who:["researcher1","casemanager","projects","fundraiser","pm","director","storekeeper","accountant"], min:60,
+   why:"The core promise of the system: one case code carries a family from research to aid, and each department sees only its part.",
+   flow:["RS-01","RS-02","RS-05","PJ-01","FR-02","PJ-02","PJ-03","SC-04","FN-04","MG-01"],
+   steps:[
+    ["Run the cases in the order shown above, on one new family.", "No step needs re-typing data someone else already entered."],
+    ["At each hand-over, the next person finds the work without being told where.", "Found from the menu or the approvals inbox."],
+    ["Check the case code is the same at every step.", "Same code everywhere."],
+    ["Check the researcher never sees the donor, and the fundraiser never sees the family's name.", "Confidentiality holds."],
+    ["At the end, the director sets the period to this month.", "The new aid and donation appear in the dashboard figures."]]},
+  {id:"E2E-2", t:"Purchase to pay", who:["procurement","finmanager","storekeeper","accountant"], min:35,
+   why:"Every pound paid to a supplier traces back to an approved need and a confirmed receipt.",
+   flow:["SC-01","SC-02","SC-03","FN-01","SC-05","FN-04"],
+   steps:[
+    ["Run the cases in order.", "Each step offers only approved documents from the step before."],
+    ["Count the approvals needed for one small purchase.", "Write the number down. If it feels too many for a small purchase, say so in the notes: this is a simplification candidate."],
+    ["The accountant opens the general ledger for the supplier.", "Order, receipt, invoice and payment all traceable."]]},
+  {id:"E2E-3", t:"Month end", who:["researcher1","hrofficer","hrmanager","payroll","director","accountant","finmanager"], min:45,
+   why:"The monthly cycle across HR and Finance.",
+   flow:["EV-02","HR-03","HR-04","FN-05","FN-07","FN-06","MG-01"],
+   steps:[
+    ["Run the cases in order.", "Leave taken and the incentive appear in payroll."],
+    ["Finance closes the month.", "No posting problems left; trial balance balances."],
+    ["The director reviews last month.", "Payroll, aid and donations for the month agree with the departments."]]}
+ ]}
+];
+
+/* menu groups each login must see (from the system's own access tests) */
+const GROUPS = ["إدارة الحالات","إدارة المتبرعين","الموارد البشرية","الشؤون المالية","سلاسل الإمداد","إدارة المشروعات"];
+const SEES = {
+  researcher1:[1,0,0,0,0,0], researcher2:[1,0,0,0,0,0], casemanager:[1,0,0,0,1,0], projects:[1,1,0,0,1,0],
+  fundraiser:[1,1,0,0,0,0], hrofficer:[0,0,1,0,0,0], hrmanager:[0,0,1,0,1,0], payroll:[0,0,1,0,0,0],
+  sara:null, accountant:[1,1,0,1,1,1], finmanager:[1,1,0,1,1,1], procurement:[0,0,0,0,1,0],
+  storekeeper:[1,1,0,0,1,0], pm:[1,0,0,0,1,1], director:[1,1,1,1,1,1], admin:[1,1,1,1,1,1]};
+const NOTE = {
+  casemanager:"No donors or donations", projects:"Referred cases, aid, sponsorships", fundraiser:"Cases list = codes only",
+  accountant:"Cases by code only; donations but not donors", finmanager:"Payroll only as journals", storekeeper:"Aid and in-kind donations only",
+  sara:"Leave and payroll rules only", payroll:"", hrmanager:"Approves payroll; may raise purchase requests"};
+const URLS = [
+  ["/finance/trial-balance/","accountant, finmanager, director, admin"],
+  ["/finance/balance-sheet/","accountant, finmanager, director, admin"],
+  ["/hr/structure/","hrofficer, hrmanager, payroll, director, admin"],
+  ["/projects/","pm, accountant, finmanager, director, admin"],
+  ["/backoffice/hr/payrollrun/","payroll, hrmanager, director, admin"],
+  ["/backoffice/crm/donor/","fundraiser, finmanager, director, admin"],
+  ["/cases/available/","fundraiser, projects, pm, accountant, finmanager, director, admin"]];
+const LOGIN_ROLE = {admin:"System administrator",director:"Executive director",casemanager:"Research Department manager",projects:"Projects Department officer",researcher1:"Field researcher",researcher2:"Field researcher",fundraiser:"Fundraising officer",hrmanager:"HR manager",hrofficer:"HR officer",payroll:"Payroll officer",sara:"Labour-law specialist",finmanager:"Finance manager",accountant:"Accountant",procurement:"Procurement officer",storekeeper:"Storekeeper",pm:"Projects Department manager"};
+
+/* ---------------------------------------------------------------- storage */
+let records = {};          // key -> record
+let db = null, dbReadOnly = false;
+const LS_KEY = "haz-protocol-results-v1";
+const pending = new Map();
+const slug = s => { // ASCII-only id (Arabic names keep a stable hash), as the shared store requires
+  s = (s||"").trim().toLowerCase(); let h = 5381; for(const ch of s) h = ((h*33) ^ ch.codePointAt(0)) >>> 0;
+  const a = s.replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30);
+  return s ? (a ? a+"-" : "t-") + h.toString(36) : "unnamed"; };
+function lsLoad(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||"{}") }catch(e){ return {} } }
+function lsSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(records)) }catch(e){} }
+function pref(k,v){ try{ if(v===undefined) return localStorage.getItem(k)||""; localStorage.setItem(k,v) }catch(e){ return "" } }
+
+const testerEl = document.getElementById("tester"), observerEl = document.getElementById("observer");
+testerEl.value = pref("haz-tester"); observerEl.value = pref("haz-observer");
+const tester = () => testerEl.value.trim();
+const keyFor = cid => `${cid}__${slug(tester())}`;
+function rec(cid){ return records[keyFor(cid)] || null }
+function ensure(cid){
+  const k = keyFor(cid);
+  if(!records[k]) records[k] = {caseId:cid, tester:tester(), observer:observerEl.value.trim(), steps:{}, minutes:"", ease:"", fit:"", help:"", severity:"", notes:""};
+  return records[k];
+}
+function save(cid){
+  const k = keyFor(cid), r = records[k]; if(!r) return;
+  r.updatedAt = new Date().toISOString(); r.observer = observerEl.value.trim() || r.observer;
+  lsSave();
+  if(!db || dbReadOnly) return;
+  clearTimeout(pending.get(k));
+  pending.set(k, setTimeout(()=>{
+    pending.delete(k);
+    db.doc("results/"+k).set(JSON.parse(JSON.stringify(r))).then(()=>setSync()).catch(e=>{
+      if(e && e.code==="invalid_argument"){ dbReadOnly = true; setSync() }
+      else setSync("Not saved to the shared sheet yet ("+(e&&e.code||"error")+"). Kept on this device.");
+    });
+  }, 700));
+}
+function setSync(msg){
+  const el = document.getElementById("sync");
+  if(msg){ el.textContent = msg; return }
+  if(db && !dbReadOnly) el.innerHTML = "<b>●</b> Results are shared with everyone who opens this page";
+  else if(db && dbReadOnly) el.textContent = "View only: you can read team results but your marks stay on this device";
+  else el.textContent = "Results are saved on this device only. Use Export at the end.";
+}
+
+/* ---------------------------------------------------------------- status helpers */
+function caseStatus(c, r){
+  if(!r) return ["todo","Not started"];
+  const vals = c.steps.map((_,i)=>r.steps[i]).filter(Boolean);
+  if(!vals.length) return ["todo","Not started"];
+  if(vals.includes("fail")) return ["fail", vals.length<c.steps.length?"Failing":"Failed"];
+  if(vals.length<c.steps.length) return ["inprog", `${vals.length}/${c.steps.length} steps`];
+  if(vals.includes("hard")) return ["hard","Works, hard to use"];
+  return ["pass","Passed"];
+}
+const allCases = () => DEPTS.flatMap(d=>d.cases.map(c=>({...c, dept:d})));
+
+/* ---------------------------------------------------------------- render */
+const TABS = [{id:"how",name:"How to test"}, ...DEPTS.map(d=>({id:d.id,name:d.name,n:d.cases.length})), {id:"access",name:"Access checks"}, {id:"results",name:"Results"}];
+let current = (location.hash||"").slice(1);
+if(!TABS.some(t=>t.id===current)) current = pref("haz-tab") || "how";
+if(!TABS.some(t=>t.id===current)) current = "how";
+const openCases = new Set();
+
+function renderTabs(){
+  document.getElementById("tabs").innerHTML = TABS.map(t=>`<button role="tab" id="tab-${t.id}" aria-selected="${t.id===current}" data-tab="${t.id}">${t.name}${t.n?` <span class="n">${t.n}</span>`:""}</button>`).join("");
+}
+function render(){
+  renderTabs();
+  const m = document.getElementById("main");
+  if(current==="how") m.innerHTML = howHTML();
+  else if(current==="access") m.innerHTML = accessHTML();
+  else if(current==="results") m.innerHTML = resultsHTML();
+  else m.innerHTML = deptHTML(DEPTS.find(d=>d.id===current));
+}
+
+function howHTML(){
+  return `
+  <h2>How to run a test session</h2>
+  <p class="lead">Each session is one employee doing their own department's cases on the demo data, with an observer next to them. The employee drives; the observer records. Testing proves two things: <b>feasibility</b> (the system does what our process needs) and <b>usability</b> (this person can do it alone, quickly, without mistakes).</p>
+  <div class="grid2">
+    <div class="panel"><h3>Before the session</h3><ol class="tight">
+      <li>Start from fresh demo data: on a new PC, open HAZ-v2 and press ${A("تحميل البيانات التجريبية")}. Every login uses the password <code>${PW}</code>.</li>
+      <li>Run the department's cases in the order listed; later cases use records made by earlier ones.</li>
+      <li>Type the tester's name at the top of this page. Results are kept per name.</li>
+      <li>Give the tester only the case title and goal. Do not show them the steps unless they are stuck.</li>
+    </ol></div>
+    <div class="panel"><h3>During the session</h3><ol class="tight">
+      <li>Ask the tester to think aloud. Write down where they hesitate.</li>
+      <li>Do not help unless they are stuck for 2 minutes. Any help counts and is recorded.</li>
+      <li>Mark every step: <b>Works</b>, <b>Hard</b> (done, but confusing or slow), or <b>Fails</b> (wrong result, error, or could not finish).</li>
+      <li>At the end of each case record minutes, ease 1–5, help needed, and whether it matches how the department works today.</li>
+    </ol></div>
+  </div>
+  <div class="panel"><h3>When a case passes</h3>
+    <ul class="tight">
+      <li>Every step works, with no S1 or S2 problem.</li>
+      <li>The tester finished with no help, or one hint.</li>
+      <li>Time is within 1.5× the target shown on the case. Targets are first estimates; adjust them after round one.</li>
+      <li>Ease is 4 or 5, and the department says it matches their process.</li>
+    </ul>
+  </div>
+  <div class="panel"><h3>How serious is a problem?</h3>
+    <div class="tbl"><table><thead><tr><th>Level</th><th>Meaning</th><th>Example</th><th>What happens</th></tr></thead><tbody>
+      <tr><td><span class="sev s1">S1</span></td><td>Blocks the work, wrong money, or data seen by the wrong person</td><td>A researcher sees a donor's amount; the trial balance does not balance</td><td>Fix before anyone uses the system</td></tr>
+      <tr><td><span class="sev s2">S2</span></td><td>Finished only with help or a workaround</td><td>Cannot find where approved cases go</td><td>Fix before go-live</td></tr>
+      <tr><td><span class="sev s3">S3</span></td><td>Works, but confusing wording or layout</td><td>Button label unclear</td><td>Batch into the simplification round</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="panel"><h3>Demo logins</h3>
+    <div class="tbl"><table><thead><tr><th>Username</th><th>Role</th><th>Department tab</th></tr></thead><tbody>
+    ${Object.entries(LOGIN_ROLE).map(([u,r])=>`<tr><td>${L(u)}</td><td>${r}</td><td>${(DEPTS.find(d=>d.logins.includes(u))||{name:"Management"}).name}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="note">Password for all: <code>${PW}</code>. Demo people and figures are fictional; tax, insurance and leave values are SAMPLE DATA, not legal values.</p>
+  </div>
+  <div class="panel"><h3>Suggested order</h3>
+    <ol class="tight">
+      <li>Day 1: every tester runs <b>All staff</b>, then their own department tab.</li>
+      <li>Day 2: the group runs the three <b>End-to-end</b> scenarios together, then <b>Access checks</b>.</li>
+      <li>Day 3: review the <b>Results</b> tab; every S1 and S2 becomes a fix; S3s go to the simplification list.</li>
+    </ol></div>`;
+}
+
+function deptHTML(d){
+  const done = d.cases.filter(c=>["pass","hard","fail"].includes(caseStatus(c,rec(c.id))[0])).length;
+  return `<h2>${d.name}</h2>
+  <p class="lead">${d.intro}</p>
+  <p class="note">Logins: ${d.logins.map(L).join(" ")} · Completed by ${tester()?`<b>${esc(tester())}</b>`:"this tester"}: ${done} of ${d.cases.length}</p>
+  ${tester()?"":`<div class="warn">Type the tester's name at the top first. Results are recorded under that name.</div>`}
+  ${d.cases.map(c=>caseHTML(c)).join("")}`;
+}
+function esc(s){ return String(s??"").replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch])) }
+
+function caseHTML(c){
+  const r = rec(c.id), [st,label] = caseStatus(c,r), dis = tester()?"":"disabled";
+  const v = f => esc(r?r[f]:"");
+  const opt = (f,list) => list.map(([val,txt])=>`<option value="${val}" ${r&&r[f]===val?"selected":""}>${txt}</option>`).join("");
+  return `<details class="case" data-case="${c.id}" ${openCases.has(c.id)?"open":""}>
+  <summary><span class="cid">${c.id}</span><span class="ctitle">${c.t}</span>
+    <span class="cstat"><span class="chip ${st}">${label}</span></span>
+    <span class="cmeta">${c.who.map(L).join(" ")} <span>· target ${c.min} min</span>${c.neg?' <span class="chip fail" style="font-weight:500">must be refused</span>':""}</span></summary>
+  <div class="cbody">
+    <p class="why"><b>Goal:</b> ${c.why}</p>
+    ${c.pre?`<div class="pre"><b>Before you start:</b> ${c.pre}</div>`:""}
+    ${c.flow?`<div class="flow">${c.flow.map(f=>`<span>${f}</span>`).join("<em>→</em>")}</div>`:""}
+    <ol class="steps">${c.steps.map((s,i)=>`<li><div class="do">${s[0]}</div><div class="ex">${s[1]}</div>
+      <div class="rb" role="group" aria-label="Result of step ${i+1}">
+        ${[["pass","Works"],["hard","Hard"],["fail","Fails"]].map(([val,txt])=>`<button type="button" ${dis} data-step="${i}" data-v="${val}" aria-pressed="${!!(r&&r.steps[i]===val)}">${txt}</button>`).join("")}
+      </div></li>`).join("")}</ol>
+    ${c.ask?`<div class="ask">${c.ask}</div>`:""}
+    <div class="score">
+      <label for="min-${c.id}">Minutes taken<input id="min-${c.id}" ${dis} data-f="minutes" type="number" min="0" inputmode="numeric" value="${v("minutes")}"></label>
+      <label for="ease-${c.id}">Ease (1 hard – 5 easy)<select id="ease-${c.id}" ${dis} data-f="ease"><option value=""></option>${opt("ease",[["1","1"],["2","2"],["3","3"],["4","4"],["5","5"]])}</select></label>
+      <label for="help-${c.id}">Help needed<select id="help-${c.id}" ${dis} data-f="help"><option value=""></option>${opt("help",[["none","None"],["hint","One hint"],["guided","Guided through"],["took","Observer took over"]])}</select></label>
+      <label for="fit-${c.id}">Matches our process?<select id="fit-${c.id}" ${dis} data-f="fit"><option value=""></option>${opt("fit",[["yes","Yes"],["partly","Partly"],["no","No"]])}</select></label>
+      <label for="sev-${c.id}">Worst problem<select id="sev-${c.id}" ${dis} data-f="severity"><option value=""></option>${opt("severity",[["none","None"],["S3","S3 minor"],["S2","S2 major"],["S1","S1 blocker"]])}</select></label>
+      <label class="wide" for="notes-${c.id}">Notes: where they hesitated, what they said, what to change<textarea id="notes-${c.id}" ${dis} data-f="notes">${v("notes")}</textarea></label>
+    </div>
+  </div></details>`;
+}
+
+function accessHTML(){
+  const rows = Object.keys(LOGIN_ROLE).map(u=>{
+    const s = SEES[u];
+    return `<tr><td>${L(u)}</td>${GROUPS.map((g,i)=>`<td class="num">${s?(s[i]?"✓":"—"):"·"}</td>`).join("")}<td class="note">${NOTE[u]||""}</td></tr>`}).join("");
+  return `<h2>Access checks</h2>
+  <p class="lead">Separate access is a promise to staff and donors. Sign in as each login and compare the side menu with this table: <b>✓</b> must be visible, <b>—</b> must be hidden. Anything extra is an S1. Record the result in case AC-01 below.</p>
+  <div class="panel tbl"><table><thead><tr><th>Login</th>${GROUPS.map(g=>`<th class="num"><span class="ar">${g}</span></th>`).join("")}<th>Limits inside the module</th></tr></thead><tbody>${rows}</tbody></table>
+  <p class="note">· Sara sees only the leave and payroll rules she signs off. Everyone also sees ${A("لوحة التحكم")}, ${A("الاعتمادات")}, ${A("إجازاتي")} and ${A("قسائم راتبي")}.</p></div>
+  <div class="panel"><h3>Page checks (browser mode)</h3>
+  <p class="lead">The desktop window has no address bar. For these checks start the server version (<code>HAZ-v2.exe --server</code>) and open <code>http://127.0.0.1:8080</code> plus the address below in a browser. Any login not listed must get a refusal or be sent back to sign in.</p>
+  <div class="tbl"><table><thead><tr><th>Address</th><th>Only these logins may open it</th></tr></thead><tbody>
+  ${URLS.map(([u,w])=>`<tr><td><code>${u}</code></td><td>${w.split(", ").map(L).join(" ")}</td></tr>`).join("")}
+  </tbody></table></div></div>
+  ${caseHTML(ACCESS_CASE)}`;
+}
+const ACCESS_CASE = {id:"AC-01", t:"Menu and page access for every login", who:["all 16 logins"], min:30, neg:true,
+  why:"Each person sees only their own modules; management and admin see everything.",
+  steps:[
+    ["Sign in as each research and projects login; compare the menu with the table.", "Exact match."],
+    ["Sign in as fundraiser, accountant and finmanager; compare.", "Exact match. Cases appear only as codes."],
+    ["Sign in as each HR login and sara; compare.", "Exact match. No finance, donors or cases."],
+    ["Sign in as procurement, storekeeper and pm; compare.", "Exact match."],
+    ["Sign in as director and admin.", "All six groups."],
+    ["In browser mode, try each address in the page checks with three logins that are not allowed.", "Refused every time."]]};
+DEPTS.push({id:"_ac", name:"Access", logins:[], cases:[ACCESS_CASE], hidden:true});
+
+function resultsHTML(){
+  const cases = allCases().filter(c=>!c.dept.hidden || c.id==="AC-01");
+  const all = Object.values(records).filter(r=>r && r.caseId);
+  const testers = [...new Set(all.map(r=>r.tester).filter(Boolean))];
+  const byDept = DEPTS.map(d=>{
+    const rs = all.filter(r=>d.cases.some(c=>c.id===r.caseId));
+    const st = rs.map(r=>caseStatus(d.cases.find(c=>c.id===r.caseId), r)[0]);
+    const eases = rs.map(r=>+r.ease).filter(Boolean);
+    const fits = rs.map(r=>r.fit).filter(Boolean);
+    return {d, runs:st.filter(s=>s!=="todo").length, pass:st.filter(s=>s==="pass").length, hard:st.filter(s=>s==="hard").length, fail:st.filter(s=>s==="fail").length,
+      ease: eases.length?(eases.reduce((a,b)=>a+b,0)/eases.length).toFixed(1):"–",
+      fit: fits.length?Math.round(100*fits.filter(f=>f==="yes").length/fits.length)+"%":"–",
+      s12: rs.filter(r=>r.severity==="S1"||r.severity==="S2").length};
+  });
+  const issues = all.filter(r=>r.severity==="S1"||r.severity==="S2"||Object.values(r.steps||{}).includes("fail"))
+    .sort((a,b)=>(a.severity||"S9").localeCompare(b.severity||"S9"));
+  const bar = x => { const t = x.pass+x.hard+x.fail || 1; return `<div class="prog" title="${x.pass} passed, ${x.hard} hard, ${x.fail} failed"><i style="width:${100*x.pass/t}%;background:var(--pass)"></i><i style="width:${100*x.hard/t}%;background:var(--hard)"></i><i style="width:${100*x.fail/t}%;background:var(--fail)"></i></div>` };
+  return `<h2>Results</h2>
+  <p class="lead">${all.length? `${all.length} case runs recorded by ${testers.length} tester${testers.length===1?"":"s"}: ${testers.map(esc).join(", ")}.` : "No results recorded yet. They appear here as soon as testers mark steps."}</p>
+  <div class="panel tbl"><table><thead><tr><th>Department</th><th class="num">Runs</th><th class="num">Passed</th><th class="num">Hard</th><th class="num">Failed</th><th>Mix</th><th class="num">Avg ease</th><th class="num">Matches process</th><th class="num">S1/S2</th></tr></thead><tbody>
+  ${byDept.filter(x=>!x.d.hidden||x.runs).map(x=>`<tr><td>${x.d.hidden?"Access checks":x.d.name}</td><td class="num">${x.runs}</td><td class="num">${x.pass}</td><td class="num">${x.hard}</td><td class="num">${x.fail}</td><td>${bar(x)}</td><td class="num">${x.ease}</td><td class="num">${x.fit}</td><td class="num">${x.s12}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="panel"><h3>Problems to fix first</h3>
+  ${issues.length?`<div class="tbl"><table><thead><tr><th>Case</th><th>Tester</th><th>Level</th><th>Failed steps</th><th>Notes</th></tr></thead><tbody>
+    ${issues.map(r=>{const c=cases.find(x=>x.id===r.caseId)||{t:""};const f=Object.entries(r.steps||{}).filter(([,v])=>v==="fail").map(([k])=>+k+1);
+      return `<tr><td><b class="mono">${r.caseId}</b> ${esc(c.t)}</td><td>${esc(r.tester)}</td><td>${r.severity&&r.severity!=="none"?`<span class="sev ${r.severity.toLowerCase()}">${r.severity}</span>`:""}</td><td class="num">${f.join(", ")||"–"}</td><td>${esc(r.notes)}</td></tr>`}).join("")}
+  </tbody></table></div>`:`<p class="note">None so far.</p>`}</div>
+  <div class="panel"><h3>Export</h3><p class="lead">One row per tester per case, for Excel. Arabic text is kept.</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="exportBtn" type="button">Save as CSV</button><button class="btn ghost" id="copyBtn" type="button">Copy CSV</button></p>
+  <textarea id="csvOut" hidden readonly style="width:100%;min-height:120px;font:12px var(--mono)"></textarea></div>`;
+}
+
+function toCSV(){
+  const cases = allCases();
+  const q = v => `"${String(v??"").replace(/"/g,'""')}"`;
+  const head = ["Case","Title","Department","Tester","Observer","Status","Steps passed","Steps hard","Steps failed","Failed step numbers","Minutes","Target","Ease","Help","Matches process","Worst problem","Notes","Updated"];
+  const rows = Object.values(records).filter(r=>r&&r.caseId).map(r=>{
+    const c = cases.find(x=>x.id===r.caseId) || {t:"",steps:[],dept:{name:""},min:""};
+    const v = Object.values(r.steps||{}); const f = Object.entries(r.steps||{}).filter(([,x])=>x==="fail").map(([k])=>+k+1).join(" ");
+    return [r.caseId,c.t,c.dept.hidden?"Access":c.dept.name,r.tester,r.observer,caseStatus(c,r)[1],v.filter(x=>x==="pass").length,v.filter(x=>x==="hard").length,v.filter(x=>x==="fail").length,f,r.minutes,c.min,r.ease,r.help,r.fit,r.severity,r.notes,r.updatedAt].map(q).join(",");
+  });
+  return "﻿"+[head.map(q).join(","),...rows].join("\r\n");
+}
+
+/* ---------------------------------------------------------------- events */
+document.getElementById("tabs").addEventListener("click",e=>{
+  const b = e.target.closest("button[data-tab]"); if(!b) return;
+  current = b.dataset.tab; pref("haz-tab",current);
+  try{ history.replaceState(null,"","#"+current) }catch(_){}
+  render(); window.scrollTo({top:0});
+});
+const main = document.getElementById("main");
+main.addEventListener("toggle",e=>{ const d=e.target.closest("details.case"); if(d) d.open?openCases.add(d.dataset.case):openCases.delete(d.dataset.case) },true);
+main.addEventListener("click",async e=>{
+  const b = e.target.closest(".rb button");
+  if(b && tester()){
+    const cid = b.closest("details.case").dataset.case, r = ensure(cid), i = b.dataset.step;
+    r.steps[i] = r.steps[i]===b.dataset.v ? undefined : b.dataset.v;
+    if(!r.steps[i]) delete r.steps[i];
+    save(cid);
+    b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", String(r.steps[i]===x.dataset.v)));
+    const c = allCases().find(x=>x.id===cid), [st,label] = caseStatus(c,r);
+    const chip = b.closest("details.case").querySelector(".cstat .chip"); chip.className = "chip "+st; chip.textContent = label;
+    return;
+  }
+  if(e.target.id==="exportBtn"){
+    const csv = toCSV(), name = `HAZ-v2 test results ${new Date().toISOString().slice(0,10)}.csv`;
+    try{ const dl = await claude.use("downloads"); if(dl){ await dl.save({filename:name, data:csv}); return } }catch(err){ if(err&&err.code==="cancelled") return }
+    showCSV(csv);
+  }
+  if(e.target.id==="copyBtn"){
+    const csv = toCSV();
+    try{ await navigator.clipboard.writeText(csv); e.target.textContent="Copied" }catch(err){ showCSV(csv) }
+  }
+});
+function showCSV(csv){ const t=document.getElementById("csvOut"); t.hidden=false; t.value=csv; t.focus(); t.select() }
+main.addEventListener("input",e=>{
+  const f = e.target.dataset && e.target.dataset.f; if(!f || !tester()) return;
+  const cid = e.target.closest("details.case").dataset.case; ensure(cid)[f] = e.target.value; save(cid);
+});
+let tTimer;
+[testerEl,observerEl].forEach(el=>el.addEventListener("input",()=>{
+  pref("haz-tester",testerEl.value); pref("haz-observer",observerEl.value);
+  clearTimeout(tTimer); tTimer = setTimeout(render,400);
+}));
+
+/* ---------------------------------------------------------------- start */
+records = lsLoad();
+setSync("Results are saved on this device only. Use Export at the end.");
+render();
+(async()=>{
+  try{ db = window.claude && claude.use ? await claude.use("db") : null }catch(e){ db = null }
+  if(!db){ setSync(); return }
+  try{
+    const u = await claude.use("user");
+    const can = u && u.can ? await u.can("data.write") : null;
+    if(can===false) dbReadOnly = true;
+  }catch(e){}
+  setSync();
+  db.collection("results").onSnapshot(snap=>{
+    const shared = {};
+    snap.docs.forEach(d=>{ const x=d.data(); if(x) shared[d.id]=x });
+    // keep local edits that are still waiting to save
+    for(const k of pending.keys()) if(records[k]) shared[k] = records[k];
+    // first sync: push device-only results up to the shared sheet
+    if(!dbReadOnly) for(const [k,r] of Object.entries(records)) if(!shared[k] && r && r.caseId){ shared[k]=r; db.doc("results/"+k).set(JSON.parse(JSON.stringify(r))).catch(()=>{}) }
+    records = shared; lsSave();
+    const focused = document.activeElement && main.contains(document.activeElement) && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+    if(!focused) render(); else renderTabs();
+  }, err=>setSync("Shared results unavailable ("+(err&&err.code||"error")+"). Saving on this device."));
+})();
+</script>
+
+</body>
+</html>
